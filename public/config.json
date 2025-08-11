@@ -1,0 +1,19 @@
+{
+  "language": "ru-RU",
+  "activeProfileIdx": 0,
+  "router": {
+    "mode": "history"
+  },
+  "ui": {
+    "indexPage": "TMDBIndex",
+    "fontSize": 0
+  },
+  "player": {
+    "default": "WebPlayer"
+  },
+  "pluginManager": {
+    "installed": [],
+    "repositories": ["/repository.json"],
+    "disabled": []
+  }
+}

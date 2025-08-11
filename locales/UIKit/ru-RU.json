@@ -1,0 +1,13 @@
+{
+  "similar": "Похожие",
+  "team": "Команда",
+  "cast": "В ролях",
+  "endIn": "Окончание в {time}",
+  "genres": "Жанры",
+  "cancel": "Отмена",
+  "ok": "Ок",
+  "registeredGlobalComponents": "Зарегистрировано {length} глобальных компонентов",
+  "registeredGlobalDirectives": "Зарегистрировано {length} глобальных директив",
+  "invalidTypeComponent": "Недопустимый {type} \"{value}\" для {component}:",
+  "trailers": "Трейлеры"
+}

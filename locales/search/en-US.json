@@ -1,0 +1,6 @@
+{
+  "search": "Search",
+  "searchNoResult": "Search didn't return any results",
+  "searchError": "Search error",
+  "exceededWaitingTime": "Exceeded waiting time. Try again later"
+}

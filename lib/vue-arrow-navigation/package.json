@@ -1,0 +1,65 @@
+{
+  "name": "arrow-navigation-vue",
+  "version": "1.0.0",
+  "description": "A light and performant Vue arrow-navigation",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "web-types": [
+    "web-types.json"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "author": "userXinos",
+  "license": "MIT",
+  "peerDependencies": {
+    "@vue/devtools-api": "^7.0.0",
+    "vue": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.1.0",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "oxlint": "^1.9.0",
+    "typescript": "^5.9.2",
+    "vite": "^6.3.5",
+    "vite-plugin-vue-devtools": "^7.7.7",
+    "vitest": "^3.2.4"
+  },
+  "packageManager": "pnpm@10.14.0+sha512.ad27a79641b49c3e481a16a805baa71817a04bbe06a38d17e60e2eaee83f6a146c6a688125f5792e48dd5ba30e7da52a5cda4c3992b9ccf333f9ce223af84748",
+  "keywords": [
+    "spatial navigation",
+    "keyboard navigation",
+    "keyboard",
+    "navigation",
+    "arrow keys",
+    "arrow",
+    "vue",
+    "vuejs",
+    "typescript",
+    "tv navigation",
+    "tv",
+    "focus",
+    "remote control",
+    "remote",
+    "control",
+    "focusable",
+    "tizen",
+    "webos",
+    "web"
+  ],
+  "dependencies": {
+    "@vueuse/core": "^13.6.0"
+  }
+}

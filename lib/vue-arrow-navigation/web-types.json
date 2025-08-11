@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json.schemastore.org/web-types",
+  "framework": "vue",
+  "name": "arrow-navigation-vue",
+  "version": "1.0.11",
+  "js-types-syntax": "typescript",
+  "contributions": {
+    "html": {
+      "vue-directives": [
+        {
+          "name": "focus",
+          "source": {
+            "module": "arrow-navigation-vue",
+            "symbol": ""
+          },
+          "description": "A directive that make the element focusable. The element with v-focus must under the element with v-focus-section",
+          "doc-url": "",
+          "value": {
+            "kind": "expression",
+            "type": "boolean",
+            "description": "Dynamic control"
+          }
+        },
+        {
+          "name": "focus-section",
+          "source": {
+            "module": "arrow-navigation-vue",
+            "symbol": ""
+          },
+          "description": "A directive that define a focus Section",
+          "doc-url": "",
+          "modifiers": [
+            {
+              "name": "default",
+              "description": "Set default section"
+            },
+            {
+              "name": "autofocus",
+              "description": "Focus after element mounted"
+            }
+          ],
+          "args": [
+            {
+              "name": "id",
+              "required": false,
+              "description": "Pass a specified section id"
+            }
+          ],
+          "value": {
+            "kind": "expression",
+            "type": "object",
+            "description": "Set configuration"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,5 @@
+.collapse[open]:not(.does-not-exist),
+.collapse.collapse-open:not(.does-not-exist),
+.collapse:focus:not(.collapse-close) {
+    grid-template-rows: max-content 1fr;
+}

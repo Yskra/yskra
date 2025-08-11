@@ -1,0 +1,3 @@
+all *.js files in this directory will be loaded when the application starts
+---
+все *.js файлы в этой директории будут загружены при запуске приложения

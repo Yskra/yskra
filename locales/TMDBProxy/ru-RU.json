@@ -1,0 +1,7 @@
+{
+  "status": "Статус",
+  "testConnect": "Тестирование подключения",
+  "connectedDirectly": "Подключено напрямую к TheMovieDB",
+  "connectedViaProxy": "Подключено через прокси",
+  "proxyUnreachable": "Прокси недоступен"
+}

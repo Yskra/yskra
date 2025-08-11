@@ -1,0 +1,6 @@
+#file: noinspection SpellCheckingInspection
+
+onlyBuiltDependencies:
+  - '@skirtle/vue-vnode-utils'
+  - json-editor-vue
+  - vue-demi

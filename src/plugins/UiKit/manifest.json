@@ -1,0 +1,14 @@
+{
+  "name": "UI Kit",
+  "overview:en": "Built-in UI Kit",
+  "overview:ru": "Встроенный UI Kit",
+  "description:en": "UI kit based on the DaisyUI component library, with support for themes and custom color palette",
+  "description:ru": "UI кит основанный на библиотеке компонентов DaisyUI, с поддержкой тем и собственной цветовой палитры",
+  "version": "1.0.0",
+  "author": "Yskra Team",
+  "imageUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiMyZWMyN2UiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIyIiBkPSJNMTQgNS41YTIuNSAyLjUgMCAxIDAgNSAwYTIuNSAyLjUgMCAxIDAtNSAwTTYgM2g1djVINnptNSA4djEwYTUgNSAwIDAgMS0uMjE3LTkuOTk1eiIvPjwvc3ZnPg==",
+  "id": "dev.yskra.ui_kit",
+  "mountOrder": 0,
+  "apiVersion": 0,
+  "source": null
+}

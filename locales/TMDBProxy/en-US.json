@@ -1,0 +1,7 @@
+{
+  "status": "Status",
+  "testConnect": "Testing connection",
+  "connectedDirectly": "Connected directly to TheMovieDB",
+  "connectedViaProxy": "Connected via proxy",
+  "proxyUnreachable": "Proxy is unreachable"
+}

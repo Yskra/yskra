@@ -1,0 +1,13 @@
+{
+  "similar": "Similar",
+  "team": "Team",
+  "cast": "Cast",
+  "endIn": "End in {time}",
+  "genres": "Genres",
+  "cancel": "Cancel",
+  "ok": "Ok",
+  "registeredGlobalComponents": "Registered {length} global components",
+  "registeredGlobalDirectives": "Registered {length} global directives",
+  "invalidTypeComponent:": "Invalid {type} \"{value}\" for {component}:",
+  "trailers": "Trailers"
+}

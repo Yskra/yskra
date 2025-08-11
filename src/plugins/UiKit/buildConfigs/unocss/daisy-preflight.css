@@ -1,0 +1,66 @@
+/**
+    it is necessary that this styles be in the same bundle with daisy themes vars,
+    so that the postcss plugin resolveColorMixVars can resolve the variables
+ */
+
+.btn {
+    &.btn-neutral:hover {
+        --btn-bg: color-mix(in oklab, var(--color-neutral), black 7%)
+    }
+    &.btn-primary:hover {
+        --btn-bg: color-mix(in oklab, var(--color-primary), black 7%)
+    }
+    &.btn-secondary:hover {
+        --btn-bg: color-mix(in oklab, var(--color-secondary), black 7%)
+    }
+    &.btn-accent:hover {
+        --btn-bg: color-mix(in oklab, var(--color-accent), black 7%)
+    }
+    &.btn-info:hover {
+        --btn-bg: color-mix(in oklab, var(--color-info), black 7%)
+    }
+    &.btn-success:hover {
+        --btn-bg: color-mix(in oklab, var(--color-success), black 7%)
+    }
+    &.btn-warning:hover {
+        --btn-bg: color-mix(in oklab, var(--color-warning), black 7%)
+    }
+    &.btn-error:hover {
+        --btn-bg: color-mix(in oklab, var(--color-error), black 7%)
+    }
+}
+
+.btn {
+    &.btn-neutral:active {
+        --btn-bg: color-mix(in oklab, var(--color-neutral), black 5%);
+        --btn-border: color-mix(in oklab, var(--color-neutral),black 7%);
+    }
+    &.btn-primary:active {
+        --btn-bg: color-mix(in oklab, var(--color-primary), black 5%);
+        --btn-border: color-mix(in oklab, var(--color-primary),black 7%);
+    }
+    &.btn-secondary:active {
+        --btn-bg: color-mix(in oklab, var(--color-secondary), black 5%);
+        --btn-border: color-mix(in oklab, var(--color-secondary),black 7%);
+    }
+    &.btn-accent:active {
+        --btn-bg: color-mix(in oklab, var(--color-accent), black 5%);
+        --btn-border: color-mix(in oklab, var(--color-accent),black 7%);
+    }
+    &.btn-info:active {
+        --btn-bg: color-mix(in oklab, var(--color-info), black 5%);
+        --btn-border: color-mix(in oklab, var(--color-info),black 7%);
+    }
+    &.btn-success:active {
+        --btn-bg: color-mix(in oklab, var(--color-success), black 5%);
+        --btn-border: color-mix(in oklab, var(--color-success),black 7%);
+    }
+    &.btn-warning:active {
+        --btn-bg: color-mix(in oklab, var(--color-warning), black 5%);
+        --btn-border: color-mix(in oklab, var(--color-warning),black 7%);
+    }
+    &.btn-error:active {
+        --btn-bg: color-mix(in oklab, var(--color-error), black 5%);
+        --btn-border: color-mix(in oklab, var(--color-error),black 7%);
+    }
+}

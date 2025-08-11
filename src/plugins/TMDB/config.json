@@ -1,0 +1,8 @@
+{
+  "apiUrl": "https://api.themoviedb.org/3/",
+  "imageCdn": "https://image.tmdb.org/t/p/",
+  "language": "",
+  "region": "",
+  "apiTimeout": 8000,
+  "token": "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmNDg2OTc0NzhhYzY1Y2U4MTMzZTlhNjk3MmJhODkxZiIsIm5iZiI6MTcyMjY3MDA1MC4zNTA4NTQsInN1YiI6IjY0YmQ1ZWNiMGVkMmFiMDBmZjg3MDkwMyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.pejerYjmP0b5n4ewp5bH0E4Jptb8-3Oc5yoP_Gnmn50"
+}

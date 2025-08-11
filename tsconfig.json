@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "target": "esnext",
+    "noEmit": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "noEmitOnError": true,
+    "noErrorTruncation": true,
+    "allowSyntheticDefaultImports": true,
+    "verbatimModuleSyntax": true,
+    "types": ["vite/client"],
+    "strict": true,
+    "allowJs": true,
+    "checkJs": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+
+    "paths": {
+      "@/*": ["./src/*"],
+      "@lib/*": ["./lib/*"],
+      "@locales/*": ["./locales/*"],
+      "@icon": ["./src/plugins/UiKit/lib/Icons/index.js"],
+      "vue-arrow-navigation": ["./lib/vue-arrow-navigation"],
+      "player": ["./lib/web-player"]
+    }
+  },
+  "include": ["src/"],
+}
