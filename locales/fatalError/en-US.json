@@ -1,6 +1,10 @@
 {
-  "title": "Fatal errors while starting Yskra app",
+  "titleFatal": "Fatal errors while starting Yskra app",
+  "titleRuntime": "Errors while running Yskra app",
   "runConfigEditor": "You can try running the {editor} {link}, which starts with the minimum required modules, if the error is related to a plugin or incorrect configuration.",
   "configEditor": "ConfigEditor",
-  "writeToChat": "You can also write to the chat so that we can help you with resolving this problem."
+  "writeToChat": "You can also write to the chat so that we can help you with resolving this problem.",
+  "runtimeErrorNote": "An error occurred while running the app. It is likely that the app is still functioning, but it is not guaranteed that it will work as expected.",
+  "closeModal": "{action} to close this window",
+  "or": "or"
 }

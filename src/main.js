@@ -12,7 +12,7 @@ import FatalError from '@/FatalError.vue';
 import loadModules from '@/modules';
 import deepMerge from '@/utils/deepMerge.js';
 import { useFetch, useStorage, watchOnce } from '@vueuse/core';
-import { createApp, reactive } from 'vue';
+import { createApp, reactive, shallowReactive, shallowRef } from 'vue';
 
 import 'element-closest-polyfill';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
@@ -20,12 +20,14 @@ import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 
 (() => {
   /** @type {Set<Error>} */
-  const errors = reactive(new Set());
+  const errors = shallowReactive(new Set());
+  const isFatal = shallowRef(false);
 
   main()
     .catch((error) => {
       // If some error occurred before mounting the main application we get here, obviously.
       console.error('[FATAL 💀]', error);
+      isFatal.value = true;
       errors.add(error);
     });
 
@@ -46,8 +48,9 @@ import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
     errors.add(error);
   });
 
+  // create app only once, pass reactive errors to it
   watchOnce(errors, () => {
-    createApp(FatalError, { errors })
+    createApp(FatalError, { errors, isFatal: isFatal.value, onClose: () => errors.clear() })
       .mount(FATAL_MOUNT_POINT);
   });
 })();
