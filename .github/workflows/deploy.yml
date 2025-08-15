@@ -5,33 +5,69 @@ name: Deploy
 on:
   push:
     branches:
-      - $default-branch
-  pull_request:
-    branches:
-      - $default-branch
-
+      - master
 
 jobs:
-  deploy:
+  build:
+    name: Build Application
     runs-on: ubuntu-latest
-    name: Deploy
+    outputs:
+      artifact-id: ${{ steps.artifact.outputs.artifact-id }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: wyvox/action-setup-pnpm@v3
+
+      - run: pnpm run build
+
+      - name: Upload artifact
+        id: artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: dist/
+
+  dispatch:
+    name: Deploy to GitHub Pages
+    environment: deploy
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Dispatch to gh-pages repo
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PAT }}
+          repository: Yskra/yskra.github.io
+          event-type: deploy-gh-pages
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "artifact-ids": "${{ needs.build.outputs.artifact-id }}", "run-id": "${{ github.run_id }}"}'
+
+  deploy:
+    name: Deploy to Cloudflare
+    environment: deploy
+    runs-on: ubuntu-latest
+    needs: build
     permissions:
       contents: read
       deployments: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: wyvox/action-setup-pnpm@v3
+      - name: Download gh-pages artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: build
+          path: dist
 
-      - name: Build
+      - name: Create wrangler.toml
         run: |
-          pnpm run build
+          cat > wrangler.toml << 'EOF'
+            name = "yskra"
+            compatibility_date = "$(date -I)"
+            assets = { not_found_handling = "single-page-application", directory = "dist" }
+          EOF
 
-      - name: Deploy
+      - name: Send assets to Cloudflare
         uses: cloudflare/wrangler-action@v3
         with:
-          environment: production
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=yskra
-          # Optional: Enable this if you want to have GitHub Deployments triggered
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
