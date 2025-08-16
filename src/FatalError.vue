@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import type { KeyFilter, OnKeyStrokeOptions } from '@vueuse/core';
 import type { SetupContext } from 'vue';
 import enUS from '@locales/fatalError/en-US.json';
 import ruRU from '@locales/fatalError/ru-RU.json';
-import { onKeyStroke } from '@vueuse/core';
+import { onKeyDown, onKeyStroke, onKeyUp, useThrottleFn, useTimeout } from '@vueuse/core';
 import { h } from 'vue';
 
 const props = defineProps<{
@@ -11,6 +12,7 @@ const props = defineProps<{
 }>();
 const emit = defineEmits<{
   (e: 'close'): void;
+  (e: 'resetConfig'): void;
 }>();
 
 // noinspection RegExpRedundantEscape
@@ -25,11 +27,20 @@ const locales = {
 
 const isConfigPage = window.location.hash !== '' ? window.location.hash.endsWith('/config') : window.location.pathname === '/config';
 const configPage = `${window.location.origin}${window.location.hash !== '' ? '#' : ''}/config`;
-const t = locales[window.navigator.language as keyof typeof locales] ?? locales.en;
+const t = (k: keyof typeof ruRU) => (locales[window.navigator.language as keyof typeof locales] ?? locales.en)[k];
 
 onKeyStroke(['Escape', 'ArrowDown'], () => {
   if (!props.isFatal) {
     emit('close');
+  }
+});
+onLongPressKey('ArrowDown', 2000, () => {
+  // oxlint-disable-next-line no-alert
+  const go = confirm(t('resetConfigPrompt'));
+
+  if (go) {
+    emit('resetConfig');
+    window.location.reload();
   }
 });
 
@@ -48,13 +59,20 @@ function replacePlaceholders(str: string, replacements: Record<string, any>) {
     return acc;
   }, []);
 }
+function onLongPressKey(key: KeyFilter, duration: number, onLongPress: () => void, options: OnKeyStrokeOptions = {}) {
+  const { start, stop } = useTimeout(duration, { controls: true, immediate: false, callback: onLongPress });
+  const throttledStart = useThrottleFn(start, duration);
+
+  onKeyDown(key, throttledStart, options);
+  onKeyUp(key, stop, options);
+}
 </script>
 
 <template>
   <div v-if="props.errors.size" class="fatal-error">
     <div class="dialog">
       <h2 class="title">
-        {{ props.isFatal ? t.titleFatal : t.titleRuntime }}
+        {{ props.isFatal ? t('titleFatal') : t('titleRuntime') }}
       </h2>
       <div class="error-list">
         <div v-for="error in props.errors" :key="error.message">
@@ -68,9 +86,9 @@ function replacePlaceholders(str: string, replacements: Record<string, any>) {
       </div>
       <div class="user-note">
         <p v-if="!isConfigPage && props.isFatal">
-          <I18n :str="t.runConfigEditor">
+          <I18n :str="t('runConfigEditor')">
             <template #editor>
-              <b>{{ t.configEditor }}</b>
+              <b>{{ t('configEditor') }}</b>
             </template>
             <template #link>
               <a
@@ -81,22 +99,25 @@ function replacePlaceholders(str: string, replacements: Record<string, any>) {
                 {{ configPage }}
               </a>
             </template>
+            <template #action>
+              <kbd class="kbd">▼</kbd>
+            </template>
           </I18n>
         </p>
 
         <p>
-          {{ t.writeToChat }}
+          {{ t('writeToChat') }}
         </p>
 
         <div v-if="!props.isFatal">
           <p>
-            {{ t.runtimeErrorNote }}
+            {{ t('runtimeErrorNote') }}
           </p>
-          <I18n :str="t.closeModal">
+          <I18n :str="t('closeModal')">
             <template #action>
               <div class="action-keys">
                 <kbd class="kbd kbd-md">Esc</kbd>
-                <span>{{ t.or }}</span>
+                <span>{{ t('or') }}</span>
                 <kbd class="kbd">▼</kbd>
               </div>
             </template>

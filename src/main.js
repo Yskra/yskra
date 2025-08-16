@@ -22,6 +22,7 @@ import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
   /** @type {Set<Error>} */
   const errors = shallowReactive(new Set());
   const isFatal = shallowRef(false);
+  const localStorage = window.localStorage;
 
   main()
     .catch((error) => {
@@ -50,7 +51,14 @@ import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 
   // create app only once, pass reactive errors to it
   watchOnce(errors, () => {
-    createApp(FatalError, { errors, isFatal: isFatal.value, onClose: () => errors.clear() })
+    const props = {
+      errors,
+      isFatal: isFatal.value,
+      onClose: () => errors.clear(),
+      onResetConfig: () => localStorage.removeItem(LS_CONFIG_KEY),
+    };
+
+    createApp(FatalError, props)
       .mount(FATAL_MOUNT_POINT);
   });
 })();
