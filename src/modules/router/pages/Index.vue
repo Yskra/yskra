@@ -10,14 +10,17 @@ import { useTitle } from '@/utils/title';
 const { indexPageRoute } = useUISettings();
 const route = useRoute();
 const bus = useAppBus();
-const { t } = useI18n();
+const { t, te } = useI18n();
 
 onBeforeRouteUpdate(clearBg);
 onUnmounted(clearBg);
 useTitle(() =>
-  route.meta.title ? t(route.meta.title as string) : route.path === '/' ? t('home') : 'Yskra',
+  route.meta.title ? resolveI18nTitle(route.meta.title) : route.path === '/' ? t('home') : 'Yskra',
 );
 
+function resolveI18nTitle(key: string) {
+  return te(key) ? t(key) : key;
+}
 function clearBg() {
   bus.call('ui.background:setImage', '');
   bus.set('ui.background:presentationMode', false);

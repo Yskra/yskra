@@ -6,12 +6,16 @@ import Index from '@/plugins/UiKit/lib/sidebar-layout/index.vue';
 import { useTitle } from '@/utils/title';
 
 const route = useRoute();
-const { t } = useI18n();
+const { t, te } = useI18n();
 
 const title = useTitle(
-  () => route.meta.title ? t(route.meta.title as string) : null,
+  () => route.meta.title && resolveI18nTitle(route.meta.title),
   { titleTemplate: `%s | ${t('settings')}` },
 );
+
+function resolveI18nTitle(key: string) {
+  return te(key) ? t(key) : key;
+}
 </script>
 
 <template>
