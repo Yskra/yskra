@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import { onUnmounted, ref, useTemplateRef } from 'vue';
+import { ref, useTemplateRef } from 'vue';
 import SearchOverlay from '../view/SearchOverlay.vue';
 
 const showModal = ref(false);
 const btnRef = useTemplateRef('btn');
-
-onUnmounted(() => {
-  console.log('unmounted');
-});
 </script>
 
 <template>
