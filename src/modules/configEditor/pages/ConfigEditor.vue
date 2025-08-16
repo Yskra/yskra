@@ -84,7 +84,7 @@ function stringify() {
           {{ $t('configEditorDescription') }}
         </p>
       </div>
-      <div class="mt-3 flex justify-between">
+      <div v-focus-section class="mt-3 flex justify-between">
         <div>
           <BaseButton
             color="primary"

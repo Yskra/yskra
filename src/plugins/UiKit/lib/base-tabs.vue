@@ -75,6 +75,7 @@ function onActivateTab(key: PropertyKey, child: VNode) {
 
 <template>
   <div
+    v-focus-section
     class="tabs-component-container h-full w-full"
     :class="styling"
     :data-active-tab="activeTabKey"
@@ -90,8 +91,6 @@ function onActivateTab(key: PropertyKey, child: VNode) {
         v-bind="$attrs"
       >
         <RenderTabs mode="tab" />
-
-
         <RenderTabs mode="content" />
       </DaisyUI>
     </KeepAlive>

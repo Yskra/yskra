@@ -11,6 +11,9 @@ interface Logger {
 export function createFocusDirective(opts: { logger: Logger }): FocusDirective {
   return {
     mounted(el, binding) {
+      if (!isRealMounted(el)) {
+        return;
+      }
       const { addChildren } = elementInject(el, FS_KEY, FS_DEFAULT_VALUE, opts)!;
       const { enabled, autofocus } = directiveResolveFocus(binding);
 
@@ -38,4 +41,12 @@ export function createFocusDirective(opts: { logger: Logger }): FocusDirective {
       delChildren(el);
     },
   };
+}
+
+/**
+ * IDK sometimes it's not really mounted. Maybe it's a bug in Vue.
+ * @param el
+ */
+function isRealMounted(el: Element) {
+  return !!el.parentNode
 }
