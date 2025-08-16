@@ -35,3 +35,24 @@ export const directionCalcByCenter: Readonly<Record<Direction, (t: ElementCenter
   [Direction.DOWN]: (target, current) => current.y > target.y,
 });
 
+/**
+ * Return adjusted distance with priority for elements on one axis.
+ */
+export function getAdjustedDistance(targetCenter: ElementCenter, elementCenter: ElementCenter, direction: Direction, tolerance: number = 120, offAxisPenalty: number = 4): number {
+  const { x: tx, y: ty } = targetCenter;
+  const { x: cx, y: cy } = elementCenter;
+
+  const dx = cx - tx;
+  const dy = cy - ty;
+  const baseDistanceSquared = dx * dx + dy * dy;
+
+  const isHorizontal = direction === Direction.LEFT || direction === Direction.RIGHT;
+
+  const isOnAxis = isHorizontal
+    ? Math.abs(cy - ty) <= tolerance
+    : Math.abs(cx - tx) <= tolerance;
+
+  const penalty = isOnAxis ? 1 : offAxisPenalty * offAxisPenalty;
+  return baseDistanceSquared * penalty;
+}
+

@@ -1,7 +1,7 @@
 import type { MaybeRefOrGetter } from 'vue';
 import type { Adapter, Direction } from './Public';
 import { toRef } from 'vue';
-import { directionCalcByCenter, directionCalcBySide, getCenter, isIntersecting } from './algebra';
+import {directionCalcByCenter, directionCalcBySide, getAdjustedDistance, getCenter, isIntersecting} from './algebra';
 
 interface ClosestElement<T extends Element> { target: T; rect: DOMRectReadOnly }
 
@@ -27,12 +27,11 @@ export function getClosedElements<T extends Element, I extends T>(target: T, rec
 
 
     if (isValidDirection) {
-      const distance = Math.sqrt(
-        (elementCenter.x - targetCenter.x) ** 2
-        + (elementCenter.y - targetCenter.y) ** 2,
-      );
-
-      filteredElements.push({ element, rect, distance });
+      filteredElements.push({
+        element,
+        rect,
+        distance: getAdjustedDistance(targetCenter, elementCenter, direction)
+      });
     }
   }
 
