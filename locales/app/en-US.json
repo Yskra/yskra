@@ -52,6 +52,7 @@
   "dependsOn": "Depends on",
   "version": "Version",
   "feedback": "Feedback",
+  "license": "License",
   "id": "Identifier",
   "linkToPluginOrRepo": "Link to plugin or repository",
   "timeout": "Waiting time exceeded",

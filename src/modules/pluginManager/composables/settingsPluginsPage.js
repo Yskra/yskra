@@ -35,6 +35,7 @@ export function useSettingsPluginsPage() {
     description: '',
     id: '',
     isInstalled: false,
+    license: 'UNLICENSED',
     name: '',
     source: '',
     status: -1,

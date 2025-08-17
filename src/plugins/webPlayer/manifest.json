@@ -6,6 +6,7 @@
   "description:ru": "Плеер с поддержкой плейлистов, потоковой передачей и режима картинка в картинке",
   "version": "0.0.1",
   "author": "Yskra Team",
+  "license": "AGPL-3.0-or-later",
   "imageUrl": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDQ4IDQ4Ij48ZyBmaWxsPSJub25lIiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBzdHJva2Utd2lkdGg9IjQiPjxwYXRoIGZpbGw9IiMyZjg4ZmYiIHN0cm9rZT0iIzAwMCIgZD0iTTI0IDQ0QzM1LjA0NTcgNDQgNDQgMzUuMDQ1NyA0NCAyNEM0NCAxMi45NTQzIDM1LjA0NTcgNCAyNCA0QzEyLjk1NDMgNCA0IDEyLjk1NDMgNCAyNEM0IDM1LjA0NTcgMTIuOTU0MyA0NCAyNCA0NFoiLz48cGF0aCBmaWxsPSIjNDNjY2Y4IiBzdHJva2U9IiNmZmYiIGQ9Ik0yMCAyNFYxNy4wNzE4TDI2IDIwLjUzNTlMMzIgMjRMMjYgMjcuNDY0MUwyMCAzMC45MjgyVjI0WiIvPjwvZz48L3N2Zz4=",
   "id": "dev.yskra.web_player",
   "apiVersion": 0,

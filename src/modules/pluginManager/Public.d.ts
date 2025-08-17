@@ -42,6 +42,7 @@ export type PluginRuntime = Readonly<typeof PLUGIN_RUNTIME[keyof typeof PLUGIN_R
 export interface PluginManifest extends Record<LocaleKey<'overview'>, string>, Record<LocaleKey<'description'>, string> {
   name: string;
   id: string;
+  license: string;
   overview?: string;
   description?: string;
   version: string;

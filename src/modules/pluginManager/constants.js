@@ -44,7 +44,7 @@ export const BLACKLIST_TAGS = Object.freeze(new Set([
 ]));
 
 /** @type {(keyof PluginManifest)[]} */
-export const PLUGIN_REQUIRED_FIELDS = ['name', 'id', 'version', 'author', 'source', 'apiVersion'];
+export const PLUGIN_REQUIRED_FIELDS = ['name', 'id', 'version', 'author', 'source', 'apiVersion', 'license'];
 
 export const appPkg = yskraPkg;
 

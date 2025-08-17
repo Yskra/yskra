@@ -70,7 +70,7 @@ const incompatibleRuntime = computed(() => pluginRuntime.value !== currentRuntim
         <span>{{ props.pluginInfo.author }}</span>
       </div>
     </BaseMenuItem>
-    <BaseMenuItem disabled>
+    <BaseMenuItem v-if="props.pluginInfo.description" disabled>
       <div class="pb-1">
         <Icon name="line-md-text-box-multiple" class="h-2rem w-2rem" />
         <span>{{ $t('description') }}</span>
@@ -109,19 +109,26 @@ const incompatibleRuntime = computed(() => pluginRuntime.value !== currentRuntim
         <span>{{ props.pluginInfo.version }}</span>
       </div>
     </BaseMenuItem>
-    <BaseMenuItem>
+    <BaseMenuItem v-if="props.pluginInfo.homepageUrl">
       <a target="_blank" :href="props.pluginInfo.homepageUrl">
         <Icon name="line-md-home-simple-filled" class="h-2rem w-2rem" />
         <span>{{ $t('homePage') }}</span>
         <Icon name="line-md-external-link" />
       </a>
     </BaseMenuItem>
-    <BaseMenuItem>
+    <BaseMenuItem v-if="props.pluginInfo.supportUrl">
       <a target="_blank" :href="props.pluginInfo.supportUrl">
         <Icon name="line-md-chat-bubble-filled" class="h-2rem w-2rem" />
         <span>{{ $t('feedback') }}</span>
         <Icon name="line-md-external-link" />
       </a>
+    </BaseMenuItem>
+    <BaseMenuItem disabled>
+      <div>
+        <div class="i-mingcute:balance-line h-2rem w-2rem" />
+        <span>{{ $t('license') }}</span>
+        <span>{{ props.pluginInfo.license }}</span>
+      </div>
     </BaseMenuItem>
     <BaseMenuItem disabled>
       <div>
