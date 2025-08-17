@@ -105,7 +105,7 @@ jobs:
       - name: Download SPA artifact
         uses: actions/download-artifact@v4
         with:
-          name: build
+          name: yskra-spa
           path: dist
 
       - name: Download Container assets
