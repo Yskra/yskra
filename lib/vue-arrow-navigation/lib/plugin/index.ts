@@ -4,7 +4,6 @@ import type { Config } from './Public';
 import { createEventHook } from '@vueuse/core';
 import { effectScope, hasInjectionContext, inject, reactive } from 'vue';
 import { createFocusConfig, removeFocusConfig } from '../config';
-import { registerDevtoolsPlugin } from '../devtools';
 import { createFocusDirective } from '../focus';
 import { createFocusSectionDirective } from '../focus-section';
 import { createNavigation } from '../navigation';
@@ -54,7 +53,9 @@ export function createArrowNavigation(fabricConfig?: Partial<Config>): Plugin & 
       });
 
       if (import.meta.env.DEV) {
-        registerDevtoolsPlugin(app, devtoolsData);
+        import('../devtools').then(({ registerDevtoolsPlugin }) => {
+          registerDevtoolsPlugin(app, devtoolsData)
+        })
       }
 
       patchBody();
