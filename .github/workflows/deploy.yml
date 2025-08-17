@@ -138,5 +138,5 @@ jobs:
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ghcr.io/yskra/yskra:latest
           labels: ${{ steps.meta.outputs.labels }}

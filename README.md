@@ -5,6 +5,8 @@
 
 # Yskra
 
+[![Deploy](https://github.com/Yskra/yskra/actions/workflows/deploy.yml/badge.svg?branch=master)](https://github.com/Yskra/yskra/actions/workflows/deploy.yml)
+
 > Free and open-source web-application for TV
 
 - Powerful plugin system
