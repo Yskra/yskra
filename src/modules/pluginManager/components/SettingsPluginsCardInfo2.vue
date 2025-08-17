@@ -32,7 +32,7 @@ const props = defineProps<{
       <p>{{ $t('error') }}</p>
     </BaseMenuItem>
     <BaseMenuItem>
-      <div class="text-md bg-base-300 p-5 text-error font-bold rounded-box">
+      <div class="text-md max-w-200 bg-base-300 p-5 text-error font-bold rounded-box">
         <span>
           {{ $t(props.error.template, props.error.payload) }}
         </span>

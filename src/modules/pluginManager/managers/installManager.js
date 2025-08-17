@@ -19,7 +19,7 @@ const builtPluginsImports = import.meta.glob(['@/plugins/*/main.js', '@/plugins/
 
 const localPluginsImports = import.meta.glob(['@localPlugins/*.js', '!@localPlugins/*.system.js'], {
   import: 'default',
-  query: '?url',
+  query: 'url',
 });
 
 /** @type {ComputedRef<BuiltPlugin[]>} */
@@ -162,13 +162,14 @@ export function useInstallManager(logger, config) {
    * @return {Promise<Plugin[]>}
    */
   async function initLocal() {
-    const [plugins] = await _urls2Plugins(Object.keys(localPluginsImports), (url, plugin) => {
+    const [plugins, errors] = await _urls2Plugins(Object.keys(localPluginsImports), (url, plugin) => {
       // valid url for local plugin not usually available - its generate by vite: like @fs/something/on/disk
 
       plugin.manifest.source = url; // bypass disable/enable errors
       installedPlugins[plugin.manifest.id] = { ...plugin.manifest };
     });
 
+    notLoadedSources.push(...errors);
     return plugins;
   }
 
