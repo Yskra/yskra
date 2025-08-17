@@ -5,8 +5,6 @@ import legacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue';
 import UnoCSS from 'unocss/vite';
 import { defineConfig, mergeConfig } from 'vite';
-import VueDevTools from 'vite-plugin-vue-devtools';
-import { version } from './package.json';
 
 import componentRegisterConfig from './src/modules/componentRegister/buildConfigs/vite.config.js';
 import i18nConfig from './src/modules/i18n/buildConfigs/vite.config.js';
@@ -14,11 +12,7 @@ import i18nConfig from './src/modules/i18n/buildConfigs/vite.config.js';
 const isProd = process.env.NODE_ENV === 'production';
 
 const modulesConfig = mergeConfig(i18nConfig, componentRegisterConfig);
-const rootConfig = defineConfig({
-  base: '/',
-  define: {
-    __APP_VERSION__: JSON.stringify(version),
-  },
+const rootConfig = defineConfig(async () => ({
   build: {
     minify: false,
   },
@@ -30,9 +24,7 @@ const rootConfig = defineConfig({
     port: 8080,
   },
   plugins: [
-    VueDevTools({
-      launchEditor: 'webstorm',
-    }),
+    await devPlugins(),
     vue(),
     UnoCSS(),
     legacy({
@@ -65,8 +57,27 @@ const rootConfig = defineConfig({
     },
     extensions: ['.js', '.ts', '.vue'],
   },
-});
+}));
 
 
 // noinspection JSUnusedGlobalSymbols
-export default mergeConfig(rootConfig, modulesConfig);
+export default defineConfig(async (env) => mergeConfig(
+  await rootConfig(env),
+  modulesConfig,
+));
+
+
+/**
+ * @return {Promise<import('vite').Plugin[]>}
+ */
+async function devPlugins() {
+  if (isProd) {
+    return [];
+  }
+
+  return [
+    await import('vite-plugin-vue-devtools').then(({ default: plugin }) => plugin({
+      launchEditor: 'webstorm',
+    })),
+  ];
+}
