@@ -14,6 +14,7 @@ import * as router from 'vue-router';
 import routerPkg from 'vue-router/package.json';
 import vuePkg from 'vue/package.json';
 import yskraPkg from '@/../package.json';
+import { DOCS_BASE_URL } from '@/constants.js';
 import fixesModuleNames from './utils/fixesModuleNames.js';
 
 export const PLUGIN_STATUS = Object.freeze({
@@ -98,4 +99,10 @@ export const appPackageRegistry = {
     package: 'utils',
   },
 };
+
+export const DOCS_URL = Object.freeze({
+  PLUGIN_MANIFEST: new URL('reference/plugin-manifest', DOCS_BASE_URL),
+  PLUGIN_MANAGER_MODULE: new URL('reference/modules/plugin-manager', DOCS_BASE_URL),
+  GUIDE_INTRODUCTION: new URL('guide/introduction', DOCS_BASE_URL),
+});
 

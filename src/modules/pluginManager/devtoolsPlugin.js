@@ -4,9 +4,8 @@
 
 import { setupDevtoolsPlugin } from '@vue/devtools-api';
 import { watch } from 'vue';
-import { DOCUMENTATION_PLUGIN_MANAGER_URL } from '@/constants.js';
-import { PLUGIN_STATUS } from '@/modules/pluginManager/constants.js';
 import Icon from './assets/folder-plugins.svg?no-inline';
+import { DOCS_URL, PLUGIN_STATUS } from './constants.js';
 
 const INSPECTOR_ID = 'pluginManager';
 
@@ -36,7 +35,7 @@ export function registerDevtoolsPlugin(app, pluginManager, config, devtoolsConfi
     id: INSPECTOR_ID,
     label: 'Plugin Manager',
     logo: Icon,
-    homepage: DOCUMENTATION_PLUGIN_MANAGER_URL,
+    homepage: DOCS_URL.PLUGIN_MANAGER_MODULE.href,
     disableAppScope: true,
     app,
   }, (api) => {

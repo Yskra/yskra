@@ -1,6 +1,6 @@
 /** @import {PluginManifest, PluginExecute} from './Public'; */
 import I18nError from '@/utils/I18nError.js';
-import { PLUGIN_REQUIRED_FIELDS } from './constants.js';
+import { DOCS_URL, PLUGIN_REQUIRED_FIELDS } from './constants.js';
 
 
 export class Plugin {
@@ -20,7 +20,7 @@ export class Plugin {
         .map((field) => `"${field}"`)
         .join(', ');
 
-      throw new I18nError(`Plugin manifest not has required fields: {list}`, { list });
+      throw new I18nError(`Plugin manifest not has required fields: {list}. See {link} for details.`, { list, link: DOCS_URL.PLUGIN_MANIFEST.href });
     }
 
     this.execute = execute;

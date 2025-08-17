@@ -2,6 +2,7 @@
 import { usePluginManager } from '@/modules/pluginManager';
 import SettingsPluginsCard2 from '@/modules/pluginManager/components/SettingsPluginsCard2.vue';
 import SettingsPluginsCardInfo2 from '@/modules/pluginManager/components/SettingsPluginsCardInfo2.vue';
+import { DOCS_URL } from '@/modules/pluginManager/constants';
 import SettingsPluginsCard from '../components/SettingsPluginsCard.vue';
 import SettingsPluginsCardInfo from '../components/SettingsPluginsCardInfo.vue';
 import { useSettingsPluginsPage } from '../composables/settingsPluginsPage';
@@ -52,6 +53,16 @@ const {
               </BaseButton>
             </BaseTooltip>
           </div>
+        </BaseMenuItem>
+        <BaseMenuItem class="border-1 border-info rounded-md">
+          <a
+            :href="DOCS_URL.GUIDE_INTRODUCTION.href"
+            target="_blank"
+            class="py-0!"
+          >
+            <span class="i-mingcute:book-2-fill" />
+            <span>{{ $t('wantToCreateYourOwnPlugin') }}</span>
+          </a>
         </BaseMenuItem>
       </BaseMenu>
 

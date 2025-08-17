@@ -4,7 +4,7 @@
 
 import { setupDevtoolsPlugin } from '@vue/devtools-api';
 import { toRef, watch } from 'vue';
-import { DOCUMENTATION_BUS_URL } from '@/constants.js';
+import { DOCS_BASE_URL } from '@/constants.js';
 import Icon from './assets/tour-bus.svg?no-inline';
 
 const INSPECTOR_ID = 'appBus';
@@ -18,7 +18,7 @@ export function registerDevtoolsPlugin(app, bus) {
     id: 'AppBus',
     label: 'App Bus',
     logo: Icon,
-    homepage: DOCUMENTATION_BUS_URL,
+    homepage: (new URL('reference/modules/app-bus', DOCS_BASE_URL)).href,
     disableAppScope: true,
     app,
   }, (api) => {
