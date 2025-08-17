@@ -3,5 +3,6 @@
   "testConnect": "Testing connection",
   "connectedDirectly": "Connected directly to TheMovieDB",
   "connectedViaProxy": "Connected via proxy",
-  "proxyUnreachable": "Proxy is unreachable"
+  "proxyUnreachable": "Proxy is unreachable",
+  "forceProxy": "Force proxy"
 }

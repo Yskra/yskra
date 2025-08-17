@@ -21,15 +21,17 @@ const config = ref({
 });
 
 export const useTMDBStore = defineStore('tmdb.main', () => {
+  /** @type {Ref<string|URL>} */
   const altApiEndpoint = ref('');
+  /** @type {Ref<string|URL>} */
   const altImageCdnEndpoint = ref('');
 
   /** @type {I18n} */
   // @ts-expect-error vue-i18n not provide 'legacy' version generic for this function
   const i18n = useI18n();
 
-  const apiUrl = computed(() => altApiEndpoint.value || config.value.apiUrl);
-  const imageCdn = computed(() => altImageCdnEndpoint.value || config.value.imageCdn);
+  const apiUrl = computed(() => new URL(altApiEndpoint.value || config.value.apiUrl));
+  const imageCdn = computed(() => new URL(altImageCdnEndpoint.value || config.value.imageCdn));
   const language = computed(() => {
     if (config.value.language === '') {
       const appLanguage = i18n.locale.split('-').at(0);
@@ -52,7 +54,7 @@ export const useTMDBStore = defineStore('tmdb.main', () => {
   });
 
   const myFetch = createFetch({
-    baseUrl: apiUrl,
+    baseUrl: () => apiUrl.value.href,
     options: {
       // @ts-expect-error not valid type in vueuse
       timeout: () => config.value.apiTimeout,

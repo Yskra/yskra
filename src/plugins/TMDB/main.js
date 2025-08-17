@@ -46,7 +46,7 @@ function initServices(defineBusService) {
     set: {
       type: 'method',
       /**
-       * @param {{apiUrl: string, imageCdn: string}} args args
+       * @param {{apiUrl: string|URL, imageCdn: string|URL}} args args
        */
       value: ({ apiUrl, imageCdn }) => {
         altApiEndpoint.value = apiUrl;

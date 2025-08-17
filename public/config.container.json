@@ -15,5 +15,9 @@
     "installed": [],
     "repositories": ["/repository.json"],
     "disabled": []
+  },
+  "dev.yskra.themoviedb_proxy": {
+    "apiUrl": "/proxy/tmdb/3/",
+    "imageCdn": "/proxy/tmdb_image/t/p/"
   }
 }
