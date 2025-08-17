@@ -29,6 +29,7 @@ const sizes = Object.freeze({
 <template>
   <DaisyUI
     :is="Checkbox"
+    v-focus
     class="toggle"
     :colors="colors"
     :sizes="sizes"

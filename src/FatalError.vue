@@ -146,7 +146,7 @@ from external dependencies that can potentially load with errors */
   @apply mb-4 text-xl text-error font-bold;
 }
 .error-list {
-  @apply overflow-y-scroll max-h-200;
+  @apply overflow-y-scroll max-h-100;
 }
 .error-message {
   @apply mb-3;
