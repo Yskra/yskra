@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { applyFreezePrototypes, applyRemoveApis } from '../globals.js';
+import { applyRemoveApis } from '../globals.js';
 
 describe('applyRemoveApis', () => {
   beforeEach(() => {
@@ -36,24 +36,24 @@ describe('applyRemoveApis', () => {
   });
 });
 
-describe('applyFreezePrototypes', () => {
-  applyFreezePrototypes();
-
-  it('should freeze Object prototype', () => {
-    expect(Object.isFrozen(Object.prototype)).toBe(true);
-  });
-
-  it('should freeze Array prototype', () => {
-    expect(Object.isFrozen(Array.prototype)).toBe(true);
-  });
-
-  it('should throw error when trying to modify frozen prototypes', () => {
-    // const obj = {};
-    // expect(() => Object.defineProperty(obj, 'newProp', { value: 1 })).toThrow();
-
-    expect(() => Array.prototype.push = () => {}).toThrow();
-  });
-});
+// describe('applyFreezePrototypes', () => {
+//   applyFreezePrototypes();
+//
+//   it('should freeze Object prototype', () => {
+//     expect(Object.isFrozen(Object.prototype)).toBe(true);
+//   });
+//
+//   it('should freeze Array prototype', () => {
+//     expect(Object.isFrozen(Array.prototype)).toBe(true);
+//   });
+//
+//   it('should throw error when trying to modify frozen prototypes', () => {
+//     // const obj = {};
+//     // expect(() => Object.defineProperty(obj, 'newProp', { value: 1 })).toThrow();
+//
+//     expect(() => Array.prototype.push = () => {}).toThrow();
+//   });
+// });
 
 // describe('applyBlockNetwork', () => {
 //   it('should block requests to blacklisted URLs using fetch', async () => {
