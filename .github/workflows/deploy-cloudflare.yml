@@ -1,0 +1,40 @@
+name:  Deploy to Cloudflare
+
+on:
+  workflow_call:
+    inputs:
+      spa-artifact:
+        required: true
+        type: string
+
+env:
+  wrangler-config: >-
+    name = "yskra"
+    compatibility_date = "$(date -I)"
+    assets = { not_found_handling = "single-page-application", directory = "dist" }
+
+jobs:
+  deploy:
+    name: Deploy to Cloudflare
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    environment:
+      name: deploy
+      url: ${{ steps.cloudflare.outputs.deployment-url }}
+    steps:
+      - name: Download SPA artifact
+        uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ inputs.spa-artifact }}
+          path: dist
+
+      - name: Create wrangler.toml
+        run: echo "${{ env.wrangler-config }}" > wrangler.toml
+
+      - name: Send assets to Cloudflare
+        id: cloudflare
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}

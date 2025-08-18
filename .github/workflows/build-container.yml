@@ -1,0 +1,53 @@
+name: Build and Push Container
+on:
+  workflow_call:
+    inputs:
+      spa-artifact:
+        required: true
+        type: string
+
+env:
+  registry: ghcr.io
+  image-name: ${{ github.repository }}
+  tags-attributes: |
+    # set latest tag for default branch
+    type=raw,value=latest,enable={{is_default_branch}}
+
+jobs:
+  build-container:
+    name: Build Container
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download SPA artifact
+        uses: actions/download-artifact@v4
+        with:
+          artifact-ids: ${{ inputs.spa-artifact }}
+          path: dist
+
+      - name: Log into registry ${{ env.registry }}
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.registry }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.registry }}/${{ env.image-name }}
+          tags: ${{ env.tags-attributes }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

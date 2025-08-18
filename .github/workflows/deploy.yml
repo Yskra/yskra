@@ -1,5 +1,3 @@
-# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
-
 name: Deploy
 
 on:
@@ -7,139 +5,29 @@ on:
     branches:
       - master
 
-env:
-  # Use docker.io for Docker Hub if empty
-  REGISTRY: ghcr.io
-  # github.repository as <account>/<repo>
-  IMAGE_NAME: ${{ github.repository }}
-
 jobs:
+  tests:
+    uses: ./.github/workflows/test.yml
+
   build:
-    name: Build Application
-    runs-on: ubuntu-latest
-    outputs:
-      artifact-id: ${{ steps.artifact.outputs.artifact-id }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    needs: tests
+    uses: ./.github/workflows/build.yml
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install --production --frozen-lockfile
-
-      - run: pnpm run build
-
-      - name: Upload SPA build artifact
-        id: artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: yskra-spa
-          path: dist/
-
-      - name: Upload Docker configs
-        uses: actions/upload-artifact@v4
-        with:
-          name: container-assets
-          path: |
-            Dockerfile
-            nginx.conf
-
-  dispatch:
-    name: Deploy to GitHub Pages
-    environment:
-      name: deploy
-      url: https://yskra.github.io
+  deploy-gh-pages:
     needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Dispatch to gh-pages repo
-        uses: peter-evans/repository-dispatch@v3
-        with:
-          token: ${{ secrets.PAT }}
-          repository: Yskra/yskra.github.io
-          event-type: deploy-gh-pages
-          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "artifact-ids": "${{ needs.build.outputs.artifact-id }}", "run-id": "${{ github.run_id }}"}'
+    uses: ./.github/workflows/deploy-gh-pages.yml
+    with:
+      spa-artifact: ${{ needs.build.outputs.artifact-id }}
 
-  deploy:
-    name: Deploy to Cloudflare
-    runs-on: ubuntu-latest
+  deploy-cloudflare:
     needs: build
-    permissions:
-      contents: read
-      deployments: write
-    environment:
-      name: deploy
-      url: ${{ steps.cloudflare.outputs.deployment-url }}
-    steps:
-      - name: Download SPA artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: yskra-spa
-          path: dist
-
-      - name: Create wrangler.toml
-        run: |
-          cat > wrangler.toml << 'EOF'
-            name = "yskra"
-            compatibility_date = "$(date -I)"
-            assets = { not_found_handling = "single-page-application", directory = "dist" }
-          EOF
-
-      - name: Send assets to Cloudflare
-        id: cloudflare
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    uses: ./.github/workflows/deploy-cloudflare.yml
+    with:
+      spa-artifact: ${{ needs.build.outputs.artifact-id }}
 
   build-container:
-    name: Build Container
-    runs-on: ubuntu-latest
     needs: build
-    permissions:
-      packages: write
-      contents: read
-    steps:
-      - name: Download SPA artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: yskra-spa
-          path: dist
+    uses: ./.github/workflows/build-container.yml
+    with:
+      spa-artifact: ${{ needs.build.outputs.artifact-id }}
 
-      - name: Download Container assets
-        uses: actions/download-artifact@v4
-        with:
-          name: container-assets
-
-      - name: Log into registry ${{ env.REGISTRY }}
-        if: github.event_name != 'pull_request'
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            # set latest tag for default branch
-            type=raw,value=latest,enable={{is_default_branch}}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}

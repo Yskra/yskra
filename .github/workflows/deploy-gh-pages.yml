@@ -1,0 +1,35 @@
+name: Deploy to GitHub Pages
+on:
+  workflow_call:
+    inputs:
+      spa-artifact:
+        required: true
+        type: string
+
+env:
+  deploy-url: https://yskra.github.io
+  repository: Yskra/yskra.github.io
+  event-type: deploy-gh-pages
+
+jobs:
+  dispatch:
+    name: Dispatch to gh-pages repo
+    environment:
+      name: deploy
+      url: ${{ env.deploy-url }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PAT }}
+          repository: ${{ env.repository }}
+          event-type: ${{ env.event-type }}
+          client-payload: >-
+            {
+              "ref": "${{ github.ref }}", 
+              "sha": "${{ github.sha }}",
+              "artifact-ids": "${{ inputs.spa-artifact }}", 
+              "run-id": "${{ github.run_id }}"
+            }
