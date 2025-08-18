@@ -4,6 +4,7 @@ on:
   workflow_call:
     inputs:
       spa-artifact:
+        description: ID uploaded artifact with static files SPA
         required: true
         type: string
 

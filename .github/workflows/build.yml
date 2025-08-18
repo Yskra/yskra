@@ -2,17 +2,19 @@ name: Build Single Page Application
 on:
   workflow_call:
     outputs:
-      spa-artifact:
+      artifact:
         description: ID uploaded artifact
-        value: ${{ jobs.build.outputs.artifact-id }}
+        value: ${{ jobs.build.outputs.artifact }}
 
+env:
+  build-dir: dist/
+  artifact-name: yskra-spa
 
 jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      spa-artifact: ${{ steps.artifact.outputs.artifact-id }}
-      container-assets: ${{ steps.container-assets.outputs.artifact-id }}
+      artifact: ${{ steps.artifact.outputs.artifact-id }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -28,5 +30,5 @@ jobs:
       - id: artifact
         uses: actions/upload-artifact@v4
         with:
-          name: yskra-spa
-          path: dist/
+          name: ${{ env.artifact-name }}
+          path: ${{ env.build-dir }}

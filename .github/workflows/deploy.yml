@@ -19,7 +19,7 @@ jobs:
     needs: build
     uses: ./.github/workflows/deploy-gh-pages.yml
     with:
-      spa-artifact: ${{ needs.build.outputs.artifact-id }}
+      spa-artifact: ${{ needs.build.outputs.artifact }}
 
   deploy-cloudflare:
     permissions:
@@ -28,7 +28,7 @@ jobs:
     needs: build
     uses: ./.github/workflows/deploy-cloudflare.yml
     with:
-      spa-artifact: ${{ needs.build.outputs.artifact-id }}
+      spa-artifact: ${{ needs.build.outputs.artifact }}
 
   build-container:
     permissions:
@@ -37,5 +37,5 @@ jobs:
     needs: build
     uses: ./.github/workflows/build-container.yml
     with:
-      spa-artifact: ${{ needs.build.outputs.artifact-id }}
+      spa-artifact: ${{ needs.build.outputs.artifact }}
 
