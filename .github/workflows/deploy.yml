@@ -15,21 +15,25 @@ jobs:
 
   deploy-gh-pages:
     permissions:
-      contents: read
-      deployments: write
-
+      contents: write
     needs: build
     uses: ./.github/workflows/deploy-gh-pages.yml
     with:
       spa-artifact: ${{ needs.build.outputs.artifact-id }}
 
   deploy-cloudflare:
+    permissions:
+      contents: read
+      deployments: write
     needs: build
     uses: ./.github/workflows/deploy-cloudflare.yml
     with:
       spa-artifact: ${{ needs.build.outputs.artifact-id }}
 
   build-container:
+    permissions:
+      packages: write
+      contents: read
     needs: build
     uses: ./.github/workflows/build-container.yml
     with:
