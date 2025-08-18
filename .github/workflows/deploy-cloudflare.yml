@@ -1,5 +1,4 @@
 name:  Deploy to Cloudflare
-
 on:
   workflow_call:
     inputs:
@@ -7,12 +6,12 @@ on:
         description: ID uploaded artifact with static files SPA
         required: true
         type: string
+    secrets:
+      CLOUDFLARE_API_TOKEN:
+        required: true
 
 env:
-  wrangler-config: >-
-    name = "yskra"
-    compatibility_date = "$(date -I)"
-    assets = { not_found_handling = "single-page-application", directory = "dist" }
+  directory: dist
 
 jobs:
   deploy:
@@ -25,14 +24,20 @@ jobs:
       name: deploy
       url: ${{ steps.cloudflare.outputs.deployment-url }}
     steps:
-      - name: Download SPA artifact
-        uses: actions/download-artifact@v4
+      - name: Download SPA artifact by ID
+        uses: actions/download-artifact@v5
         with:
           artifact-ids: ${{ inputs.spa-artifact }}
-          path: dist
+          path: ${{ env.directory }}
+          merge-multiple: true
 
       - name: Create wrangler.toml
-        run: echo "${{ env.wrangler-config }}" > wrangler.toml
+        run: |
+          cat > wrangler.toml << 'EOF'
+            name = "yskra"
+            compatibility_date = "$(date -I)"
+            assets = { not_found_handling = "single-page-application", directory = "${{ env.directory }}" }
+          EOF
 
       - name: Send assets to Cloudflare
         id: cloudflare

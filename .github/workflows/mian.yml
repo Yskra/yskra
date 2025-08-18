@@ -20,6 +20,8 @@ jobs:
     uses: ./.github/workflows/deploy-gh-pages.yml
     with:
       spa-artifact: ${{ needs.build.outputs.artifact }}
+    secrets:
+      PAT: ${{ secrets.PAT }}
 
   deploy-cloudflare:
     permissions:
@@ -29,6 +31,8 @@ jobs:
     uses: ./.github/workflows/deploy-cloudflare.yml
     with:
       spa-artifact: ${{ needs.build.outputs.artifact }}
+    secrets:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
   build-container:
     permissions:

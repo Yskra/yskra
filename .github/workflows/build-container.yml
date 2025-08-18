@@ -29,6 +29,7 @@ jobs:
         with:
           artifact-ids: ${{ inputs.spa-artifact }}
           path: dist
+          merge-multiple: true
 
       - name: Log into registry ${{ env.registry }}
         if: github.event_name != 'pull_request'

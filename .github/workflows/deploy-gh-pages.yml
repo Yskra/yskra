@@ -6,10 +6,13 @@ on:
         description: ID uploaded artifact with static files SPA
         required: true
         type: string
+    secrets:
+      PAT:
+        required: true
 
 env:
-  deploy-url: https://yskra.github.io
-  repository: Yskra/yskra.github.io
+  deploy-url: https://${{ github.repository_owner }}.github.io
+  repository: ${{ github.repository_owner }}/${{ github.repository }}
   event-type: deploy-gh-pages
 
 jobs:
