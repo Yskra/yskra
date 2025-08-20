@@ -5,7 +5,7 @@ export const CONFIG_FILE_PATH = '/config.json';
 export const LS_CONFIG_KEY = 'config';
 export const LS_USER_PROFILES_KEY = 'userProfiles';
 
-export const DOCS_BASE_URL = new URL('https://docs.yskra.app/en/');
+export const DOCS_BASE_URL = new URL('https://docs.yskra.app/');
 
 export const DEFAULT_PROFILE = {
   meta: {
