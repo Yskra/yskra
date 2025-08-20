@@ -7,22 +7,22 @@ import getVanillaInput from './vanila-input';
 const Checkbox = getVanillaInput('checkbox');
 
 const colors = Object.freeze({
-  neutral: 'btn-neutral', // neutral color
-  primary: 'btn-primary', // primary color
-  secondary: 'btn-secondary', // secondary color
-  accent: 'btn-accent', // accent color
-  info: 'btn-info', // info color
-  success: 'btn-success', // success color
-  warning: 'btn-warning', // warning color
-  error: 'btn-error', // error color
+  neutral: 'checkbox-neutral', // neutral color
+  primary: 'checkbox-primary', // primary color
+  secondary: 'checkbox-secondary', // secondary color
+  accent: 'checkbox-accent', // accent color
+  info: 'checkbox-info', // info color
+  success: 'checkbox-success', // success color
+  warning: 'checkbox-warning', // warning color
+  error: 'checkbox-error', // error color
 });
 
 const sizes = Object.freeze({
-  xs: 'btn-xs', // Tiny size
-  sm: 'btn-sm', // Small size
-  md: 'btn-md', // Medium size (default)
-  lg: 'btn-lg', // Large size
-  xl: 'btn-xl', // Extra large size
+  xs: 'checkbox-xs', // Tiny size
+  sm: 'checkbox-sm', // Small size
+  md: 'checkbox-md', // Medium size (default)
+  lg: 'checkbox-lg', // Large size
+  xl: 'checkbox-xl', // Extra large size
 });
 </script>
 

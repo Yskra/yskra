@@ -1,6 +1,5 @@
 import type { UseImage, vOnClickOutside } from '@vueuse/components';
-import type { VNode } from 'vue';
-import type { AllowedComponentProps, ComponentCustomProps, VNodeProps } from 'vue';
+import type { AllowedComponentProps, ComponentCustomProps, VNode, VNodeProps } from 'vue';
 import type { RouterLink } from 'vue-router';
 import type BaseFilterItem from './lib/base-filter-item.vue';
 
@@ -67,6 +66,13 @@ declare module 'vue' {
       title: () => VNode[];
       figure: () => VNode[];
       actions: () => VNode[];
+    };
+  };
+
+  const UIKitBaseCheckbox: new () => {
+    $props: BaseProps & {
+      color?: DaisyUIType;
+      size?: DaisyUIType;
     };
   };
 
@@ -217,6 +223,7 @@ declare module 'vue' {
     BaseBadge: typeof UIKitBaseBadge;
     BaseButton: typeof UIKitBaseButton;
     BaseCard: typeof UIKitBaseCard;
+    BaseCheckbox: typeof UIKitBaseCheckbox;
     BaseCollapse: typeof UIKitBaseCollapse;
     BaseDivider: typeof UIKitBaseDivider;
     BaseFilter: typeof UIKitBaseFilter;
