@@ -14,6 +14,10 @@
   "pluginManager": {
     "installed": [],
     "repositories": ["/repository.json"],
-    "disabled": []
+    "disabled": [],
+    "pluginsTos": {
+      "accepted": false,
+      "href": "https://docs.yskra.app/tos/plugins"
+    }
   }
 }

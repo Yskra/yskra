@@ -5,10 +5,11 @@
 /* global System */
 
 import { watchOnce } from '@vueuse/core';
-import { hasInjectionContext, inject, ref, shallowReactive } from 'vue';
+import { h, hasInjectionContext, inject, ref, shallowReactive, shallowRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAppBus } from '@/modules/appBus';
 import { Logger } from '@/modules/logger';
+import AcceptTOS from '@/modules/pluginManager/components/AcceptTOS.vue';
 import { appPackageRegistry, BLACKLIST_TAGS, BLACKLIST_URLS, INJECT_KEY, PLUGIN_RUNTIME, PLUGIN_STATUS } from '@/modules/pluginManager/constants';
 import { createInjectorModule } from '@/modules/pluginManager/lib/injector/index.js';
 import { useEnableManager } from '@/modules/pluginManager/managers/disableManager.js';
@@ -393,6 +394,11 @@ export function createPluginManagerModule({ config, userProfile, isRecoveryMode,
    * @param {string} src plugin url
    */
   async function installAndMount(src) {
+    const accepted = await checkPluginTos();
+
+    if (!accepted) {
+      return;
+    }
     const plugin = await installPlugin(src);
 
     await tryMount(plugin);
@@ -434,6 +440,36 @@ export function createPluginManagerModule({ config, userProfile, isRecoveryMode,
   function disableAndUnmount(id) {
     tryUnmount(id).then(() => {
       disablePlugin(id);
+    });
+  }
+
+  /**
+   * @return {Promise<boolean>}
+   */
+  async function checkPluginTos() {
+    const pluginsTos = config.value.pluginManager.pluginsTos;
+
+    if (pluginsTos.accepted || !pluginsTos.href) {
+      return true;
+    }
+
+    return new Promise((resolve) => {
+      const accepted = shallowRef(false);
+      const dialog = bus.call('ui.dialog:modal', {
+        title: t('warning'),
+        body: h(AcceptTOS, {
+          href: pluginsTos.href,
+          onAccepted: (/** @type {boolean} */ result) => {
+            accepted.value = result;
+            dialog.close();
+          },
+        }),
+      });
+
+      dialog.onClose(() => {
+        pluginsTos.accepted = accepted.value;
+        resolve(accepted.value);
+      });
     });
   }
 }

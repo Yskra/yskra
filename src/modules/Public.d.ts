@@ -27,6 +27,10 @@ interface BaseConfig {
     disabled: PluginManifest['id'][];
     installed: PluginManifest['source'][];
     repositories: string[];
+    pluginsTos: {
+      accepted: boolean;
+      href: string;
+    };
   };
 }
 

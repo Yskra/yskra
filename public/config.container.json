@@ -14,7 +14,11 @@
   "pluginManager": {
     "installed": [],
     "repositories": ["/repository.json"],
-    "disabled": []
+    "disabled": [],
+    "pluginsTos": {
+      "accepted": true,
+      "href": ""
+    }
   },
   "dev.yskra.themoviedb_proxy": {
     "apiUrl": "/proxy/tmdb/3/",
