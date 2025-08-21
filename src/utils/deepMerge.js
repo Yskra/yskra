@@ -1,3 +1,5 @@
+import equal from 'fast-deep-equal';
+
 /**
  * @template {Record<string, any>} T
  * @param {T} obj1 source object
@@ -10,7 +12,7 @@ export default function deepMerge(obj1, obj2) {
   for (const key in obj1) {
     if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object') {
       if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])) {
-        result[key] = [...obj1[key], ...obj2[key].filter((e) => !obj1[key].includes(e))];
+        result[key] = [...obj1[key], ...obj2[key].filter((e) => !obj1[key].some((/** @type {any} */ ee) => equal(ee, e)))];
       }
       else {
         result[key] = deepMerge(obj1[key], obj2[key]);
