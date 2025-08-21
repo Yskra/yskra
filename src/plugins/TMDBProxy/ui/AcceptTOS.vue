@@ -3,9 +3,6 @@ import { autoResetRef } from '@vueuse/core';
 import { ref } from 'vue';
 import { BaseCheckbox } from '@/plugins/UiKit/lib';
 
-const props = defineProps<{
-  href: string;
-}>();
 const emit = defineEmits<{
   (e: 'accepted', result: boolean): void;
 }>();
@@ -25,7 +22,7 @@ function onAccepted() {
 
 <template>
   <div v-focus-section.autofocus>
-    <p>{{ $t('acceptYskraPluginTosToContinue') }}</p>
+    <p>{{ $t('acceptTmdbProxyTosToContinue') }}</p>
 
     <div
       v-focus
@@ -38,13 +35,7 @@ function onAccepted() {
         :checked="checked"
       />
       <p class="ml-2">
-        <i18n-t
-          keypath="acceptConditionsAndContinue"
-          tag="label"
-          for="tos"
-        >
-          <a :href="props.href" target="_blank">{{ $t('conditionsPluginTos') }}</a>
-        </i18n-t>
+        {{ $t('accept') }}
       </p>
     </div>
 

@@ -18,6 +18,7 @@ export default function plugin({ defineSettings, defineConfig }) {
   const bus = useAppBus();
   const config = defineConfig({
     forceProxy: false,
+    acceptedTos: false,
     apiUrl: '',
     imageCdn: '',
   });
@@ -31,6 +32,7 @@ export default function plugin({ defineSettings, defineConfig }) {
     status: status.value,
     forceProxy: config.forceProxy,
     onToggleForceProxy: () => config.forceProxy = !config.forceProxy,
+    onTosAccepted: () => config.acceptedTos = true,
   })));
 
   return () => {
@@ -47,6 +49,10 @@ export default function plugin({ defineSettings, defineConfig }) {
     if (tmdbAvailable) {
       status.value = STATUS.DIRECT;
       bus.call('tmdb.endpoints:set', { apiUrl: '', imageCdn: '' });
+      return;
+    }
+    if (!config.acceptedTos) {
+      status.value = STATUS.TOS_NOT_ACCEPTED;
       return;
     }
     const proxyAvailable = await fetch(config.apiUrl, checkHostOpts).catch(() => false);

@@ -3,6 +3,10 @@
   "testConnect": "Testing connection",
   "connectedDirectly": "Connected directly to TheMovieDB",
   "connectedViaProxy": "Connected via proxy",
+  "tosNotAccepted": "Terms of Service not accepted",
+  "showTerms": "Show terms",
+  "acceptTmdbProxyTosToContinue": "This optional feature uses a proxy server to restore access to TMDB. By enabling it, you confirm that you are acting at your own risk and not breaking local laws. The developer is not responsible for any consequences of using this feature.",
+  "accept": "Accept",
   "proxyUnreachable": "Proxy is unreachable",
   "forceProxy": "Force proxy"
 }

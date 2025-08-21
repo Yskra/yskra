@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import { h, shallowRef } from 'vue';
+import { useI18n } from 'vue-i18n';
 import STATUS from '@/plugins/TMDBProxy/status.js';
+import AcceptTOS from '@/plugins/TMDBProxy/ui/AcceptTOS.vue';
+import { useAppBus } from '@/utils/appBus';
 
 defineProps<{
   status: typeof STATUS[keyof typeof STATUS];
@@ -8,7 +12,29 @@ defineProps<{
 
 const emit = defineEmits<{
   (e: 'toggleForceProxy'): void;
+  (e: 'tosAccepted'): void;
 }>();
+const { t } = useI18n();
+const bus = useAppBus();
+
+function showTos() {
+  const accepted = shallowRef(false);
+  const dialog = bus.call('ui.dialog:modal', {
+    title: t('warning'),
+    body: h(AcceptTOS, {
+      onAccepted: (result: boolean) => {
+        accepted.value = result;
+        dialog.close();
+      },
+    }),
+  });
+
+  dialog.onClose(() => {
+    if (accepted.value) {
+      emit('tosAccepted');
+    }
+  });
+}
 </script>
 
 <template>
@@ -29,6 +55,16 @@ const emit = defineEmits<{
           <div class="i-mingcute:wifi-fill icon-size" />
         </div>
         <span class="text-sm">{{ $t('connectedDirectly') }}</span>
+      </template>
+      <template v-if="$props.status === STATUS.TOS_NOT_ACCEPTED">
+        <div class="mr-6 text-warning">
+          <div class="i-mingcute:safety-certificate-fill icon-size" />
+        </div>
+        <span class="text-sm">{{ $t('tosNotAccepted') }}</span>
+
+        <BaseButton class="ml-5" @click="showTos">
+          {{ $t('showTerms') }}
+        </BaseButton>
       </template>
       <template v-if="$props.status === STATUS.PROXY">
         <div class="mr-6 text-success">

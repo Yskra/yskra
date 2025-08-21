@@ -32,6 +32,7 @@
     }
   ],
   "dev.yskra.themoviedb_proxy": {
+    "acceptedTos": true,
     "apiUrl": "/proxy/tmdb/3/",
     "imageCdn": "/proxy/tmdb_image/t/p/"
   }

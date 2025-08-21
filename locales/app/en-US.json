@@ -127,7 +127,7 @@
   "auto": "Auto",
   "apply": "Apply",
   "warning": "Warning",
-  "acceptPluginTosToContinue": "You are about to install a plugin that is supported by a third party developer unrelated to Yskra. You must accept the plugin terms of use to continue.",
+  "acceptYskraPluginTosToContinue": "You are about to install a plugin that is supported by a third party developer unrelated to Yskra. You must accept the plugin terms of use to continue.",
   "acceptConditionsAndContinue": "I accept and agree to {0}.",
   "conditionsPluginTos": "the terms of use of the plugins",
   "cancel": "Cancel",
