@@ -4,6 +4,7 @@
 	"description": "Free and open-source web-application for TV",
 	"type": "module",
 	"homepage": "https://yskra.app",
+	"repository": "https://github.com/Yskra/yskra",
 	"license": "AGPL-3.0-or-later",
 	"web-types": [
 		"lib/vue-arrow-navigation/web-types.json"

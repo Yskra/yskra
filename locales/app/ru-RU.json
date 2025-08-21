@@ -131,5 +131,11 @@
   "acceptConditionsAndContinue": "Я принимаю {0} и соглашаюсь с ними.",
   "conditionsPluginTos": "условия использования плагинов",
   "cancel": "Отмена",
-  "ok": "Ок"
+  "ok": "Ок",
+  "about": "О приложении",
+  "aboutYskra": "Yskra это свободное и открытое веб-приложение для TV.",
+  "sourceCode": "Исходный код",
+  "termsOfService": "Условия использования",
+  "privacyPolicy": "Политика конфиденциальности",
+  "dmca": "DMCA"
 }

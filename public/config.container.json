@@ -20,6 +20,17 @@
       "href": ""
     }
   },
+  "legal": {
+    "privacy_policy": "",
+    "terms_of_service": "",
+    "dmca": ""
+  },
+  "links": [
+    {
+      "name": "Telegram (@Yskra_app)",
+      "href": "https://t.me/Yskra_app"
+    }
+  ],
   "dev.yskra.themoviedb_proxy": {
     "apiUrl": "/proxy/tmdb/3/",
     "imageCdn": "/proxy/tmdb_image/t/p/"

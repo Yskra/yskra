@@ -19,5 +19,16 @@
       "accepted": false,
       "href": "https://docs.yskra.app/tos/plugins"
     }
-  }
+  },
+  "legal": {
+    "privacy_policy": "https://docs.yskra.app/privacy",
+    "terms_of_service": "https://docs.yskra.app/tos",
+    "dmca": "https://docs.yskra.app/dmca"
+  },
+  "links": [
+    {
+      "name": "Telegram (@Yskra_app)",
+      "href": "https://t.me/Yskra_app"
+    }
+  ]
 }

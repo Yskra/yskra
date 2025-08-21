@@ -26,5 +26,14 @@ export default {
         icon: 'i-mingcute:play-fill',
       },
     },
+    {
+      path: 'about',
+      name: 'settingsAbout',
+      component: () => import('@/modules/settings/preferences/AboutPage/AboutPage.vue'),
+      meta: {
+        title: 'about',
+        icon: 'i-mingcute:information-fill',
+      },
+    },
   ],
 };

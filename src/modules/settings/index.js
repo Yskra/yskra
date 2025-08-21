@@ -1,6 +1,7 @@
 /** @import {Module} from '@/modules/Public' */
 
 import { useVanillaRouter } from '@/modules/router';
+import { setLinksFromConfig } from '@/modules/settings/preferences/AboutPage';
 import { createPlayerSettings } from '@/modules/settings/preferences/player';
 import { createUISettings } from '@/modules/settings/preferences/UI';
 import route from './route.js';
@@ -30,6 +31,7 @@ export function createSettingsModule({ config, isRecoveryMode, awaitModules }) {
       awaitModules('PlatformModule', 'Store').then(() => {
         createUISettings(config);
         createPlayerSettings(config);
+        setLinksFromConfig(config);
       });
     },
   };

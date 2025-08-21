@@ -131,5 +131,11 @@
   "acceptConditionsAndContinue": "I accept and agree to {0}.",
   "conditionsPluginTos": "the terms of use of the plugins",
   "cancel": "Cancel",
-  "ok": "Ok"
+  "ok": "Ok",
+  "about": "About",
+  "aboutYskra": "Yskra is a free and open-source web-application for TV.",
+  "sourceCode": "Source code",
+  "termsOfService": "Terms of Service",
+  "privacyPolicy": "Privacy policy",
+  "dmca": "DMCA"
 }

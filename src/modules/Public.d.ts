@@ -32,6 +32,12 @@ interface BaseConfig {
       href: string;
     };
   };
+  legal: {
+    privacy_policy: string;
+    terms_of_service: string;
+    dmca: string;
+  };
+  links: { name: string; href: string }[];
 }
 
 interface BaseUserProfile {
