@@ -1,6 +1,18 @@
 {
   "manifest_version": 1,
-  "name": "Yskra Plugins",
+  "name": "Yskra Official Plugins",
   "plugins": [
+    {
+      "name": "Iframe Player",
+      "version": "1.0.0",
+      "author": "Xinos",
+      "id": "dev.yskra.iframePlayer",
+      "homepageUrl": "https://github.com/Yskra/iframe-player-plugin",
+      "supportUrl": "https://github.com/Yskra/iframe-player-plugin/issues",
+      "esSource": "https://yskra.github.io/iframe-player-plugin/iframe_player.js",
+      "systemSource": "https://yskra.github.io/iframe-player-plugin/iframe_player.system.js",
+      "license": "MPL-2.0",
+      "apiVersion": 0
+    }
   ]
 }
