@@ -43,7 +43,11 @@ function onAccepted() {
           tag="label"
           for="tos"
         >
-          <a :href="props.href" target="_blank">{{ $t('conditionsPluginTos') }}</a>
+          <a
+            class="link"
+            :href="props.href"
+            target="_blank"
+          >{{ $t('conditionsPluginTos') }}</a>
         </i18n-t>
       </p>
     </div>

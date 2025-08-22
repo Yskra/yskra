@@ -58,6 +58,13 @@ export interface PluginManifest extends Record<LocaleKey<'overview'>, string>, R
   dependencies?: Record<PluginManifest['id'], PluginManifest['version']>;
 }
 
+export interface PluginRepositoryItem extends PluginManifest {
+  esSource: string;
+  systemSource: string;
+  category?: string;
+  tags?: string[];
+}
+
 export type PluginFlag = (
     | 'SafeDisable' // only for built-in, by default disabling built-in is impossible as it can break many things
 );

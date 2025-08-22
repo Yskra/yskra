@@ -1,5 +1,5 @@
 // noinspection JSUnusedGlobalSymbols
-/** @import {PluginManifest, PluginInfo} from '@/modules/pluginManager/Public'; */
+/** @import {PluginManifest, PluginRepositoryItem, PluginInfo} from '@/modules/pluginManager/Public'; */
 /** @import {Ref, ComputedRef, UnwrapRef} from 'vue'; */
 /** @import {UseFetchReturn} from '@vueuse/core'; */
 /** @typedef {Ref<UnwrapRef<UseFetchReturn<any>[]>>} Fetched */
@@ -10,7 +10,7 @@ import { computed, reactive, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAppBus } from '@/modules/appBus/index.js';
 import { Logger } from '@/modules/logger';
-import { usePluginManager } from '@/modules/pluginManager';
+import { PLUGIN_RUNTIME, usePluginManager } from '@/modules/pluginManager';
 import { Plugin } from '@/modules/pluginManager/Plugin.js';
 import SourceError from '@/modules/pluginManager/utils/SourceError.js';
 import I18nError from '@/utils/I18nError.js';
@@ -117,7 +117,7 @@ export function useSettingsPluginsPage() {
       const { response } = await useFetch(value, { timeout: CHECK_HEADERS_TIMEOUT }).head();
 
       if (response.value && response.value.status === 200) {
-        if (response.value.headers.get('content-type') === 'application/json') {
+        if (response.value.headers.get('content-type')?.startsWith('application/json')) {
           addRepository(value);
           return;
         }
@@ -221,12 +221,14 @@ export function useSettingsPluginsPage() {
   }
 
   /**
-   * @param {PluginManifest} plugin
-   * @returns {PluginInfo}
+   * @param {PluginManifest|PluginRepositoryItem} plugin
+   * @returns {PluginInfo} plugin info for UI
    */
   function pluginManifest2Info(plugin) {
     const canDisable = !!plugin.source || !!plugin.flags?.includes('SafeDisable');
     const canRemove = !!plugin.source;
+    const pluginRuntime = plugin.runtime ?? PLUGIN_RUNTIME.ES;
+    const source = 'source' in plugin ? plugin.source : (pluginRuntime === PLUGIN_RUNTIME.ES ? plugin.esSource : plugin.systemSource);
 
     return reactive({
       ...plugin,
@@ -236,7 +238,7 @@ export function useSettingsPluginsPage() {
       isInstalled: computed(() => isPluginInstalled(plugin.id)),
       canRemove,
       canDisable,
-      install: () => installPlugin(plugin.source),
+      install: () => installPlugin(source),
       remove: () => {
         if (!canRemove) {
           return;
