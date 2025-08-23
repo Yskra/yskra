@@ -86,7 +86,7 @@
     ],
     "no-const-assign": "error",
     "no-control-regex": "error",
-    "no-debugger": "warn",
+    "no-debugger": "off",
     "no-delete-var": "error",
     "no-dupe-class-members": "error",
     "no-dupe-keys": "error",

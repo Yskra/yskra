@@ -79,7 +79,7 @@ export default function loadModules({ config, userProfiles, rootComponents }) {
       });
 
       attachGlobals(exposeGlobal);
-      initLogger.info(`Done in ${(performance.now() - startTime)}ms`);
+      initLogger.info(`Done in ${(performance.now() - startTime).toFixed(1)}ms`);
       ready.resolve();
     },
   };

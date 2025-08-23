@@ -58,15 +58,16 @@ export interface Props {
   isLoading: boolean;
   additionalActions?: FilmCardAction[];
 }
-const { hero, additionalActions = [] } = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  additionalActions: () => [],
+});
 const store = useFilmCardStore();
 const { actionsOrder } = storeToRefs(store);
 const bus = useAppBus();
 
-
-const filmCardBtnPayload = toRef(() => hero);
+const filmCardBtnPayload = toRef(() => props.hero);
 const filteredSortedActions = computed(() =>
-  [...additionalActions, ...store.actions]
+  [...props.additionalActions, ...store.actions]
     .filter((e) => e.isAvailable(filmCardBtnPayload.value))
     .map((e) => ({ ...e, action: (event: Event) => e.action({ event, ...filmCardBtnPayload.value }) }))
     .toSorted((a, b) => {
@@ -77,7 +78,7 @@ const filteredSortedActions = computed(() =>
     }),
 );
 
-watch(() => hero.image, (value) => {
+watch(() => props.hero.image, (value) => {
   bus.call('ui.background:setImage', value);
 }, { immediate: true });
 
@@ -91,27 +92,27 @@ function findIndexOrZero<T = any>(arr: T[], predicate: (item: T) => boolean): nu
 <template>
   <div class="film-card">
     <div class="flex flex-basis-100% flex-col justify-between overflow-x-auto rounded-xl bg-base-200 p-5">
-      <FilmCardHero v-bind="hero" :is-loading="isLoading">
+      <FilmCardHero v-bind="props.hero" :is-loading="props.isLoading">
         <template #top>
-          <FilmCardMeta v-bind="hero" :is-loading="isLoading" />
+          <FilmCardMeta v-bind="props.hero" :is-loading="props.isLoading" />
         </template>
         <template #middle>
-          <FilmCardRatings v-bind="hero" :is-loading="isLoading" />
-          <FilmCardActions v-if="hero.id" :actions="filteredSortedActions" />
+          <FilmCardRatings v-bind="props.hero" :is-loading="props.isLoading" />
+          <FilmCardActions v-if="props.hero.id" :actions="filteredSortedActions" />
         </template>
         <template #bottom>
-          <FilmCardInfoSheet v-bind="hero" :is-loading="isLoading" />
+          <FilmCardInfoSheet v-bind="props.hero" :is-loading="props.isLoading" />
         </template>
       </FilmCardHero>
 
-      <template v-if="collection">
+      <template v-if="props.collection">
         <BaseDivider />
 
         <h1 class="mb-3 text-lg font-bold">
-          {{ collection.name }}
+          {{ props.collection.name }}
         </h1>
         <YCarousel
-          :items="collection.parts"
+          :items="props.collection.parts"
           class="collection-carousel"
         />
       </template>
@@ -126,10 +127,10 @@ function findIndexOrZero<T = any>(arr: T[], predicate: (item: T) => boolean): nu
 
     <div class="ml-4 min-w-70">
       <div>
-        <FilmCardPeople :peoples="peoples.crew.slice(0, 5)">
+        <FilmCardPeople :peoples="props.peoples.crew.slice(0, 5)">
           {{ $t('team') }}
         </FilmCardPeople>
-        <FilmCardPeople :peoples="peoples.cast.slice(0, 10)">
+        <FilmCardPeople :peoples="props.peoples.cast.slice(0, 10)">
           {{ $t('cast') }}
         </FilmCardPeople>
       </div>
