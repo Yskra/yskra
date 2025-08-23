@@ -1,7 +1,7 @@
 /** @import {ItemListsResponse, ListsPath} from '../Public'; */
 /** @import {MaybeRefOrGetter, Ref} from 'vue' */
 
-import { computed, ref, toRef, watch } from 'vue';
+import { computed, toRef } from 'vue';
 import { useTMDBStore } from '@/plugins/TMDB/api/tmdb.js';
 import { imageQualities, imageTypes } from '@/plugins/TMDB/constants.js';
 import { useUrlBuild } from '@/plugins/TMDB/utils/urlBuild.js';
@@ -9,6 +9,9 @@ import { useUrlBuild } from '@/plugins/TMDB/utils/urlBuild.js';
 /** @type {ItemListsResponse} */
 const initialData = {
   results: [],
+  page: 0,
+  total_pages: 0,
+  total_results: 0,
 };
 
 /**
@@ -22,14 +25,12 @@ export function useCollectLists(typeR, pathR) {
   const type = toRef(typeR);
   const path = toRef(pathR);
 
-  let abortController = new AbortController();
-  const isLoading = ref(false);
   const { buildTMDBImageUrl } = useUrlBuild();
   const store = useTMDBStore();
   const url = computed(() => `${type.value}/${path.value}`);
+  /** @type {{data: Ref<ItemListsResponse>, error: Ref<any>, isFetching: Ref<boolean>}} */
   // @ts-ignore
-  /** @type {Ref<ItemListsResponse>} */
-  const response = ref(initialData);
+  const { data: response, error, isFetching: isLoading } = store.fetch(url, { initialData }).get().json();
   const items = computed(() => response.value.results.map(({ title, name, id, poster_path, release_date, first_air_date, backdrop_path, vote_average }) => ({
     title: title || name,
     id,
@@ -40,29 +41,9 @@ export function useCollectLists(typeR, pathR) {
     link: { name: 'TMDBItem', params: { type: type.value, id } },
   })));
 
-  watch([url, () => store.language], async () => {
-    // cancel the leading request, sometimes the application localization file loads faster -
-    // which triggers a change of the active language in the application,
-    // and the downloading of the default language data has not yet been completed and then the default language data can rewrite more current data
-    abortController?.abort();
-    abortController = new AbortController();
-
-    await refresh();
-  }, { immediate: true });
-
   return {
+    error,
+    isLoading,
     items,
   };
-
-  async function refresh() {
-    isLoading.value = true;
-    response.value = initialData;
-
-    if (url.value) {
-      const { data } = await store.fetch(url.value).get().json();
-
-      response.value = data.value;
-    }
-    isLoading.value = false;
-  }
 }

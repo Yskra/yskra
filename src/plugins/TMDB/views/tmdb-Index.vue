@@ -5,6 +5,7 @@ import { computed } from 'vue';
 import { useCollectPeople } from '@/plugins/TMDB/api/collectPeople';
 import { useCollectLists } from '@/plugins/TMDB/api/ItemLists';
 import { useTMDBStore } from '@/plugins/TMDB/api/tmdb.js';
+import FetchError from '@/plugins/TMDB/views/FetchError.vue';
 import { useAppBus } from '@/utils/appBus.js';
 import { useCollectDiscover } from '../api/collectDiscover.js';
 import { useCollectTrending } from '../api/collectTending.js';
@@ -12,7 +13,7 @@ import { useCollectTrending } from '../api/collectTending.js';
 const bus = useAppBus();
 const mainStore = useTMDBStore();
 
-const { items: popular } = useCollectDiscover('movie');
+const { items: popular, error } = useCollectDiscover('movie');
 const { items: trendingDay } = useCollectTrending('all', 'day');
 const { items: trendingWeek } = useCollectTrending('all', 'week');
 
@@ -38,40 +39,44 @@ function getRandomTwoUnique<T = any>(arr: T[]): [T, T] {
 </script>
 
 <template>
-  <div>
-    <BaseDivider placement="start" class="text-base">
-      {{ $t('popular') }}
-    </BaseDivider>
-    <YCarousel :items="popular" />
-  </div>
-  <div>
-    <BaseDivider placement="start" class="text-base">
-      {{ $t('trendingDay') }}
-    </BaseDivider>
-    <YCarousel :items="trendingDay" />
-  </div>
-  <div>
-    <BaseDivider placement="start" class="text-base">
-      {{ $t('trendingWeek') }}
-    </BaseDivider>
-    <YCarousel :items="trendingWeek" />
-  </div>
-  <div>
-    <BaseDivider placement="start" class="text-base">
-      {{ $t('nowOnCinemas') }}
-    </BaseDivider>
-    <YCarousel :items="nowPlaying" />
-  </div>
-  <div v-if="people1.cast.length">
-    <BaseDivider placement="start" class="text-base">
-      {{ $t('starring', { name: peoples[0].name }) }}
-    </BaseDivider>
-    <YCarousel :items="people1.cast.slice(0, 25)" />
-  </div>
-  <div v-if="people2.cast.length">
-    <BaseDivider placement="start" class="text-base">
-      {{ $t('starring', { name: peoples[1].name }) }}
-    </BaseDivider>
-    <YCarousel :items="people2.cast.slice(0, 25)" />
-  </div>
+  <FetchError v-if="error" :error="error" />
+
+  <template v-else>
+    <div>
+      <BaseDivider placement="start" class="text-base">
+        {{ $t('popular') }}
+      </BaseDivider>
+      <YCarousel :items="popular" />
+    </div>
+    <div>
+      <BaseDivider placement="start" class="text-base">
+        {{ $t('trendingDay') }}
+      </BaseDivider>
+      <YCarousel :items="trendingDay" />
+    </div>
+    <div>
+      <BaseDivider placement="start" class="text-base">
+        {{ $t('trendingWeek') }}
+      </BaseDivider>
+      <YCarousel :items="trendingWeek" />
+    </div>
+    <div>
+      <BaseDivider placement="start" class="text-base">
+        {{ $t('nowOnCinemas') }}
+      </BaseDivider>
+      <YCarousel :items="nowPlaying" />
+    </div>
+    <div v-if="people1.cast.length">
+      <BaseDivider placement="start" class="text-base">
+        {{ $t('starring', { name: peoples[0].name }) }}
+      </BaseDivider>
+      <YCarousel :items="people1.cast.slice(0, 25)" />
+    </div>
+    <div v-if="people2.cast.length">
+      <BaseDivider placement="start" class="text-base">
+        {{ $t('starring', { name: peoples[1].name }) }}
+      </BaseDivider>
+      <YCarousel :items="people2.cast.slice(0, 25)" />
+    </div>
+  </template>
 </template>

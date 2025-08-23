@@ -14,6 +14,7 @@ import { useAppBus } from '@/modules/appBus/index.js';
 import { useCollectCollectionData } from '@/plugins/TMDB/api/collectCollection.js';
 import { useCollectItemData } from '@/plugins/TMDB/api/collectItem.js';
 import { useCollectKeywords } from '@/plugins/TMDB/api/collectKeywords.js';
+import FetchError from '@/plugins/TMDB/views/FetchError.vue';
 import StartSearch from '@/plugins/TMDB/views/item/StartSearch.vue';
 import { useTitle } from '@/utils/title';
 
@@ -23,7 +24,7 @@ const bus = useAppBus();
 const type = toRef(() => route.params.type as 'movie' | 'tv');
 const id = toRef(() => route.params.id as string);
 
-const { hero, peoples, similar, collectionId, isLoading } = useCollectItemData(type, id);
+const { hero, peoples, similar, collectionId, isLoading, error } = useCollectItemData(type, id);
 const { collection } = useCollectCollectionData(collectionId);
 const { t } = useI18n();
 const additionalActions: FilmCardAction[] = [
@@ -51,11 +52,13 @@ const additionalActions: FilmCardAction[] = [
   },
 ];
 
-useTitle(() => isLoading.value ? '' : `${hero.value.title} (${hero.value.releaseDate?.getFullYear()})`);
+useTitle(() => isLoading.value && !error.value ? '' : `${hero.value.title} (${hero.value.releaseDate?.getFullYear()})`);
 </script>
 
 <template>
+  <FetchError v-if="error" :error="error" />
   <FilmCard
+    v-else
     :is-loading="isLoading"
     :hero="hero"
     :similar="similar"

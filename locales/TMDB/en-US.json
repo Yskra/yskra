@@ -51,5 +51,10 @@
   "airDateAsc": "air date ascending",
   "airDateDesc": "air date descending",
   "titleAsc": "title ZA",
-  "titleDesc": "title AZ"
+  "titleDesc": "title AZ",
+  "currentPage": "Current page",
+  "pageId": "Page ID",
+  "apiAddress": "API address",
+  "cdnAddress": "CDN address of images",
+  "fetchFiledTmdb": "Fetching data from TheMovieDB failed"
 }

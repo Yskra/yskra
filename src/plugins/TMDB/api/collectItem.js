@@ -1,13 +1,14 @@
 /** @import {ItemMovieResponse, ItemTVResponse} from '../Public'; */
 /** @import {MaybeRefOrGetter, Ref} from 'vue' */
 
-import { computed, ref, toRef, watch } from 'vue';
+import { computed, toRef } from 'vue';
 import { imageQualities, imageTypes } from '../constants.js';
 import findCertification from '../utils/certification.js';
 import { useUrlBuild } from '../utils/urlBuild.js';
 import { useRegionsStore } from './regions.js';
 import { useTMDBStore } from './tmdb.js';
 
+/** @type {ItemMovieResponse | ItemTVResponse & {ids: {}}} */
 const initialData = {
   adult: false,
   homepage: '',
@@ -35,10 +36,15 @@ const initialData = {
   production_companies: [],
   budget: 0,
   revenue: 0,
-  similar: { results: [] },
+  similar: { results: [], page: 0, total_pages: 0, total_results: 0 },
   credits: { crew: [], cast: [] },
   external_ids: {},
-  release_dates: { results: [] },
+  release_dates: {
+    results: [],
+    page: 0,
+    total_pages: 0,
+    total_results: 0,
+  },
 };
 
 const formatMoney = new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD' }).format;
@@ -52,13 +58,12 @@ export function useCollectItemData(type, id) {
   type = toRef(type);
   id = toRef(id);
 
-  let abortController = new AbortController();
-  const isLoading = ref(false);
   const store = useTMDBStore();
   const regionsStore = useRegionsStore();
   const url = computed(() => `${type.value}/${id.value}?append_to_response=credits,external_ids,similar,release_dates`);
-  /** @type {Ref<ItemMovieResponse | ItemTVResponse>} */
-  const response = ref(initialData);
+  /** @type {{data: Ref<ItemMovieResponse | ItemTVResponse>, error: Ref<any>, isFetching: Ref<boolean>}} */
+  // @ts-ignore
+  const { data: response, error, isFetching: isLoading } = store.fetch(url, { initialData }).get().json();
   const { buildTMDBImageUrl } = useUrlBuild();
 
   const certification = computed(() => {
@@ -76,7 +81,7 @@ export function useCollectItemData(type, id) {
       imdb: response.value.external_ids.imdb_id,
       wikidata: response.value.external_ids.wikidata_id,
     },
-    image: buildTMDBImageUrl(response.value.poster_path, imageTypes.POSTER, [imageQualities.HIGH, null]).href,
+    image: response.value.poster_path ? buildTMDBImageUrl(response.value.poster_path, imageTypes.POSTER, [imageQualities.HIGH, null]).href : '',
     // @ts-ignore
     title: response.value.title || response.value.name,
     // @ts-ignore
@@ -129,33 +134,14 @@ export function useCollectItemData(type, id) {
       })),
   }));
 
-  watch([url, () => store.language], async () => {
-    // cancel the leading request, sometimes the application localization file loads faster -
-    // which triggers a change of the active language in the application,
-    // and the downloading of the default language data has not yet been completed and then the default language data can rewrite more current data
-    abortController?.abort();
-    abortController = new AbortController();
-
-    await refresh();
-  }, { immediate: true });
-
 
   return {
+    error,
+    isLoading,
     hero,
     peoples,
     similar,
     // @ts-ignore
     collectionId: computed(() => response.value.belongs_to_collection?.id ?? null),
-    isLoading,
   };
-
-  async function refresh() {
-    isLoading.value = true;
-    response.value = initialData;
-
-    const { data } = await store.fetch(url.value, { signal: abortController.signal }).get().json();
-
-    response.value = data.value;
-    isLoading.value = false;
-  }
 }

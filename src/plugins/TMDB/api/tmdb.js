@@ -56,6 +56,7 @@ export const useTMDBStore = defineStore('tmdb.main', () => {
   const myFetch = createFetch({
     baseUrl: () => apiUrl.value.href,
     options: {
+      refetch: true,
       // @ts-expect-error not valid type in vueuse
       timeout: () => config.value.apiTimeout,
       beforeFetch({ options, url }) {

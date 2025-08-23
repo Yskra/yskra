@@ -51,5 +51,10 @@
   "airDateAsc": "дата первого выхода в эфир по возрастанию",
   "airDateDesc": "дата первого выхода в эфир по убыванию",
   "titleAsc": "название по ЯА",
-  "titleDesc": "название по АЯ"
+  "titleDesc": "название по АЯ",
+  "currentPage": "Текущая страница",
+  "pageId": "ID страницы",
+  "apiAddress": "API адрес",
+  "cdnAddress": "CDN адрес изображений",
+  "fetchFiledTmdb": "Ошибка загрузки данных с TheMovieDB"
 }

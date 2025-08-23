@@ -1,7 +1,7 @@
 /** @import {PeopleResponse} from '../Public'; */
 /** @import {MaybeRefOrGetter, Ref} from 'vue' */
 
-import { computed, ref, toRef, watch } from 'vue';
+import { computed, toRef } from 'vue';
 import { useTMDBStore } from '@/plugins/TMDB/api/tmdb.js';
 import { imageQualities, imageTypes } from '@/plugins/TMDB/constants.js';
 import { useUrlBuild } from '@/plugins/TMDB/utils/urlBuild.js';
@@ -35,14 +35,13 @@ export function useCollectPeople(id, path = '') {
   id = toRef(id);
   path = toRef(path);
 
-  let abortController = new AbortController();
-  const isLoading = ref(false);
   const { buildTMDBImageUrl } = useUrlBuild();
   const store = useTMDBStore();
   const url = computed(() => `person/${id.value}${path.value ? '/' : ''}${path.value}`);
+  /** @type {{data: Ref<PeopleResponse<path['value']>, error: Ref<any>, isFetching: Ref<boolean>}} */
   // @ts-ignore
-  /** @type {Ref<PeopleResponse<path['value']>>} */
-  const response = ref(initialDataMap[path.value]);
+  const { data: response, error, isFetching: isLoading } = store.fetch(url, { initialData: initialDataMap[path.value] }).get().json();
+
   const items = computed(() => {
     if (path.value === 'combined_credits') {
       const cast = response.value.cast.map(({ title, name, id, poster_path, release_date, first_air_date, backdrop_path, vote_average, media_type }) => ({
@@ -77,29 +76,9 @@ export function useCollectPeople(id, path = '') {
     return response.value;
   });
 
-  watch([url, () => store.language], async () => {
-    // cancel the leading request, sometimes the application localization file loads faster -
-    // which triggers a change of the active language in the application,
-    // and the downloading of the default language data has not yet been completed and then the default language data can rewrite more current data
-    abortController?.abort();
-    abortController = new AbortController();
-
-    await refresh();
-  }, { immediate: true });
-
   return {
+    error,
+    isLoading,
     items,
   };
-
-  async function refresh() {
-    isLoading.value = true;
-    response.value = initialDataMap[path.value];
-
-    if (url.value) {
-      const { data } = await store.fetch(url.value).get().json();
-
-      response.value = data.value ?? initialDataMap[path.value];
-    }
-    isLoading.value = false;
-  }
 }

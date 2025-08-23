@@ -1,13 +1,17 @@
 /** @import {TrendingResponse} from '../Public'; */
 /** @import {MaybeRefOrGetter, Ref} from 'vue' */
 
-import { computed, ref, toRef, watch } from 'vue';
+import { computed, toRef } from 'vue';
 import { useTMDBStore } from '@/plugins/TMDB/api/tmdb.js';
 import { imageQualities, imageTypes } from '@/plugins/TMDB/constants.js';
 import { useUrlBuild } from '@/plugins/TMDB/utils/urlBuild.js';
 
+/** @type {TrendingResponse} */
 const initialData = {
   results: [],
+  page: 0,
+  total_pages: 0,
+  total_results: 0,
 };
 
 /**
@@ -19,13 +23,12 @@ export function useCollectTrending(type, timeWindow) {
   type = toRef(type);
   timeWindow = toRef(timeWindow);
 
-  let abortController = new AbortController();
-  const isLoading = ref(false);
   const { buildTMDBImageUrl } = useUrlBuild();
   const store = useTMDBStore();
   const url = computed(() => `trending/${type.value}/${timeWindow.value}`);
-  /** @type {Ref<TrendingResponse>} */
-  const response = ref(initialData);
+  /** @type {{data: Ref<TrendingResponse>, error: Ref<any>, isFetching: Ref<boolean>}} */
+  // @ts-ignore
+  const { data: response, error, isFetching: isLoading } = store.fetch(url, { initialData }).get().json();
   const items = computed(() => response.value.results.map(({ title, name, id, poster_path, release_date, backdrop_path, vote_average, media_type }) => ({
     title: title ?? name,
     id,
@@ -36,29 +39,9 @@ export function useCollectTrending(type, timeWindow) {
     link: { name: 'TMDBItem', params: { type: media_type, id } },
   })));
 
-  watch([url, () => store.language], async () => {
-    // cancel the leading request, sometimes the application localization file loads faster -
-    // which triggers a change of the active language in the application,
-    // and the downloading of the default language data has not yet been completed and then the default language data can rewrite more current data
-    abortController?.abort();
-    abortController = new AbortController();
-
-    await refresh();
-  }, { immediate: true });
-
   return {
+    error,
+    isLoading,
     items,
   };
-
-  async function refresh() {
-    isLoading.value = true;
-    response.value = initialData;
-
-    if (url.value) {
-      const { data } = await store.fetch(url.value).get().json();
-
-      response.value = data.value;
-    }
-    isLoading.value = false;
-  }
 }
