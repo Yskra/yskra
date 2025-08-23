@@ -9,5 +9,8 @@
   "registeredGlobalComponents": "Registered {length} global components",
   "registeredGlobalDirectives": "Registered {length} global directives",
   "invalidTypeComponent:": "Invalid {type} \"{value}\" for {component}:",
-  "trailers": "Trailers"
+  "trailers": "Trailers",
+  "budget": "Budget",
+  "revenue": "Revenue",
+  "productionCountries": "Production countries"
 }

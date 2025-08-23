@@ -9,5 +9,8 @@
   "registeredGlobalComponents": "Зарегистрировано {length} глобальных компонентов",
   "registeredGlobalDirectives": "Зарегистрировано {length} глобальных директив",
   "invalidTypeComponent": "Недопустимый {type} \"{value}\" для {component}:",
-  "trailers": "Трейлеры"
+  "trailers": "Трейлеры",
+  "budget": "Бюджет",
+  "revenue": "Сборы",
+  "productionCountries": "Страны производства"
 }

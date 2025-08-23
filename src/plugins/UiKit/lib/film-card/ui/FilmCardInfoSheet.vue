@@ -19,13 +19,13 @@ defineProps<Props>();
       <thead>
         <tr>
           <th v-if="budget" class="text-start">
-            Бюджет
+            {{ $t('budget') }}
           </th>
           <th v-if="revenue" class="text-start">
-            Сборы
+            {{ $t('revenue') }}
           </th>
           <th v-if="productionCountries" class="text-start">
-            Страны
+            {{ $t('productionCountries') }}
           </th>
         </tr>
       </thead>
