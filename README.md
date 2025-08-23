@@ -5,7 +5,7 @@
 
 # Yskra
 
-[![Deploy](https://github.com/Yskra/yskra/actions/workflows/deploy.yml/badge.svg?branch=master)](https://github.com/Yskra/yskra/actions/workflows/deploy.yml)
+[![Deploy](https://github.com/Yskra/yskra/actions/workflows/mian.yml/badge.svg)](https://github.com/Yskra/yskra/actions/workflows/mian.yml)
 
 > Free and open-source web-application for TV
 
