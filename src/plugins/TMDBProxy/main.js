@@ -19,8 +19,8 @@ export default function plugin({ defineSettings, defineConfig }) {
   const config = defineConfig({
     forceProxy: false,
     acceptedTos: false,
-    apiUrl: '',
-    imageCdn: '',
+    apiUrl: 'https://tmdb.yskra.app/proxy/tmdb/3/',
+    imageCdn: 'https://tmdb.yskra.app/proxy/tmdb_image/t/p/',
   });
 
   const apiEndpoint = computed(() => config.apiUrl.startsWith('/') ? new URL(config.apiUrl, window.location.origin) : new URL(config.apiUrl));
