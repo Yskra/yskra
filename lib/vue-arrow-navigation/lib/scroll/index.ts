@@ -8,7 +8,7 @@ export function scrollTo({ target, rect, direction }: { target: Element; rect: D
 
   // run always: restore, keyboard or autofocus
   if (parent) {
-    verticalScrollSegment(rect.top + parent.scrollTop, parent);
+    verticalScrollSegment(rect.top - parent.offsetTop + parent.scrollTop, parent);
   }
 
   // run only from keyboard
@@ -19,7 +19,7 @@ export function scrollTo({ target, rect, direction }: { target: Element; rect: D
 
 function verticalScrollSegment(target: number, host: Element, threshold = VERTICAL_VIEWPORT_THRESHOLD) {
   const currentScrollY = host.scrollTop;
-  const viewportHeight = window.innerHeight;
+  const viewportHeight = host.clientHeight;
   const segments = getScrollVerticalSegments(host, threshold);
   const targetSegment = segments.find((segment) =>
     target < (segment + threshold * viewportHeight),
@@ -38,7 +38,7 @@ function horizontalScroll(target: Element) {
 }
 
 function getScrollVerticalSegments(host: Element = document.documentElement, threshold = VERTICAL_VIEWPORT_THRESHOLD) {
-  const viewportHeight = window.innerHeight;
+  const viewportHeight = host.clientHeight;
   const pageHeight = host.scrollHeight;
   const segmentStep = threshold * viewportHeight;
   const segments = [0];

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ChangeFocusCause, Direction, onBeforeANSectionLeave } from 'vue-arrow-navigation';
+// import { ChangeFocusCause, Direction, onBeforeANSectionLeave } from 'vue-arrow-navigation';
 
 export interface Props {
   title?: string;
@@ -8,11 +8,11 @@ defineProps<Props>();
 
 const show = defineModel('show', { type: Boolean });
 
-onBeforeANSectionLeave((from) => {
-  if (show.value && from.cause === ChangeFocusCause.KEYDOWN && from.direction === Direction.LEFT) {
-    show.value = false;
-  }
-});
+// onBeforeANSectionLeave((from) => {
+//   if (show.value && from.cause === ChangeFocusCause.KEYDOWN && from.direction === Direction.LEFT) {
+//     show.value = false;
+//   }
+// });
 </script>
 
 <template>
