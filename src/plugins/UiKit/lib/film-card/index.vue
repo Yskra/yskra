@@ -16,7 +16,6 @@ export default {
 import type { Props as RCarouselProps } from '../r-carousel';
 import type { FilmCardAction, FilmCardIDs } from './Public';
 import type { People } from './ui/FilmCardPeople.vue';
-import { storeToRefs } from 'pinia';
 import { computed, toRef, watch } from 'vue';
 import { useAppBus } from '@/utils/appBus';
 import { useFilmCardStore } from './store';
@@ -62,31 +61,18 @@ const props = withDefaults(defineProps<Props>(), {
   additionalActions: () => [],
 });
 const store = useFilmCardStore();
-const { actionsOrder } = storeToRefs(store);
 const bus = useAppBus();
 
 const filmCardBtnPayload = toRef(() => props.hero);
 const filteredSortedActions = computed(() =>
-  [...props.additionalActions, ...store.actions]
+  store.useOrderedActions(props.additionalActions)
     .filter((e) => e.isAvailable(filmCardBtnPayload.value))
-    .map((e) => ({ ...e, action: (event: Event) => e.action({ event, ...filmCardBtnPayload.value }) }))
-    .toSorted((a, b) => {
-      const aIndex = findIndexOrZero(actionsOrder.value, (i) => i.id === a.id);
-      const bIndex = findIndexOrZero(actionsOrder.value, (i) => i.id === b.id);
-
-      return aIndex - bIndex;
-    }),
+    .map((e) => ({ ...e, action: (event: Event) => e.action({ event, ...filmCardBtnPayload.value }) })),
 );
 
 watch(() => props.hero.image, (value) => {
   bus.call('ui.background:setImage', value);
 }, { immediate: true });
-
-function findIndexOrZero<T = any>(arr: T[], predicate: (item: T) => boolean): number {
-  const index = arr.findIndex(predicate);
-
-  return index === -1 ? arr.length : index;
-}
 </script>
 
 <template>
@@ -98,7 +84,11 @@ function findIndexOrZero<T = any>(arr: T[], predicate: (item: T) => boolean): nu
         </template>
         <template #middle>
           <FilmCardRatings v-bind="props.hero" :is-loading="props.isLoading" />
-          <FilmCardActions v-if="props.hero.id" :actions="filteredSortedActions" />
+          <FilmCardActions
+            v-if="props.hero.id"
+            :actions="filteredSortedActions"
+            @reorder="store.moveAction"
+          />
         </template>
         <template #bottom>
           <FilmCardInfoSheet v-bind="props.hero" :is-loading="props.isLoading" />

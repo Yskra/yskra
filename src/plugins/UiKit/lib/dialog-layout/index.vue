@@ -10,8 +10,8 @@ export default {
 import { onKeyStroke } from '@vueuse/core';
 import { computed, nextTick, ref, useTemplateRef, watch } from 'vue';
 import { defineNAConfig, onBeforeANSectionLeave, useArrowNavigation } from 'vue-arrow-navigation';
+import { useRouterResolver } from '..';
 import { useRipple } from './ripple';
-import { useRouterResolver } from './routerResolver';
 import { useDialogsStore } from './store';
 
 // The layout for manage all popup elements

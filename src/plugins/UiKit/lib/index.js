@@ -53,3 +53,6 @@ export { default as DaisyUI, type2array } from './daisy-ui';
 export { DialogsContainer, useDialogStore } from './dialogs-helper-api';
 export { NotificationContainer, VNotification } from './notices';
 export { useNoticesStore } from './notices';
+
+/** utils */
+export { useRouterResolver } from './routerResolver';

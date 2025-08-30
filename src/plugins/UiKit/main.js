@@ -71,8 +71,8 @@ function initServices(defineBusService) {
     removeNotification: noticesStore.removeNotification,
   });
   defineBusService('ui.filmCard', {
-    addActionBtn: filmCardStore.addActionBtn,
-    removeActionBtn: filmCardStore.removeActionBtn,
+    addActionBtn: filmCardStore.addAction,
+    removeActionBtn: filmCardStore.removeAction,
   });
 
   return () => null;
