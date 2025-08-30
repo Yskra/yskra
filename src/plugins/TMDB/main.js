@@ -69,19 +69,6 @@ function initSettings(defineSettings, config) {
 
   defineSettings([
     {
-      name: 'apiEndpoint',
-      ref: toRef(config, 'apiUrl'),
-      type: 'url',
-    },
-    // {
-    //   name: 'apiToken',
-    //   note: h(I18nT, { keypath: 'apiTokenNote' }, {
-    //     details: LinkDocs,
-    //   }),
-    //   ref: toRef(config, 'token'),
-    //   type: 'text',
-    // },
-    {
       name: 'language',
       note: 'languageNote',
       ref: toRef(config, 'language'),
@@ -90,6 +77,12 @@ function initSettings(defineSettings, config) {
         { name: 'languageDefault', value: '' },
         ...languages,
       ],
+    },
+    {
+      name: 'parentalControlPassword',
+      note: 'parentalControlPasswordNote',
+      ref: toRef(config, 'adultPass'),
+      type: 'password',
     },
   ]);
 }

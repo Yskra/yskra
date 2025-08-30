@@ -14,6 +14,8 @@ import { useAppBus } from '@/modules/appBus/index.js';
 import { useCollectCollectionData } from '@/plugins/TMDB/api/collectCollection.js';
 import { useCollectItemData } from '@/plugins/TMDB/api/collectItem.js';
 import { useCollectKeywords } from '@/plugins/TMDB/api/collectKeywords.js';
+import { useTMDBStore } from '@/plugins/TMDB/api/tmdb';
+import AdultChallenge from '@/plugins/TMDB/views/adult-challenge.vue';
 import FetchError from '@/plugins/TMDB/views/FetchError.vue';
 import StartSearch from '@/plugins/TMDB/views/item/StartSearch.vue';
 import { useTitle } from '@/utils/title';
@@ -24,6 +26,7 @@ const bus = useAppBus();
 const type = toRef(() => route.params.type as 'movie' | 'tv');
 const id = toRef(() => route.params.id as string);
 
+const store = useTMDBStore();
 const { hero, peoples, similar, collectionId, isLoading, error } = useCollectItemData(type, id);
 const { collection } = useCollectCollectionData(collectionId);
 const { t } = useI18n();
@@ -57,6 +60,9 @@ useTitle(() => isLoading.value && !error.value ? '' : `${hero.value.title} (${he
 
 <template>
   <FetchError v-if="error" :error="error" />
+
+  <AdultChallenge v-else-if="hero.isAdult && !store.adultPassed" @pass="store.tryPassedAdult($event)" />
+
   <FilmCard
     v-else
     :is-loading="isLoading"

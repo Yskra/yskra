@@ -18,6 +18,7 @@ const config = ref({
   region: '',
   apiTimeout: 8000,
   token: '',
+  adultPass: '',
 });
 
 export const useTMDBStore = defineStore('tmdb.main', () => {
@@ -53,6 +54,9 @@ export const useTMDBStore = defineStore('tmdb.main', () => {
     return config.value.region;
   });
 
+  const enteredAdultPass = ref('');
+  const adultPassed = computed(() => enteredAdultPass.value === config.value.adultPass);
+
   const myFetch = createFetch({
     baseUrl: () => apiUrl.value.href,
     options: {
@@ -82,6 +86,10 @@ export const useTMDBStore = defineStore('tmdb.main', () => {
     setConfig: (/** @type {Config} */v) => {
       config.value = v;
     },
+    tryPassedAdult,
+
+    enteredAdultPass,
+    adultPassed,
     altApiEndpoint,
     altImageCdnEndpoint,
     apiUrl,
@@ -90,6 +98,15 @@ export const useTMDBStore = defineStore('tmdb.main', () => {
     region,
     fetch: myFetch,
   };
+
+  /**
+   * @param {string} password
+   */
+  async function tryPassedAdult(password) {
+    enteredAdultPass.value = password;
+
+    return adultPassed.value;
+  }
 });
 
 if (import.meta.hot) {

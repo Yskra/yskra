@@ -99,6 +99,7 @@ export function useCollectItemData(type, id) {
     })),
     productionCompanies: response.value.production_companies, // uses only for StartSearch
     certification: certification.value,
+    isAdult: response.value.adult || certification.value === '18+',
     // @ts-ignore
     budget: response.value.budget ? formatMoney(response.value.budget) : undefined,
     // @ts-ignore
