@@ -6,8 +6,18 @@
 # Yskra
 
 [![Deploy](https://github.com/Yskra/yskra/actions/workflows/mian.yml/badge.svg)](https://github.com/Yskra/yskra/actions/workflows/mian.yml)
+[![Docs](https://img.shields.io/badge/read-docs-blue)](https://docs.yskra.app/)
+[![Version](https://img.shields.io/github/package-json/v/Yskra/yskra)]
+
 
 > Free and open-source web-application for TV
 
 - Powerful plugin system
 - Built on vue
+- Self-hosting friendly
+- Focused on performance
+
+
+### Run in Container
+
+See [documentation](https://docs.yskra.app/guide/general/installation#container)
