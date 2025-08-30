@@ -56,5 +56,8 @@
   "pageId": "ID страницы",
   "apiAddress": "API адрес",
   "cdnAddress": "CDN адрес изображений",
-  "fetchFiledTmdb": "Ошибка загрузки данных с TheMovieDB"
+  "fetchFiledTmdb": "Ошибка загрузки данных с TheMovieDB",
+  "parentalControl": "Родительский контроль",
+  "parentalControlPassword": "Пароль родительского контроля",
+  "parentalControlPasswordNote": "Скрывает взрослые фильмы и сериалы с рейтингом больше 18+. Оставьте пустым для отключения"
 }

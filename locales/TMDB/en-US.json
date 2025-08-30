@@ -56,5 +56,8 @@
   "pageId": "Page ID",
   "apiAddress": "API address",
   "cdnAddress": "CDN address of images",
-  "fetchFiledTmdb": "Fetching data from TheMovieDB failed"
+  "fetchFiledTmdb": "Fetching data from TheMovieDB failed",
+  "parentalControl": "Parental control",
+  "parentalControlPassword": "Password for parental control",
+  "parentalControlPasswordNote": "Hides adult films and TV shows with a rating greater than 18+. Leave blank to disable"
 }
