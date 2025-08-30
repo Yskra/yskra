@@ -35,6 +35,7 @@ export interface Props {
     image: string;
     overview: string;
     title: string;
+    isAdult: boolean;
     originalTitle: string;
     releaseDate: Date;
     runtime: Date;
