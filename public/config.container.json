@@ -13,7 +13,7 @@
   },
   "pluginManager": {
     "installed": [],
-    "repositories": ["/repository.json"],
+    "repositories": ["/repository.json", "/local-plugins.json"],
     "disabled": [],
     "pluginsTos": {
       "accepted": true,
