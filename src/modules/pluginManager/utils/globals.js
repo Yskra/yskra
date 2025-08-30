@@ -1,5 +1,5 @@
 // @ts-nocheck
-/* eslint-disable jsdoc/no-undefined-types */
+
 
 export function applyRemoveApis() {
   const localStorage = window.localStorage;
@@ -146,5 +146,35 @@ export function applyBlockNetwork(blacklist) {
     RTCPeerConnection,
     WebSocket: webSocket,
     XHRSend: origXHRSend.bind(XMLHttpRequest.prototype),
+  };
+}
+
+/**
+ * @param {Readonly<Set<string>>} blacklist black list
+ */
+export function applyBlockEvents(blacklist) {
+  const origAddEventListener = EventTarget.prototype.addEventListener;
+
+  /**
+   * @param {string} type
+   * @param {EventListenerOrEventListenerObject | null} callback
+   * @param { AddEventListenerOptions | boolean} [options]
+   * @returns {void}
+   */
+  function newAddEventListener(type, callback, options) {
+    if (blacklist.has(type.toLowerCase())) {
+      return undefined;
+    }
+
+    return origAddEventListener.call(this, type, callback, options);
+  }
+
+  delete EventTarget.prototype.addEventListener;
+
+  // oxlint-disable-next-line no-extend-native
+  Object.defineProperty(EventTarget.prototype, 'addEventListener', { value: newAddEventListener });
+
+  return {
+    addEventListener: origAddEventListener.bind(EventTarget.prototype),
   };
 }

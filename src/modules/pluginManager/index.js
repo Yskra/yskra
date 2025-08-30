@@ -10,14 +10,14 @@ import { useI18n } from 'vue-i18n';
 import { useAppBus } from '@/modules/appBus';
 import { Logger } from '@/modules/logger';
 import AcceptTOS from '@/modules/pluginManager/components/AcceptTOS.vue';
-import { appPackageRegistry, BLACKLIST_TAGS, BLACKLIST_URLS, INJECT_KEY, PLUGIN_RUNTIME, PLUGIN_STATUS } from '@/modules/pluginManager/constants';
+import { appPackageRegistry, BLACKLIST_EVENTS, BLACKLIST_TAGS, BLACKLIST_URLS, INJECT_KEY, PLUGIN_RUNTIME, PLUGIN_STATUS } from '@/modules/pluginManager/constants';
 import { createInjectorModule } from '@/modules/pluginManager/lib/injector/index.js';
 import { useEnableManager } from '@/modules/pluginManager/managers/disableManager.js';
 import { useGlobalInterface } from '@/modules/pluginManager/managers/globalInterface.js';
 import { useInstallManager } from '@/modules/pluginManager/managers/installManager.js';
 import { useMountManager } from '@/modules/pluginManager/managers/mountManager.js';
 import { useRepositoryManager } from '@/modules/pluginManager/managers/repositoryManager.js';
-import { applyBlockElements, applyBlockNetwork, applyFreezePrototypes, applyRemoveApis } from '@/modules/pluginManager/utils/globals.js';
+import { applyBlockElements, applyBlockEvents, applyBlockNetwork, applyFreezePrototypes, applyRemoveApis } from '@/modules/pluginManager/utils/globals.js';
 import { patchCreateScriptTag, patchRegister } from '@/modules/pluginManager/utils/patchSystemJS.js';
 import { addSettingsRootPage } from '@/modules/settings';
 import compareVersions from '@/utils/compareVersions.js';
@@ -270,6 +270,7 @@ export function createPluginManagerModule({ config, userProfile, isRecoveryMode,
     applyRemoveApis();
     applyFreezePrototypes();
     applyBlockNetwork(BLACKLIST_URLS);
+    applyBlockEvents(BLACKLIST_EVENTS);
 
     logger.info(t('Protection enabled'));
 

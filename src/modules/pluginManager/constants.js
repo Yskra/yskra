@@ -43,6 +43,15 @@ export const BLACKLIST_TAGS = Object.freeze(new Set([
   'script',
 ]));
 
+/** @type {Readonly<Set<string>>} */
+export const BLACKLIST_EVENTS = Object.freeze(new Set([
+  'storage',
+  'beforeunload',
+  'unload',
+  'error',
+  'unhandledrejection',
+]));
+
 /** @type {(keyof PluginManifest)[]} */
 export const PLUGIN_REQUIRED_FIELDS = ['name', 'id', 'version', 'author', 'source', 'apiVersion', 'license'];
 
