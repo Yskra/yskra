@@ -1,3 +1,4 @@
+import { execSync } from 'node:child_process';
 import { resolve } from 'node:path';
 import process from 'node:process';
 
@@ -10,9 +11,13 @@ import componentRegisterConfig from './src/modules/componentRegister/buildConfig
 import i18nConfig from './src/modules/i18n/buildConfigs/vite.config.js';
 
 const isProd = process.env.NODE_ENV === 'production';
+const commitHash = execSync('git rev-parse HEAD').toString();
 
 const modulesConfig = mergeConfig(i18nConfig, componentRegisterConfig);
 const rootConfig = defineConfig(async () => ({
+  define: {
+    __COMMIT_HASH__: JSON.stringify(commitHash),
+  },
   build: {
     minify: false,
   },

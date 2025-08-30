@@ -1,4 +1,5 @@
 /** @import {Config} from '@/modules/Public'; */
+/* global __COMMIT_HASH__ */
 
 import pkg from '@/../package.json';
 
@@ -15,13 +16,20 @@ export const ICONS = Object.freeze({
 
 /** @type {ReturnType<typeof setLinksFromConfig>} */
 let instance;
-
+const hash = __COMMIT_HASH__;
 
 /**
  * @return {ReturnType<typeof setLinksFromConfig>}
  */
 export function getLinks() {
   return instance;
+}
+
+export function getAppInfo() {
+  return {
+    version: pkg.version,
+    shortHash: hash.slice(0, 7),
+  };
 }
 
 /**
@@ -33,6 +41,7 @@ export function setLinksFromConfig(config) {
     privacy: new URL(config.value.legal.privacy_policy || window.location.origin),
     dmca: new URL(config.value.legal.dmca || window.location.origin),
     sourceCode: new URL(pkg.repository),
+    commitHash: new URL(`commit/${hash}`, pkg.repository),
 
     other: config.value.links.map((link) => ({ url: new URL(link.href), name: link.name })),
   };

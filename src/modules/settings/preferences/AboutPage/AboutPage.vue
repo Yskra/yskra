@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { getLinks, ICONS } from '.';
+import { getAppInfo, getLinks, ICONS } from '.';
 
 const links = getLinks();
 const { t } = useI18n();
+const info = getAppInfo();
 
 const linkColumns = [
   [
@@ -55,7 +56,7 @@ function getIcon(name: string | URL) {
   <div class="w-full flex flex-col items-center justify-center">
     <div class="w-50% flex justify-between bg-base-300 p-4 pr-50 rounded-box">
       <img
-        src="@/../public/logo.svg"
+        src="/logo.svg"
         alt="Yskra"
         class="w-40"
       >
@@ -88,6 +89,19 @@ function getIcon(name: string | URL) {
               </a>
             </li>
           </ul>
+        </div>
+
+        <div class="mt-5 text-center text-sm">
+          <p>
+            {{ info.version }}
+          </p>
+          <a
+            :href="links.commitHash.href"
+            target="_blank"
+            class="link"
+          >
+            {{ info.shortHash }}
+          </a>
         </div>
       </div>
     </div>
