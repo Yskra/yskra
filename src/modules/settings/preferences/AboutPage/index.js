@@ -29,9 +29,9 @@ export function getLinks() {
  */
 export function setLinksFromConfig(config) {
   const links = {
-    tos: new URL(config.value.legal.terms_of_service),
-    privacy: new URL(config.value.legal.privacy_policy),
-    dmca: new URL(config.value.legal.dmca),
+    tos: new URL(config.value.legal.terms_of_service || window.location.origin),
+    privacy: new URL(config.value.legal.privacy_policy || window.location.origin),
+    dmca: new URL(config.value.legal.dmca || window.location.origin),
     sourceCode: new URL(pkg.repository),
 
     other: config.value.links.map((link) => ({ url: new URL(link.href), name: link.name })),
