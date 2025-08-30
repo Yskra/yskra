@@ -7,7 +7,7 @@
 
 [![Deploy](https://github.com/Yskra/yskra/actions/workflows/mian.yml/badge.svg)](https://github.com/Yskra/yskra/actions/workflows/mian.yml)
 [![Docs](https://img.shields.io/badge/read-docs-blue)](https://docs.yskra.app/)
-[![Version](https://img.shields.io/github/package-json/v/Yskra/yskra)]
+![Version](https://img.shields.io/github/package-json/v/Yskra/yskra)
 
 
 > Free and open-source web-application for TV
@@ -20,4 +20,4 @@
 
 ### Run in Container
 
-See [documentation](https://docs.yskra.app/guide/general/installation#container)
+[See documentation](https://docs.yskra.app/guide/general/installation#container)
