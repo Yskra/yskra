@@ -36,6 +36,13 @@ const error = ref();
         @input="field.ref = $event.target.value"
       />
     </template>
+    <template v-if="field.type === 'password'">
+      <BasePassword
+        :value="field.ref"
+        class="w-full"
+        @input="field.ref = $event.target.value"
+      />
+    </template>
     <template v-if="field.type === 'url'">
       <PluginSettingsURL
         v-model:model-value="field.ref"

@@ -81,7 +81,7 @@ export interface RegisterSettingsField {
   name: string | VNode;
   note?: string | VNode;
   ref: Ref;
-  type: 'text' | 'number' | 'boolean' | 'select' | 'url' | Component;
+  type: 'text' | 'number' | 'boolean' | 'select' | 'url' | 'password' | Component;
   options?: { name: string; value: unknown }[];
 }
 
