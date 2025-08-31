@@ -297,6 +297,30 @@ describe('android TV', () => {
 
     expect(parseUserAgent(input)).toEqual(output);
   });
+
+  it('mi box S Webview', () => {
+    const input = 'Mozilla/5.0 (Linux; Android 9; MIBOX4 Build/PI) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/124.0.6367.123 Mobile Safari/537.36';
+    const output = {
+      isTV: true,
+      os: { family: 'AndroidTV', version: 9 },
+      browser: 'Chrome',
+      version: 124,
+    };
+
+    expect(parseUserAgent(input)).toEqual(output);
+  });
+
+  it('nvidia shield', () => {
+    const input = 'Mozilla/5.0 (Linux; Android 11; SHIELD Android TV Build/RQ1A.210105.003; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/129.0.6668.81 Mobile Safari/537.36';
+    const output = {
+      isTV: true,
+      os: { family: 'AndroidTV', version: 11 },
+      browser: 'Chrome',
+      version: 129,
+    };
+
+    expect(parseUserAgent(input)).toEqual(output);
+  });
 });
 
 // it('user agent for a Philips TV', () => {
@@ -325,6 +349,18 @@ it('user agent for a Mac OS X machine', () => {
     os: { family: 'macOS', version: 14 },
     browser: 'Chrome',
     version: 133,
+  };
+
+  expect(parseUserAgent(input)).toEqual(output);
+});
+
+it('user agent for android', () => {
+  const input = 'Mozilla/5.0 (Android 10; Mobile; rv:141.0) Gecko/141.0 Firefox/141.0';
+  const output = {
+    isTV: false,
+    os: { family: 'Android', version: 10 },
+    browser: 'Firefox',
+    version: 141,
   };
 
   expect(parseUserAgent(input)).toEqual(output);

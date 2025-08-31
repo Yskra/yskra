@@ -9,7 +9,8 @@ const WEBOS_REGEX = /^Web0S;/;
 const TIZEN_REGEX = /(Linux\/SmartTV(\+(?<year>.+))?; Maple2012|Tizen (?<version>.+))$/;
 const WINDOWS_REGEX = /^Windows NT (?<version>.+)/;
 const MACOS_REGEX = /Mac OS X (?<version>.+)$/;
-const ANDROID_TV_REGEX = /Android (?<version>.+?);(.+?)? Android TV/;
+const ANDROID_TV_REGEX = /Android (?<version>.+?);(.+?)? (SHIELD )?(Android TV|MIBOX)/;
+const ANDROID_REGEX = /Android (?<version>.+?);/;
 const LINUX_REGEX = /Linux/;
 
 const WEBOS_VERSION_CHROME_MAP = {
@@ -50,6 +51,9 @@ export default function parseUserAgent(ua) {
   }
   else if (ANDROID_TV_REGEX.test(systemInformation)) {
     [osFamily, osVersion, isTv] = parsePlatformAndroidTV(systemInformation);
+  }
+  else if (ANDROID_REGEX.test(systemInformation)) {
+    [osFamily, osVersion, isTv] = parsePlatformAndroid(systemInformation);
   }
   else if (WEBOS_REGEX.test(systemInformation)) {
     [osFamily, osVersion, isTv] = parsePlatformWebOS(systemInformation, result, compatibleBrowser);
@@ -112,6 +116,15 @@ function parsePlatformAndroidTV(systemInformation) {
   const { version } = ANDROID_TV_REGEX.exec(systemInformation).groups;
 
   return ['AndroidTV', Number.parseInt(version, 10), true];
+}
+
+/**
+ * @param {string} systemInformation systemInformation
+ */
+function parsePlatformAndroid(systemInformation) {
+  const { version } = ANDROID_REGEX.exec(systemInformation).groups;
+
+  return ['Android', Number.parseInt(version, 10)];
 }
 
 /**
