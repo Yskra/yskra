@@ -95,7 +95,7 @@ export function createConfigEditorModule({ config, requestRecoveryMode, isRecove
   }
 
   function sendUpdateConfig(/** @type {Partial<ConfigRaw>} */ value) {
-    logger.info('Send', JSON.parse(JSON.stringify(value)));
+    // logger.info('Send', JSON.parse(JSON.stringify(value)));
 
     try {
       post(deepToRaw(value));
