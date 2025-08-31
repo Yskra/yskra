@@ -1,5 +1,4 @@
-// @ts-nocheck
-/* oxlint-disable no-restricted-globals */
+/** @import {Ref} from 'vue' */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { nextTick, ref } from 'vue';
@@ -10,37 +9,17 @@ describe('useTitle', () => {
   let mockDocument;
 
   beforeEach(() => {
+    // @ts-ignore
     mockDocument = {
       title: 'Initial Title',
     };
 
-    Object.defineProperty(global, 'document', {
-      value: mockDocument,
-      writable: true,
-    });
-
-    global.onBeforeUnmount = vi.fn((callback) => {
-      global.onBeforeUnmount.callbacks = global.onBeforeUnmount.callbacks || [];
-      global.onBeforeUnmount.callbacks.push(callback);
-    });
-
-    global.onActivated = vi.fn((callback) => {
-      global.onActivated.callbacks = global.onActivated.callbacks || [];
-      global.onActivated.callbacks.push(callback);
-    });
-
-    global.onDeactivated = vi.fn((callback) => {
-      global.onDeactivated.callbacks = global.onDeactivated.callbacks || [];
-      global.onDeactivated.callbacks.push(callback);
-    });
+    vi.stubGlobal('document', mockDocument);
   });
 
   afterEach(() => {
+    vi.unstubAllGlobals();
     vi.restoreAllMocks();
-    // delete global.document;
-    delete global.onBeforeUnmount;
-    delete global.onActivated;
-    delete global.onDeactivated;
   });
 
   it('should set document title immediately with string value', () => {
@@ -52,6 +31,7 @@ describe('useTitle', () => {
   });
 
   it('should use default document title when no title provided', () => {
+    // @ts-ignore
     useTitle();
     expect(mockDocument.title).toBe('Initial Title');
   });
@@ -79,7 +59,7 @@ describe('useTitle', () => {
 
   it('should format title with function template', () => {
     const titleRef = ref('Home');
-    const templateFn = (title) => `${title} | My Application`;
+    const templateFn = (/** @type {any} */ title) => `${title} | My Application`;
 
     useTitle(titleRef, { titleTemplate: templateFn });
 
@@ -130,6 +110,7 @@ describe('useTitle', () => {
   // });
 
   it('should handle null values', async () => {
+    /** @type {Ref<string|null>} */
     const titleRef = ref('Initial');
 
     useTitle(titleRef);
@@ -183,7 +164,7 @@ describe('useTitle', () => {
 
   it('should handle template function', () => {
     const titleRef = ref('Home');
-    const templateFn = (title) => `App - ${title}`;
+    const templateFn = (/** @type {any} */ title) => `App - ${title}`;
 
     useTitle(titleRef, { titleTemplate: templateFn });
 

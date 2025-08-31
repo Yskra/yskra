@@ -1,9 +1,11 @@
-// @ts-nocheck
-/* oxlint-disable no-restricted-globals */
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import SupportedAPI from '../SupportedAPI';
 
 describe('webWorkers', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it('should detect Web Workers support when Worker is available', () => {
     const hasWorker = typeof Worker !== 'undefined';
 
@@ -18,14 +20,8 @@ describe('webWorkers', () => {
 });
 
 describe('wasm', () => {
-  let originalWebAssembly;
-
-  beforeEach(() => {
-    originalWebAssembly = global.WebAssembly;
-  });
-
   afterEach(() => {
-    global.WebAssembly = originalWebAssembly;
+    vi.unstubAllGlobals();
   });
 
   it('should return true when WASM is fully supported', () => {
@@ -40,7 +36,7 @@ describe('wasm', () => {
   });
 
   it('should return false when WebAssembly is not an object', async () => {
-    global.WebAssembly = undefined;
+    vi.stubGlobal('WebAssembly', undefined);
     vi.resetModules();
 
     const { default: SupportedAPI } = await import('../SupportedAPI');
@@ -49,10 +45,7 @@ describe('wasm', () => {
   });
 
   it('should return false when WebAssembly.instantiate is not a function', async () => {
-    global.WebAssembly = {
-      ...global.WebAssembly,
-      instantiate: undefined,
-    };
+    vi.stubGlobal('WebAssembly', { ...globalThis.WebAssembly, instantiate: undefined });
 
     vi.resetModules();
     const { default: SupportedAPI } = await import('../SupportedAPI');
@@ -61,13 +54,12 @@ describe('wasm', () => {
   });
 
   it('should return false when WebAssembly.Module constructor fails', async () => {
-    global.WebAssembly = {
-      ...global.WebAssembly,
+    vi.stubGlobal('WebAssembly', {
+      ...globalThis.WebAssembly,
       Module: vi.fn(() => {
         throw new Error('Module construction failed');
       }),
-      instantiate: vi.fn(),
-    };
+    });
 
     vi.resetModules();
     const { default: SupportedAPI } = await import('../SupportedAPI');
@@ -76,14 +68,14 @@ describe('wasm', () => {
   });
 
   it('should return false when WebAssembly.Instance constructor fails', async () => {
-    global.WebAssembly = {
-      ...global.WebAssembly,
+    vi.stubGlobal('WebAssembly', {
+      ...globalThis.WebAssembly,
       Module: vi.fn(() => ({})),
       Instance: vi.fn(() => {
         throw new Error('Instance construction failed');
       }),
       instantiate: vi.fn(),
-    };
+    });
 
     vi.resetModules();
     const { default: SupportedAPI } = await import('../SupportedAPI');
@@ -92,16 +84,17 @@ describe('wasm', () => {
   });
 
   it('should return false when Module is not instance of WebAssembly.Module', async () => {
-    global.WebAssembly = {
-      ...global.WebAssembly,
+    vi.stubGlobal('WebAssembly', {
+      ...globalThis.WebAssembly,
       Module: vi.fn(() => ({})),
       Instance: vi.fn(() => ({})),
       instantiate: vi.fn(),
-    };
+    });
 
     const mockModule = {};
 
-    global.WebAssembly.Module.mockReturnValue(mockModule);
+    // @ts-ignore
+    globalThis.WebAssembly.Module.mockReturnValue(mockModule);
 
     vi.resetModules();
     const { default: SupportedAPI } = await import('../SupportedAPI');
@@ -112,12 +105,12 @@ describe('wasm', () => {
   it('should return false when Instance is not instance of WebAssembly.Instance', async () => {
     const mockModule = {};
 
-    global.WebAssembly = {
-      ...global.WebAssembly,
+    vi.stubGlobal('WebAssembly', {
+      ...globalThis.WebAssembly,
       Module: vi.fn(() => mockModule),
       Instance: vi.fn(() => ({})),
       instantiate: vi.fn(),
-    };
+    });
 
     vi.resetModules();
     const { default: SupportedAPI } = await import('../SupportedAPI');
@@ -146,7 +139,6 @@ describe('wasm', () => {
         }
       }
       catch (e) {
-        // WASM может быть частично поддержан
       }
 
       const expected = moduleCreated && instanceCreated;
@@ -157,10 +149,15 @@ describe('wasm', () => {
 });
 
 describe('static properties immutability', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it('should have readonly webWorkers property that throws on assignment', () => {
     const originalValue = SupportedAPI.webWorkers;
 
     expect(() => {
+      // @ts-ignore
       SupportedAPI.webWorkers = !originalValue;
     }).toThrow(TypeError);
     expect(SupportedAPI.webWorkers).toBe(originalValue);
