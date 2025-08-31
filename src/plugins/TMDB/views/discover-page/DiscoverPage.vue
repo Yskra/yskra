@@ -6,9 +6,9 @@ export default {
 
 <script setup lang="ts">
 import type { QUERY_TYPES } from './constants';
-import { syncRefs } from '@vueuse/core';
+import { syncRefs, until } from '@vueuse/core';
 import equal from 'fast-deep-equal';
-import { computed, reactive, toRaw, toRef } from 'vue';
+import { computed, reactive, toRaw, watchEffect } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useCollectDiscover } from '@/plugins/TMDB/api/collectDiscover';
 import { useDiscoverTitle } from '@/plugins/TMDB/views/discover-page/useDiscoverTitle';
@@ -22,18 +22,30 @@ type QueryTypeId = typeof QUERY_TYPES[keyof typeof QUERY_TYPES];
 const route = useRoute();
 const router = useRouter();
 
-const type = toRef(() => route.params.type as 'movie' | 'tv');
-const query = toRef(() => route.query as Record<string, string>);
+const type = computed(() => route.params.type as 'movie' | 'tv');
+const query = computed(() => route.query as Record<string, string>);
 const currentPage = computed(() => 'page' in query.value ? Number.parseInt(query.value.page) : 1);
 const parsedQuery = computed(() => parseQuery(query.value));
 
 const paginationSource = reactive(useCollectDiscover(type, query));
-const { scrollContainerRef, reset, items, totalPages } = useInfinitePagination(paginationSource, loadMore, currentPage, { distance: 200 });
+const { scrollContainerRef, reset, items, totalPages } = useInfinitePagination(paginationSource, loadMore, currentPage, { distance: 150 });
 const { title } = useDiscoverTitle(type, parsedQuery, currentPage, totalPages);
 const { selects, onReset, localFilters } = useDiscoverFilter(type, updateFilter);
 
 syncRefs(parsedQuery, localFilters);
 useTitle(title);
+
+watchEffect(async () => {
+  if (
+    items.value.length !== 0
+    && !paginationSource.isLoading
+    && scrollContainerRef.value
+    && scrollContainerRef.value.scrollHeight <= scrollContainerRef.value.clientHeight
+  ) {
+    await loadMore();
+  }
+});
+
 /**
  * parse query from url to internal ids
  * @param {Record<string, string>} query
@@ -51,6 +63,7 @@ function parseQuery(query: Record<string, string>): Record<QueryTypeId, string[]
 }
 async function loadMore() {
   await router.replace({ query: { ...query.value, page: currentPage.value + 1 } });
+  await until(() => paginationSource.page === currentPage.value).toBeTruthy();
 }
 async function updateFilter(q: Record<string, any>) {
   if (equal(toRaw(query.value), toRaw(q))) {
