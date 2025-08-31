@@ -1,23 +1,28 @@
 <script setup lang="ts">
 import type { Item } from './Public';
 import { useScroll } from '@vueuse/core';
-import { computed, useTemplateRef } from 'vue';
+import { computed, useTemplateRef, watch } from 'vue';
 import YCarouselItem from './YCarouselItem.vue';
 
 
 export interface Props {
   items: Item[];
+  isLoading?: boolean;
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  isLoading: false,
+});
 const emit = defineEmits<{
   (e: 'itemClick', item: Item): void;
 }>();
 const carouselRef = useTemplateRef<HTMLElement>('carouselRef');
-const { x, arrivedState } = useScroll(carouselRef);
-const items = computed(() => props.items?.length ? props.items : Array.from({ length: 8 }).map((_, i) => ({ id: i }) as Item));
+const { x, arrivedState, measure } = useScroll(carouselRef);
+const items = computed(() => props.isLoading ? Array.from({ length: 20 }).map((_, i) => ({ id: i }) as Item) : props.items);
 const showNextBtn = computed(() => !arrivedState.right);
 const showPrevBtn = computed(() => !arrivedState.left);
+
+watch(items, measure);
 
 function scrollNext() {
   x.value += carouselRef.value?.clientWidth ?? 0;
@@ -34,7 +39,7 @@ function scrollPrev() {
       class="w-full carousel"
       :class="{ 'gradient-left': showPrevBtn, 'gradient-right': showNextBtn, 'gradient-between': showPrevBtn && showNextBtn }"
     >
-      <div v-if="$slots['before-items']" class="h-77 p-2 carousel-item">
+      <div v-if="$slots['before-items'] && !isLoading" class="h-77 p-2 carousel-item">
         <slot name="before-items" />
       </div>
       <div
@@ -63,21 +68,21 @@ function scrollPrev() {
         </div>
       </div>
 
-      <div v-if="$slots['after-items']" class="h-77 p-2 carousel-item">
+      <div v-if="$slots['after-items'] && !isLoading" class="h-77 p-2 carousel-item">
         <slot name="after-items" />
       </div>
     </div>
 
     <div
       v-if="showPrevBtn"
-      class="arrow-btn op-0 -left-5 group-hover:left-0 group-hover:op-100"
+      class="arrow-btn op-0 -left-8 group-hover:left-2 group-hover:op-100"
       @click="scrollPrev"
     >
       <div class="i-mingcute:arrow-left-circle-fill h-full w-full bg-base-300" />
     </div>
     <div
       v-if="showNextBtn"
-      class="arrow-btn op-0 -right-5 group-hover:right-0 group-hover:op-100"
+      class="arrow-btn op-0 -right-8 group-hover:right-2 group-hover:op-100"
       @click="scrollNext"
     >
       <div class="i-mingcute:arrow-right-circle-fill h-full w-full bg-base-300" />
@@ -103,7 +108,7 @@ function scrollPrev() {
   }
 
   .arrow-btn {
-    @apply absolute top-1/2 h-2rem w-2rem cursor-pointer rounded-full bg-secondary -translate-y-1/2 transition-all;
+    @apply absolute top-1/2 h-13 w-13 cursor-pointer rounded-full bg-secondary -translate-y-1/2 transition-all;
   }
 }
 </style>

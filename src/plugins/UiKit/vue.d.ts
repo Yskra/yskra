@@ -6,7 +6,7 @@ import type BaseFilterItem from './lib/base-filter-item.vue';
 import type BaseSelectItem from './lib/base-select-item.vue';
 import type BaseSelect from './lib/base-select.vue';
 import type FilmCard from './lib/film-card/index.vue';
-import type Index from './lib/y-carousel/index.vue';
+import type YCarousel from './lib/y-carousel/index.vue';
 import type YConfirm from './lib/y-confirm.vue';
 import type YDialog from './lib/y-dialog.vue';
 import type YDrawer from './lib/y-drawer.vue';
@@ -254,7 +254,7 @@ declare module 'vue' {
     YModal: typeof YModal;
     YPrompt: typeof YPrompt;
     YSlider: typeof YSlider;
-    YCarousel: typeof Index;
+    YCarousel: typeof YCarousel;
 
     FilmCard: typeof FilmCard;
     Icon: typeof UIKitGlobalComponentIcon;

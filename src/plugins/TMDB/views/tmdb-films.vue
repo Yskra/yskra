@@ -12,10 +12,10 @@ import { useCollectTrending } from '../api/collectTending.js';
 const router = useRouter();
 const bus = useAppBus();
 
-const { items: popular, error } = useCollectDiscover('movie');
-const { items: trendingDay } = useCollectTrending('movie', 'day');
-const { items: trendingWeek } = useCollectTrending('movie', 'week');
-const { items: nowPlaying } = useCollectLists('movie', 'now_playing');
+const { items: popular, isLoading: popularLoading, error } = useCollectDiscover('movie');
+const { items: trendingDay, isLoading: trendingDayLoading } = useCollectTrending('movie', 'day');
+const { items: trendingWeek, isLoading: trendingWeekLoading } = useCollectTrending('movie', 'week');
+const { items: nowPlaying, isLoading: nowPlayingLoading } = useCollectLists('movie', 'now_playing');
 
 const query = ref<Record<string, LocationQueryValue | LocationQueryValue[]>>({});
 const { selects } = useDiscoverFilter('movie', async (q) => {
@@ -37,7 +37,7 @@ function onStartSearch() {
       <BaseDivider placement="start" class="text-base">
         {{ $t('popular') }}
       </BaseDivider>
-      <YCarousel :items="popular">
+      <YCarousel :items="popular" :is-loading="popularLoading">
         <template #after-items>
           <AppLink :to="{ name: 'TMDBDiscover', params: { type: 'movie' }, query: { sort_by: 'popularity.desc' } }" class="h-full w-full">
             <div v-focus class="h-full w-45 flex items-center justify-center bg-base-300 card">
@@ -78,19 +78,19 @@ function onStartSearch() {
       <BaseDivider placement="start" class="text-base">
         {{ $t('trendingDay') }}
       </BaseDivider>
-      <YCarousel :items="trendingDay" />
+      <YCarousel :items="trendingDay" :is-loading="trendingDayLoading" />
     </div>
     <div>
       <BaseDivider placement="start" class="text-base">
         {{ $t('trendingWeek') }}
       </BaseDivider>
-      <YCarousel :items="trendingWeek" />
+      <YCarousel :items="trendingWeek" :is-loading="trendingWeekLoading" />
     </div>
     <div>
       <BaseDivider placement="start" class="text-base">
         {{ $t('nowOnCinemas') }}
       </BaseDivider>
-      <YCarousel :items="nowPlaying" />
+      <YCarousel :items="nowPlaying" :is-loading="nowPlayingLoading" />
     </div>
   </template>
 </template>

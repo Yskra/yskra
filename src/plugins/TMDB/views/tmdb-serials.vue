@@ -13,11 +13,11 @@ const router = useRouter();
 const bus = useAppBus();
 const lastYear = (new Date()).getFullYear() - 1;
 
-const { items: popular, error } = useCollectDiscover('tv');
-const { items: popularLastYear } = useCollectDiscover('tv', { first_air_date_year: lastYear });
-const { items: trendingDay } = useCollectTrending('tv', 'day');
-const { items: trendingWeek } = useCollectTrending('tv', 'week');
-const { items: nowPlaying } = useCollectLists('tv', 'on_the_air');
+const { items: popular, isLoading: popularLoading, error } = useCollectDiscover('tv');
+const { items: popularLastYear, isLoading: popularLastYearLoading } = useCollectDiscover('tv', { first_air_date_year: lastYear });
+const { items: trendingDay, isLoading: trendingDayLoading } = useCollectTrending('tv', 'day');
+const { items: trendingWeek, isLoading: trendingWeekLoading } = useCollectTrending('tv', 'week');
+const { items: nowPlaying, isLoading: nowPlayingLoading } = useCollectLists('tv', 'on_the_air');
 
 const query = ref<Record<string, LocationQueryValue | LocationQueryValue[]>>({});
 const { selects } = useDiscoverFilter('tv', async (q) => {
@@ -39,7 +39,7 @@ function onStartSearch() {
       <BaseDivider placement="start" class="text-base">
         {{ $t('popular') }}
       </BaseDivider>
-      <YCarousel :items="popular">
+      <YCarousel :items="popular" :is-loading="popularLoading">
         <template #after-items>
           <AppLink :to="{ name: 'TMDBDiscover', params: { type: 'tv' }, query: { sort_by: 'popularity.desc' } }" class="h-full w-full">
             <div v-focus class="h-full w-45 flex items-center justify-center bg-base-300 card">
@@ -80,25 +80,25 @@ function onStartSearch() {
       <BaseDivider placement="start" class="text-base">
         {{ $t('lastYear') }}
       </BaseDivider>
-      <YCarousel :items="popularLastYear" />
+      <YCarousel :items="popularLastYear" :is-loading="popularLastYearLoading" />
     </div>
     <div>
       <BaseDivider placement="start" class="text-base">
         {{ $t('trendingDay') }}
       </BaseDivider>
-      <YCarousel :items="trendingDay" />
+      <YCarousel :items="trendingDay" :is-loading="trendingDayLoading" />
     </div>
     <div>
       <BaseDivider placement="start" class="text-base">
         {{ $t('trendingWeek') }}
       </BaseDivider>
-      <YCarousel :items="trendingWeek" />
+      <YCarousel :items="trendingWeek" :is-loading="trendingWeekLoading" />
     </div>
     <div>
       <BaseDivider placement="start" class="text-base">
         {{ $t('currentlyAiring') }}
       </BaseDivider>
-      <YCarousel :items="nowPlaying" />
+      <YCarousel :items="nowPlaying" :is-loading="nowPlayingLoading" />
     </div>
   </template>
 </template>
