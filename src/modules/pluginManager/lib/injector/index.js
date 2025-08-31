@@ -71,9 +71,8 @@ export function createInjectorModule() {
   function addInject(target, methodName, patch, injectionId, isPre = false) {
     const { t } = useI18n();
 
-    if (!target) {
-      logger.error(t('Injection module {injectionId} is undefended', { injectionId }));
-      return;
+    if (!target || !target[methodName]) {
+      throw new Error(t('invalidInjectTarget', { injectionId, methodName }));
     }
 
     if (!(methodName in (target[INJECTION_FIELD] || {}))) {
@@ -131,8 +130,11 @@ export function createInjectorModule() {
       }
     )(target[methodName]);
 
-    Object.assign(target[methodName], funcCopy);
-    target[methodName].toString = () => funcCopy.toString();
+    Object.defineProperties(target[methodName], {
+      length: { value: funcCopy.length },
+      name: { value: funcCopy.name },
+      toString: { value: funcCopy.toString },
+    });
   }
 
   /**

@@ -115,7 +115,7 @@
   "Route {name} removed": "Роут {name} удавлен",
   "Injected {name}": "Инъекция применена {name}",
   "Uninjected {name}": "Инъекция удалена {name}",
-  "Injection module {injectionId} is undefended": "Модуль для инъекции {injectionId} - undefined",
+  "invalidInjectTarget": "Инъекция {injectionId} невозможна. Некорректный модуль или метод {methodName} отсутствует в этом модуле.",
   "Error in pre-injection {injectionId}": "Ошибка в пред-инъекции {injectionId}",
   "Error in post-injection {injectionId}": "Ошибка в пост-инъекции {injectionId}",
   "Pre-inject {injectionId} returned not array. Injection will be ignored": "Пред-инъекция {injectionId} вернула не массив. Инъекция будет проигнорирована",

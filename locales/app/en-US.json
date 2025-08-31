@@ -115,7 +115,7 @@
   "Route {name} removed": "Route {name} removed",
   "Injected {name}": "Injected {name}",
   "Uninjected {name}": "Uninjected {name}",
-  "Injection module {injectionId} is undefended":  "Injection module {injectionId} is undefended",
+  "invalidInjectTarget":  "Injection {injectionId} not possible. Invalid module or method {methodName} is missing in this module.",
   "Error in pre-injection {injectionId}":  "Error in pre-injection {injectionId}",
   "Error in post-injection {injectionId}":  "Error in post-injection {injectionId}",
   "Pre-inject {injectionId} returned not array. Injection will be ignored": "Pre-inject {injectionId} returned not array. Injection will be ignored",
