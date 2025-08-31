@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { RouteRecord } from 'vue-router';
-import { computedWithControl } from '@vueuse/core';
-import { resolveComponent, watch } from 'vue';
+import { computedWithControl, useActiveElement } from '@vueuse/core';
+import { computed, ref, resolveComponent, useTemplateRef, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAppBus } from '@/modules/appBus';
 import { useI18n } from '@/modules/i18n';
@@ -15,6 +15,11 @@ const { indexPageRoute } = useUISettings();
 const isPresentation = bus.get('ui.background:presentationMode');
 const settingsPage = { name: SETTINGS_PAGES_PARENT };
 const i18n = useI18n();
+const sidebarContainerRef = useTemplateRef<HTMLElement>('sidebarContainerRef');
+const activeElement = useActiveElement();
+
+const hoveredContainer = ref(false);
+const compactMenu = computed(() => hoveredContainer.value ? false : (activeElement.value && sidebarContainerRef.value) ? !sidebarContainerRef.value?.contains(activeElement.value) : false);
 
 bus.on('pluginManager.plugin:mounted', routes.trigger);
 bus.on('pluginManager.plugin:mounted', routes.trigger);
@@ -32,13 +37,23 @@ function generateRoutes(): RouteRecord[] {
 </script>
 
 <template>
-  <div class="sidebar-container" :class="{ 'bg-base-200/40': isPresentation }">
-    <div v-focus-section class="sidebar-body">
+  <div
+    ref="sidebarContainerRef"
+    class="sidebar-container"
+    :class="{ 'bg-base-200/40': isPresentation }"
+    @mouseenter="hoveredContainer = true"
+    @mouseleave="hoveredContainer = false"
+  >
+    <div
+      v-focus-section
+      class="sidebar-body"
+      :class="{ compact: compactMenu }"
+    >
       <BaseMenu class="w-full text-base">
         <BaseMenuItem>
           <div v-focus @click="router.back()">
-            <Icon name="line-md-chevron-left" class="h-2rem w-2rem" />
-            <span>{{ $t('back') }}</span>
+            <Icon name="line-md-chevron-left" class="icon-size" />
+            <span v-if="!compactMenu">{{ $t('back') }}</span>
           </div>
         </BaseMenuItem>
         <BaseMenuItem modifier="disabled" />
@@ -48,8 +63,8 @@ function generateRoutes(): RouteRecord[] {
             to="/"
             exact-active-class="menu-active"
           >
-            <Icon name="line-md-home-simple-filled" class="h-2rem w-2rem" />
-            <span>{{ $t('home') }}</span>
+            <Icon name="line-md-home-simple-filled" class="icon-size" />
+            <span v-if="!compactMenu">{{ $t('home') }}</span>
           </AppLink>
         </BaseMenuItem>
         <BaseMenuItem v-for="route in routes" :key="route.path">
@@ -59,12 +74,12 @@ function generateRoutes(): RouteRecord[] {
               default-tag="span"
               class="icon-size"
             />
-            <ResolveTextComponent :is="route.meta.title" />
+            <ResolveTextComponent :is="route.meta.title" v-if="!compactMenu" />
           </AppLink>
         </BaseMenuItem>
       </BaseMenu>
 
-      <div class="sidebar-bottom-area">
+      <div v-if="!compactMenu" class="sidebar-bottom-area">
         <BaseTooltip :data-tip="$t('settings')">
           <BaseButton
             :is="resolveComponent('AppLink')"
@@ -110,10 +125,13 @@ function generateRoutes(): RouteRecord[] {
 .sidebar-body {
   @apply  min-w-60 flex flex-col justify-between overflow-y-auto py-5 relative flex-grow;
 }
+.sidebar-body.compact {
+  @apply min-w-full;
+}
 .sidebar-bottom-area {
   @apply p-2 flex absolute bottom-0 left-0;
 }
 .icon-size {
-  @apply h-2rem w-2rem;
+  @apply h-4rem w-2rem;
 }
 </style>

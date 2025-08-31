@@ -2,7 +2,6 @@
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import TheSettingsSidebar from '@/modules/settings/components/TheSettingsSidebar.vue';
-import Index from '@/plugins/UiKit/lib/sidebar-layout/index.vue';
 import { useTitle } from '@/utils/title';
 
 const route = useRoute();
@@ -19,7 +18,7 @@ function resolveI18nTitle(key: string) {
 </script>
 
 <template>
-  <Index>
+  <SidebarLayout>
     <template #sidebar>
       <TheSettingsSidebar />
     </template>
@@ -34,6 +33,6 @@ function resolveI18nTitle(key: string) {
         <RouterView />
       </div>
     </div>
-  </Index>
+  </SidebarLayout>
 </template>
 
