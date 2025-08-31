@@ -227,10 +227,11 @@ export function createNavigator(elements: Elements, guards: NavigationGuards, op
 
     if (isFocusHandlerActive.value) {
       adapter.focusNode(element, toPayload);
+      handleScroll(toPayload, fromPayload);
     }
 
     guards.resolveAfterElement(toPayload, fromPayload);
-    handleScroll(toPayload, fromPayload);
+
     return true;
   }
 
