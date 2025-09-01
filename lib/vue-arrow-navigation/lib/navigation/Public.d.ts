@@ -1,5 +1,5 @@
-import type { ShallowRef } from 'vue';
-import type { StorageValue } from '../store';
+import type {ShallowRef} from 'vue';
+import type {StorageValue} from '../store';
 
 export enum Direction {
   LEFT = 'left',
@@ -48,6 +48,7 @@ export interface ResolveElementFrom {
 export interface Options {
   adapter: Adapter;
   elements: Elements;
+  keyboardThrottleTimeout: number;
   navigatorOptions: NavigatorOptions;
   keyboardMap: KeyboardMap;
   logger: {
@@ -67,6 +68,7 @@ export interface KeyboardMap {
 }
 
 export interface NavigatorOptions {
+  keyboardThrottleTimeout: number;
   passiveRestoreFocus: boolean; // disabling this enables aggressive focus restore that can be triggered by clicking the mouse at the
   scrollBehavior: (to: ResolveElementTo, from: ResolveElementFrom) => void;
 }

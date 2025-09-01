@@ -1,14 +1,14 @@
-import type { App, Plugin } from 'vue';
-import type { Elements, Options } from '../navigation';
-import type { Config } from './Public';
-import { createEventHook } from '@vueuse/core';
-import { effectScope, hasInjectionContext, inject, reactive } from 'vue';
-import { createFocusConfig, removeFocusConfig } from '../config';
-import { createFocusDirective } from '../focus';
-import { createFocusSectionDirective } from '../focus-section';
-import { createNavigation } from '../navigation';
-import { createStore } from '../store';
-import { NAVIGATION_INJECT_KEY } from './constants';
+import type {App, Plugin} from 'vue';
+import {effectScope, hasInjectionContext, inject, reactive} from 'vue';
+import type {Elements, Options} from '../navigation';
+import {createNavigation} from '../navigation';
+import type {Config} from './Public';
+import {createEventHook} from '@vueuse/core';
+import {createFocusConfig, removeFocusConfig} from '../config';
+import {createFocusDirective} from '../focus';
+import {createFocusSectionDirective} from '../focus-section';
+import {createStore} from '../store';
+import {NAVIGATION_INJECT_KEY} from './constants';
 import defaultConfig from './defaultConfig';
 
 export * from './componentHooks';
@@ -46,6 +46,7 @@ export function createArrowNavigation(fabricConfig?: Partial<Config>): Plugin & 
         adapter: { ...defaultConfig.adapter, ...config?.adapter },
         keyboardMap: { ...defaultConfig.keyboardMap, ...config?.keyboardMap },
         navigatorOptions: { ...defaultConfig.navigatorOptions, ...config?.navigatorOptions },
+        keyboardThrottleTimeout: config?.navigatorOptions?.keyboardThrottleTimeout ?? defaultConfig.navigatorOptions.keyboardThrottleTimeout,
       };
 
       scope.run(() => {

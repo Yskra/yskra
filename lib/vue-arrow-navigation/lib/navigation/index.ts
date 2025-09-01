@@ -1,10 +1,12 @@
-import type { EventHookOn } from '@vueuse/core';
-import type { Options, ResolveElementFrom, ResolveElementTo, ResolveSection } from './Public';
-import { createEventHook } from '@vueuse/core';
-import { createNavigationGuards } from '../navigation-guards';
-import { setupEventHandlers } from './eventHandler';
-import { createNavigator } from './navigator';
-import { Direction, KeyboardClick } from './Public.d';
+import type {EventHookOn, FunctionArgs, PromisifyFn} from '@vueuse/core';
+import {createEventHook, createFilterWrapper} from '@vueuse/core';
+import type {Options, ResolveElementFrom, ResolveElementTo, ResolveSection} from './Public';
+import {createNavigationGuards} from '../navigation-guards';
+import {setupEventHandlers} from './eventHandler';
+import {createNavigator} from './navigator';
+import {Direction, KeyboardClick} from './Public.d';
+import {throttleFilterWithBurst} from "../event-filter";
+import type {MaybeRefOrGetter} from "vue";
 
 export { ChangeFocusCause, Direction, KeyboardClick } from './Public.d';
 export type { Adapter, Elements, KeyboardMap, NavigatorOptions, Options, ResolveSection } from './Public.d';
@@ -22,7 +24,8 @@ export function createNavigation(options: Options, onUninstall: EventHookOn, dev
   };
 
   const { focus, triggerFocusRestore, debugData } = createNavigator(options.elements, guards, options.navigatorOptions, options.adapter);
-  const removeHandler = setupEventHandlers(options.keyboardMap, keyboardHandler);
+  const keyboardHandlerThrottled = useThrottleFn(keyboardHandler, options.keyboardThrottleTimeout);
+  const removeHandler = setupEventHandlers(options.keyboardMap, keyboardHandlerThrottled);
 
   Object.assign(devtoolsData, debugData);
 
@@ -62,3 +65,8 @@ function isDirection(d: string): d is Direction {
 function isKeyboardClick(d: string): d is typeof KeyboardClick {
   return d === KeyboardClick;
 }
+
+function useThrottleFn<T extends FunctionArgs>(fn: T, ms: MaybeRefOrGetter<number> = 200): PromisifyFn<T> {
+  return createFilterWrapper(throttleFilterWithBurst(ms), fn)
+}
+
