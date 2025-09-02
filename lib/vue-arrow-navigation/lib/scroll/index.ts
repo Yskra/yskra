@@ -1,5 +1,5 @@
-import { Direction } from '../navigation';
-import { findScrollContainer } from './scrollParent';
+import {Direction} from '../navigation';
+import {findScrollContainer} from './scrollParent';
 
 const VERTICAL_VIEWPORT_THRESHOLD = 0.5;
 

@@ -1,9 +1,9 @@
-import type { Adapter, Direction, Elements, FocusableElement, NavigationGuards, NavigatorOptions, ResolveElementFrom, ResolveElementTo } from './Public';
-import { refAutoReset } from '@vueuse/core';
-import { computed, shallowRef, watch } from 'vue';
-import { SimpleStack } from '../simple-stack';
-import { useElementsUtils } from './elementsCalcs';
-import { ChangeFocusCause } from './Public.d';
+import type {Adapter, Direction, Elements, FocusableElement, NavigationGuards, NavigatorOptions, ResolveElementFrom, ResolveElementTo} from './Public';
+import {refAutoReset} from '@vueuse/core';
+import {computed, shallowRef, watch} from 'vue';
+import {SimpleStack} from '../simple-stack';
+import {useElementsUtils} from './elementsCalcs';
+import {ChangeFocusCause} from './Public.d';
 
 const FOCUS_HANDLER_ACTIVE_TIMEOUT = 2000;
 
@@ -85,7 +85,7 @@ export function createNavigator(elements: Elements, guards: NavigationGuards, op
     if (tryFocusNextElement(direction))
       return;
     if (trySelectNextSection(direction)) {
-      if (tryFocusNextElement(direction))
+      if (tryFocusDefaultElement() || tryFocusNextElement(direction))
         return;
       focusRestore();
     }
@@ -147,6 +147,19 @@ export function createNavigator(elements: Elements, guards: NavigationGuards, op
     return false;
   }
 
+  function tryFocusDefaultElement(): boolean {
+    const element = getDefaultFocus();
+
+    if (element) {
+      return focusElement(element, adapter.getNodeRect(element), {
+        cause: ChangeFocusCause.KEYDOWN,
+        direction: null,
+      });
+    }
+
+    return false;
+  }
+
   function sectionFocusRestore() {
     if (sectionStack.size > 0) {
       focusSection(sectionStack.pop()!, {
@@ -169,22 +182,15 @@ export function createNavigator(elements: Elements, guards: NavigationGuards, op
 
 
   function focusRestore() {
-    if (elements.has(activeSection.value)) {
-      const { instance, children } = elements.get(activeSection.value)!;
+    // 1. Try to restore last focused element current section
+    const element = getDefaultFocus();
 
-      // 1. Try to restore last focused element current section
-      if (instance.defaultFocus) {
-        if (children.has(instance.defaultFocus)) {
-          focusElement(instance.defaultFocus, adapter.getNodeRect(instance.defaultFocus), {
-            cause: ChangeFocusCause.RESTORE,
-            direction: null,
-          });
-          return;
-        }
-        else {
-          instance.defaultFocus = null;
-        }
-      }
+    if (element) {
+      focusElement(element, adapter.getNodeRect(element), {
+        cause: ChangeFocusCause.RESTORE,
+        direction: null,
+      });
+      return;
     }
 
     // 2. Get the first element from the current section
@@ -196,6 +202,23 @@ export function createNavigator(elements: Elements, guards: NavigationGuards, op
         direction: null,
       });
     }
+  }
+
+  function getDefaultFocus(): FocusableElement | null {
+    if (elements.has(activeSection.value)) {
+      const { instance, children } = elements.get(activeSection.value)!;
+
+      if (instance.defaultFocus) {
+        if (children.has(instance.defaultFocus)) {
+          return instance.defaultFocus
+        }
+        else {
+          instance.defaultFocus = null;
+        }
+      }
+    }
+
+    return null;
   }
 
   function focusSection(section: Element, meta: { direction: Direction | null; cause: ChangeFocusCause }): boolean {

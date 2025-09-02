@@ -15,13 +15,13 @@ export function findScrollContainer(element: Element): Element | null {
       return cache.get(parent)!;
     }
 
-    // prevent scroll on fixed page element like sidebar, drawer, etc
-    if (parent.clientHeight === document.documentElement.clientHeight && parent !== document.documentElement) {
-      return null;
-    }
     if (parent.scrollHeight > parent.clientHeight) {
       cache.set(parent, parent);
       return parent;
+    }
+    // prevent scroll on fixed page element like sidebar, drawer, etc
+    if (parent.clientHeight === document.documentElement.clientHeight && parent !== document.documentElement) {
+      return null;
     }
     parent = parent.parentElement;
   }

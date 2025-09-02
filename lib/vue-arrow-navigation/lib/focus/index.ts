@@ -1,7 +1,7 @@
-import type { FocusDirective } from '../config';
-import { directiveResolveFocus } from '../config';
-import { elementInject } from '../elements-inject';
-import { FS_DEFAULT_VALUE, FS_KEY } from '../focus-section';
+import type {FocusDirective} from '../config';
+import {directiveResolveFocus} from '../config';
+import {elementInject} from '../elements-inject';
+import {FS_DEFAULT_VALUE, FS_KEY} from '../focus-section';
 
 interface Logger {
   error: (...a: any) => void;
