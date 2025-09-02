@@ -8,6 +8,10 @@ import { rootPages } from '@/modules/settings/addPage';
 import settingsRoute from '@/modules/settings/route';
 import { ResolveIconComponent, ResolveTextComponent } from '@/utils/ResolveComponent';
 
+const props = defineProps<{
+  compact: boolean;
+}>();
+
 const router = useRouter();
 const bus = useAppBus();
 const pluginRoutes = computedWithControl(() => undefined, generatePluginRoutes);
@@ -35,23 +39,23 @@ function generateNativeRoutes(): RouteRecord[] {
 </script>
 
 <template>
-  <div class="sticky top-0 h-screen rounded-br-2xl rounded-tr-2xl bg-base-200 px-2">
-    <div class="h-full min-w-60 flex flex-col justify-between overflow-y-auto py-5">
-      <BaseMenu class="w-full">
+  <div class="sticky top-0 h-screen w-full flex flex-col rounded-br-2xl rounded-tr-2xl bg-base-200 px-2">
+    <div class="sidebar-body" :class="{ compact: props.compact }">
+      <BaseMenu class="menu">
         <BaseMenuItem>
           <div v-focus @click="router.back()">
-            <Icon name="line-md-chevron-left" class="h-2rem w-2rem" />
-            <span>{{ $t('back') }}</span>
+            <Icon name="line-md-chevron-left" class="item-icon" />
+            <span class="item-text">{{ $t('back') }}</span>
           </div>
         </BaseMenuItem>
         <BaseMenuItem>
           <AppLink to="/">
-            <Icon name="line-md-home-simple-filled" class="h-2rem w-2rem" />
-            <span>{{ $t('home') }}</span>
+            <Icon name="line-md-home-simple-filled" class="item-icon" />
+            <span class="item-text">{{ $t('home') }}</span>
           </AppLink>
         </BaseMenuItem>
         <BaseMenuItem type="title">
-          {{ $t('general') }}
+          <span v-if="!props.compact" class="item-text">{{ $t('general') }}</span>
         </BaseMenuItem>
 
         <BaseMenuItem v-for="route in nativeRoues" :key="route.path">
@@ -59,22 +63,22 @@ function generateNativeRoutes(): RouteRecord[] {
             <ResolveIconComponent
               :is="route.meta.icon"
               default-tag="span"
-              class="h-2rem w-2rem"
+              class="item-icon"
             />
 
-            <ResolveTextComponent :is="route.meta.title" />
+            <ResolveTextComponent :is="route.meta.title" class="item-text" />
           </AppLink>
         </BaseMenuItem>
 
         <template v-if="pluginRoutes.length">
           <BaseMenuItem type="title">
-            {{ $t('plugins') }}
+            <span v-if="!props.compact" class="item-text">{{ $t('plugins') }}</span>
           </BaseMenuItem>
 
           <BaseMenuItem v-for="route in pluginRoutes" :key="route.path">
             <AppLink :to="route.path">
-              <span class="i-mingcute:plugin-2-line h-2rem w-2rem" />
-              <ResolveTextComponent :is="route.meta.title" />
+              <span class="i-mingcute:plugin-2-line item-icon" />
+              <ResolveTextComponent :is="route.meta.title" class="item-text" />
             </AppLink>
           </BaseMenuItem>
         </template>
@@ -82,3 +86,38 @@ function generateNativeRoutes(): RouteRecord[] {
     </div>
   </div>
 </template>
+
+<style scoped>
+.menu {
+  @apply w-full text-base;
+
+  li:not(.menu-title) > * {
+    @apply gap-0 p-e-0;
+  }
+
+  li:empty {
+    margin: 0.6rem 1rem;
+    --color-base-content: transparent;
+  }
+}
+.item-icon {
+  @apply h-3rem w-2rem;
+}
+.item-text {
+  @apply pl-3 whitespace-nowrap transition-opacity;
+}
+
+.sidebar-body {
+  @apply overflow-auto min-w-60 flex flex-col justify-between py-5 relative flex-grow transition-min-width;
+}
+.sidebar-body.compact {
+  @apply min-w-4rem w-4rem duration-300 overflow-hidden;
+
+  .menu {
+    @apply pr-0;
+  }
+  .item-text {
+    @apply op-0;
+  }
+}
+</style>

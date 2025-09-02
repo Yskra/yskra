@@ -30,8 +30,8 @@ function clearBg() {
 <template>
   <BackgroundImageLayout>
     <SidebarLayout>
-      <template #sidebar>
-        <TheRootSidebar />
+      <template #sidebar="{ compactSidebar }">
+        <TheRootSidebar :compact="compactSidebar" />
       </template>
 
       <template v-if="route.path === '/'">

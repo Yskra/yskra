@@ -19,8 +19,8 @@ function resolveI18nTitle(key: string) {
 
 <template>
   <SidebarLayout>
-    <template #sidebar>
-      <TheSettingsSidebar />
+    <template #sidebar="{ compactSidebar }">
+      <TheSettingsSidebar :compact="compactSidebar" />
     </template>
 
     <div class="w-full p-5">

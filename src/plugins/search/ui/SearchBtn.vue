@@ -10,7 +10,7 @@ const btnRef = useTemplateRef('btn');
   <div
     ref="btn"
     v-focus-section
-    class="px-5 pt-5"
+    class="px-1 pt-5"
   >
     <BaseButton
       class="h-3rem w-3rem w-full p-0 rounded-box"
@@ -18,7 +18,7 @@ const btnRef = useTemplateRef('btn');
       styling="soft"
       @click="showModal = true"
     >
-      <div class="i-mingcute:search-2-fill h-2rem w-2rem" />
+      <div class="i-mingcute:search-2-fill h-3rem w-2rem" />
     </BaseButton>
   </div>
 
