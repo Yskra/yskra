@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import type { LoggerLevel } from '@/modules/logger/Public';
 import { UseClipboard } from '@vueuse/components';
 import { ref } from 'vue';
 import LoggerItem from '@/modules/logger/components/LoggerItem.vue';
-import { filteredEntries, filterLevel, saveLogs } from '@/modules/logger/stores/logs';
+import { filteredEntries, saveLogs } from '@/modules/logger/stores/logs';
 
 const LEVELS = Object.freeze([
   { value: 'info', label: 'Информация' },
@@ -25,21 +24,6 @@ function openDetails(event: Event, msg: { title: string; full: string }) {
 <template>
   <div class="w-full flex flex-col items-end">
     <div class="flex items-center">
-      <BaseFilter
-        @change="filterLevel = $event.target.value"
-      >
-        <BaseFilterItem
-          type="reset"
-          value="x"
-          @click="filterLevel = LEVELS[0].value as LoggerLevel"
-        />
-        <BaseFilterItem
-          v-for="option in LEVELS"
-          :key="option.value"
-          :value="option.value"
-          :label="option.label"
-        />
-      </BaseFilter>
       <BaseButton class="ml-3" @click="saveLogs">
         {{ $t('saveLogs') }}
       </BaseButton>
@@ -62,7 +46,7 @@ function openDetails(event: Event, msg: { title: string; full: string }) {
             {{ messages.length }}
           </BaseBadge>
         </template>
-        <div v-focus-section class="border-t-2 border-t-[--color-base-300] pt-2 tab-content">
+        <div v-focus-section class="tab-content">
           <div v-if="messages.length === 0" class="mt-5 flex items-center justify-center">
             <div class="i-mingcute:broom-fill mr-2 h-2rem w-2rem" />
             <span class="text-center">
