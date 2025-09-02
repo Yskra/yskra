@@ -46,6 +46,7 @@ export default antfu(
         ],
         'style/no-multiple-empty-lines': ['error', { max: 2 }],
         'unused-imports/no-unused-vars': ['error', { caughtErrors: 'none' }],
+        'import/no-duplicates': ['error'],
       },
       languageOptions: {
         globals: {

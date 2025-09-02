@@ -231,7 +231,7 @@
     "jsdoc/require-property-name": "warn",
     "jsdoc/require-returns-description": "warn",
     "import/first": "error",
-    "import/no-duplicates": "error",
+    "import/no-duplicates": "off",
     "import/no-mutable-exports": "error",
     "import/no-named-default": "error",
     "unicorn/consistent-empty-array-spread": "error",
