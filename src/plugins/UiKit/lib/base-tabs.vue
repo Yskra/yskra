@@ -1,8 +1,18 @@
+<script lang="ts">
+import type { Ref } from 'vue';
+
+export const TABS_INJECT_KEY = Symbol('tabs key');
+
+export type TabsApi = Readonly<Ref<{
+  activeTabKey: PropertyKey | undefined;
+  onTabSelect: (key: PropertyKey) => void;
+  mode: 'tab' | 'content';
+}>>;
+</script>
+
 <script setup lang="ts">
-import type { VNode } from 'vue';
-import { eachChild } from '@skirtle/vue-vnode-utils';
-import { computed, h, ref, useAttrs, useSlots } from 'vue';
-import { DaisyUI, type2array } from '.';
+import { computed, defineComponent, h, provide, ref, toRef, useAttrs } from 'vue';
+import { DaisyUI, type2array } from './index';
 
 /**
  * @docs https://daisyui.com/components/tab/
@@ -19,7 +29,7 @@ defineOptions({
   inheritAttrs: false,
 });
 const emit = defineEmits<{
-  (e: 'selected', tab: VNode): void;
+  (e: 'selected', tab: PropertyKey): void;
 }>();
 
 const styles: Record<string, string> = Object.freeze({
@@ -43,34 +53,25 @@ const placements = Object.freeze({
 
 const attrs = useAttrs();
 const styling = computed(() => type2array(attrs.styling).map((v: string) => `_${styles[v]}`));
-const slots = useSlots();
 const activeTabKey = ref<PropertyKey>();
 
-function RenderTabs({ mode }: { mode: 'tab' | 'content' }) {
-  const rendered = slots.default?.() ?? [];
-
-  eachChild(rendered, (child) => {
-    const tabIndex: PropertyKey = child.key!;
-
-    if (!activeTabKey.value) {
-      activeTabKey.value = tabIndex;
-    }
-
-    if (!child.props) {
-      child.props = {};
-    }
-
-    child.props.mode = mode;
-    child.props.onClick = () => onActivateTab(tabIndex, child);
-    child.props.active = tabIndex === activeTabKey.value;
-  });
-  return h(() => rendered);
-}
-
-function onActivateTab(key: PropertyKey, child: VNode) {
+function onActivateTab(key: PropertyKey) {
   activeTabKey.value = key;
-  emit('selected', child);
+  emit('selected', key);
 }
+
+const InjectWrap = defineComponent<{ mode: 'tab' | 'content' }, any, any, any>((props, ctx) => {
+  provide<TabsApi>(TABS_INJECT_KEY, toRef(() => ({
+    mode: props.mode,
+    activeTabKey: activeTabKey.value,
+    onTabSelect: onActivateTab,
+  })));
+
+  return () => h(ctx.slots.default);
+}, {
+  props: ['mode'],
+  slots: ['default'],
+});
 </script>
 
 <template>
@@ -80,20 +81,26 @@ function onActivateTab(key: PropertyKey, child: VNode) {
     :class="styling"
     :data-active-tab="activeTabKey"
   >
-    <KeepAlive>
-      <DaisyUI
-        is="div"
-        role="tablist"
-        :styles="styles"
-        :sizes="sizes"
-        :placements="placements"
-        class="tabs"
-        v-bind="$attrs"
-      >
-        <RenderTabs mode="tab" />
-        <RenderTabs mode="content" />
-      </DaisyUI>
-    </KeepAlive>
+    <DaisyUI
+      is="div"
+      role="tablist"
+      :styles="styles"
+      :sizes="sizes"
+      :placements="placements"
+      class="tabs"
+      v-bind="$attrs"
+    >
+      <div class="tabs-list">
+        <InjectWrap mode="tab">
+          <slot />
+        </InjectWrap>
+      </div>
+
+
+      <InjectWrap mode="content">
+        <slot />
+      </InjectWrap>
+    </DaisyUI>
   </div>
 </template>
 
@@ -101,6 +108,14 @@ function onActivateTab(key: PropertyKey, child: VNode) {
 .tabs-component-container {
   :deep(.tab-content) {
     display: block;
+  }
+
+  .tabs-list {
+    @apply flex overflow-x-auto p-3;
+
+    > * {
+      @apply shrink-0;
+    }
   }
 
   &[data-active-tab="0"] :deep(.tab-content) {
