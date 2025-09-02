@@ -10,7 +10,7 @@ const compactSidebar = computed(() => hoveredContainer.value ? false : (activeEl
 </script>
 
 <template>
-  <div class="w-screen flex">
+  <div class="flex">
     <div
       ref="sidebarContainerRef"
       @mouseenter="hoveredContainer = true"

@@ -25,7 +25,7 @@ export default {
       direction: to.direction,
     }),
     // smoother scrolling when key is being held down
-    keyboardThrottleTimeout: 200,
+    keyboardThrottleTimeout: 300,
   },
   // all allowed keys: https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values
   keyboardMap: {
