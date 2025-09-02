@@ -5,10 +5,13 @@
 
 # Yskra
 
-[![Deploy](https://github.com/Yskra/yskra/actions/workflows/mian.yml/badge.svg)](https://github.com/Yskra/yskra/actions/workflows/mian.yml)
+
 [![Docs](https://img.shields.io/badge/read-docs-blue)](https://docs.yskra.app/)
-[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/YskraChat)
-![Version](https://img.shields.io/github/package-json/v/Yskra/yskra)
+[![Telegram](https://telegram-badge.vercel.app/api/telegram-badge?channelId=@YskraApp)](https://t.me/YskraApp)
+
+[![Deploy](https://github.com/Yskra/yskra/actions/workflows/mian.yml/badge.svg)](https://github.com/Yskra/yskra/actions/workflows/mian.yml)
+[![Version](https://img.shields.io/github/package-json/v/Yskra/yskra)]()
+[![Version](https://img.shields.io/github/license/Yskra/yskra)]()
 
 
 > Free and open-source web-application for TV
