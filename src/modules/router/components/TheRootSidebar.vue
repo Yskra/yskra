@@ -40,7 +40,7 @@ function generateRoutes(): RouteRecord[] {
     :class="{ 'bg-base-200/40': isPresentation }"
   >
     <div
-      v-focus-section
+
       class="sidebar-body"
       :class="{ compact: props.compact }"
     >
@@ -74,7 +74,7 @@ function generateRoutes(): RouteRecord[] {
         </BaseMenuItem>
       </BaseMenu>
 
-      <div class="sidebar-bottom-area">
+      <div v-focus-section class="sidebar-bottom-area">
         <BaseTooltip :data-tip="$t('settings')">
           <BaseButton
             :is="resolveComponent('AppLink')"
