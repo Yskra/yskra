@@ -48,6 +48,16 @@ import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
     console.error(error);
     errors.add(error);
   });
+  // catch vite fails to load dynamic imports
+  window.addEventListener('vite:preloadError', (event) => {
+    const error = event.payload;
+
+    error.message = `${error.message}. See https://vite.dev/guide/build.html#load-error-handling`;
+
+    event.preventDefault();
+    console.error(error);
+    errors.add(error);
+  });
 
   // create app only once, pass reactive errors to it
   watchOnce(errors, () => {
