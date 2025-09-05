@@ -78,7 +78,7 @@ watch(() => props.hero.image, (value) => {
 
 <template>
   <div class="film-card">
-    <div class="flex flex-basis-100% flex-col justify-between overflow-x-auto rounded-xl bg-base-200 p-5">
+    <div class="flex flex-basis-100% flex-col overflow-x-auto rounded-xl bg-base-200 p-5">
       <FilmCardHero v-bind="props.hero" :is-loading="props.isLoading">
         <template #top>
           <FilmCardMeta v-bind="props.hero" :is-loading="props.isLoading" />
@@ -116,7 +116,7 @@ watch(() => props.hero.image, (value) => {
       <YCarousel :items="similar" />
     </div>
 
-    <div class="ml-4 min-w-70">
+    <div class="ml-4">
       <div>
         <FilmCardPeople :peoples="props.peoples.crew.slice(0, 5)">
           {{ $t('team') }}

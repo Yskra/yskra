@@ -17,7 +17,7 @@ const peoples = computed(() => props.peoples?.length ? props.peoples : [{ id: 0 
 </script>
 
 <template>
-  <BaseMenu class="w-full">
+  <BaseMenu class="w-full max-xl:hidden">
     <BaseMenuItem type="title">
       <slot />
     </BaseMenuItem>

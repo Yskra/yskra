@@ -18,7 +18,7 @@ const { image = '' } = defineProps<Props>();
 
 <template>
   <div class="film-card-hero">
-    <div class="flex items-start px-2 hero-content">
+    <div class="items-start p-0 hero-content">
       <UseImage
         v-if="!isLoading"
         :src="image"
@@ -70,8 +70,8 @@ const { image = '' } = defineProps<Props>();
 
 <style scoped>
 .film-card-hero {
-  @apply hero text-lg;
-  @apply block
+  @apply hero text-lg items-start;
+  @apply flex
 }
 </style>
 
