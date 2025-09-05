@@ -21,7 +21,9 @@ export function findScrollContainer(element: Element): Element | null {
     }
     // prevent scroll on fixed page element like sidebar, drawer, etc
     if (parent.clientHeight === document.documentElement.clientHeight && parent !== document.documentElement) {
-      return null;
+      if (parent.getBoundingClientRect().top === 0) {
+        return null;
+      }
     }
     parent = parent.parentElement;
   }

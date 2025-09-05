@@ -28,13 +28,12 @@ function verticalScrollSegment(target: number, host: Element, threshold = VERTIC
   if (targetSegment !== undefined && Math.abs(currentScrollY - targetSegment) > 10 && host.scrollTo) {
     host.scrollTo({
       top: targetSegment,
-      behavior: 'smooth',
     });
   }
 }
 
 function horizontalScroll(target: Element) {
-  target.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+  target.scrollIntoView({ block: 'nearest', inline: 'center' });
 }
 
 function getScrollVerticalSegments(host: Element = document.documentElement, threshold = VERTICAL_VIEWPORT_THRESHOLD) {
