@@ -1,3 +1,5 @@
+import type { PLATFORMS } from './constants.js';
+
 export interface Platform {
   browser: string | undefined;
   version: number | 1;
@@ -5,5 +7,5 @@ export interface Platform {
     family: string | undefined;
     version: number | 1;
   };
-  isTV: boolean;
+  type: typeof PLATFORMS[keyof typeof PLATFORMS];
 }

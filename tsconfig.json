@@ -23,8 +23,9 @@
       "@locales/*": ["./locales/*"],
       "@icon": ["./src/plugins/UiKit/lib/Icons/index.js"],
       "vue-arrow-navigation": ["./lib/vue-arrow-navigation"],
-      "player": ["./lib/web-player"]
+      "player": ["./lib/web-player"],
+      "parse-ua": ["./lib/parse-ua"]
     }
   },
-  "include": ["src/"],
+  "include": ["src/", "lib/parse-ua/"],
 }

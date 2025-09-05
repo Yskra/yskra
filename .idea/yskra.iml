@@ -9,6 +9,7 @@
       <excludeFolder url="file://$MODULE_DIR$/lib" />
       <excludeFolder url="file://$MODULE_DIR$/plugins" />
     </content>
+    <content url="file://$MODULE_DIR$/lib/parse-ua" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>

@@ -1,5 +1,5 @@
+import type { Platform } from 'parse-ua/Public';
 import type { Component } from 'vue';
-import type { Platform } from '@/modules/platform/Public';
 import type { useGlobalInterface } from '@/modules/pluginManager/managers/globalInterface';
 
 type PluginManagerGlobal = ReturnType<typeof useGlobalInterface>;

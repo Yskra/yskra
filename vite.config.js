@@ -59,6 +59,7 @@ const rootConfig = defineConfig(async () => ({
       '@icon': resolve('src/plugins/UiKit/lib/Icons/index.js'),
       'vue-arrow-navigation': resolve('lib/vue-arrow-navigation'),
       'player': resolve('lib/web-player'),
+      'parse-ua': resolve('lib/parse-ua'),
     },
     extensions: ['.js', '.ts', '.vue'],
   },
