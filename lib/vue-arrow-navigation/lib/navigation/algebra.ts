@@ -35,22 +35,15 @@ export const directionCalcByCenter: Readonly<Record<Direction, (t: ElementCenter
   [Direction.DOWN]: (target, current) => current.y > target.y,
 });
 
-const directionIsOffAxis: Readonly<Record<Direction, (angle: number) => boolean>> = Object.freeze({
-  [Direction.LEFT]: (angle) => angle < 135,
-  [Direction.RIGHT]: (angle) => angle > 45,
-  [Direction.UP]: (angle) => angle < 45,
-  [Direction.DOWN]: (angle) => angle > 135,
-});
-
 /**
  * Return adjusted distance with priority for elements on one axis.
+ * todo надо пересмотреть логику выбора ближайшей секции и тогда можно выкинуть вычисление квадрата
  */
 export function getAdjustedDistance(
   targetCenter: ElementCenter,
   elementCenter: ElementCenter,
   direction: Direction,
-  tolerance: number = 120,
-  offAxisPenalty: number = 4
+  offAxisPenalty: number = 5
 ): number {
   const deltaX = targetCenter.x - elementCenter.x;
   const deltaY = targetCenter.y - elementCenter.y;
@@ -61,38 +54,9 @@ export function getAdjustedDistance(
     return 0;
   }
 
-  // Для проверки направления все равно нужно вычислить угол
-  const angleDegrees = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
-  const absAngle = Math.abs(angleDegrees);
+  const offAxisDistance = (direction === Direction.RIGHT || direction === Direction.LEFT)
+    ? Math.abs(deltaY)
+    : Math.abs(deltaX);
 
-  const isOffAxis = (() => {
-    switch (direction) {
-      case Direction.RIGHT:
-        return absAngle > 45;
-      case Direction.LEFT:
-        return absAngle < 135;
-      case Direction.DOWN:
-      case Direction.UP:
-        return absAngle < 45 || absAngle > 135;
-      default:
-        return false;
-    }
-  })();
-
-  if (isOffAxis) {
-    const offAxisDistance = (direction === Direction.RIGHT || direction === Direction.LEFT)
-      ? Math.abs(deltaY)
-      : Math.abs(deltaX);
-
-    if (offAxisDistance > tolerance) {
-      // Возвращаем квадрат расстояния + штраф (для сравнения это приемлемо)
-      // Или если нужен точный результат, вычисляем корень только в конце:
-      const baseDistance = Math.sqrt(squaredDistance);
-      return baseDistance + (offAxisDistance - tolerance) * offAxisPenalty;
-    }
-  }
-
-  // Возвращаем квадрат расстояния вместо самого расстояния
-  // (только если функция используется для сравнения, а не как абсолютное значение)
-  return Math.sqrt(squaredDistance);
+  return Math.sqrt(squaredDistance) + offAxisDistance * offAxisPenalty;
 }
