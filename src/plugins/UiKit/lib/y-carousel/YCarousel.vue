@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Item } from './Public';
-import { useScroll, useVirtualList } from '@vueuse/core';
+import { useScroll } from '@vueuse/core';
 import { computed, watch } from 'vue';
 import YCarouselItem from './YCarouselItem.vue';
 
@@ -17,8 +17,7 @@ const emit = defineEmits<{
 }>();
 
 const items = computed(() => props.isLoading ? Array.from({ length: 20 }).map((_, i) => ({ id: i }) as Item) : props.items);
-const { list, containerProps, wrapperProps } = useVirtualList(items, { itemWidth: 196 });
-const { x, arrivedState, measure } = useScroll(containerProps.ref);
+const { x, arrivedState, measure } = useScroll(null);
 const showNextBtn = computed(() => !arrivedState.right);
 const showPrevBtn = computed(() => !arrivedState.left);
 
@@ -36,42 +35,40 @@ function scrollPrev() {
   <div v-focus-section class="y-carousel group">
     <div
       class="w-full carousel"
-      v-bind="containerProps"
       :class="{ 'gradient-left': showPrevBtn, 'gradient-right': showNextBtn, 'gradient-between': showPrevBtn && showNextBtn }"
     >
-      <div v-bind="wrapperProps">
-        <div v-if="$slots['before-items'] && !isLoading" class="h-77 p-2 carousel-item">
-          <slot name="before-items" />
-        </div>
-        <div
-          v-for="item in list"
-          :key="item.data.id"
-          :data-item-id="item.data.id"
-          class="h-77 p-2 carousel-item"
+      <div v-if="$slots['before-items'] && !isLoading" class="h-77 p-2 carousel-item">
+        <slot name="before-items" />
+      </div>
+      <div
+        v-for="item in items"
+        :key="item.id"
+        :data-item-id="item.id"
+        class="h-77 p-2 carousel-item"
+      >
+        <AppLink
+          v-if="item.link"
+          class=""
+          :to="item.link"
         >
-          <AppLink
-            v-if="item.data.link"
-            class="h-full w-full"
-            :to="item.data.link"
-          >
-            <slot name="item" :item="item.data">
-              <YCarouselItem :item="item.data" />
-            </slot>
-          </AppLink>
+          <slot name="item" :item="item">
+            <YCarouselItem :item="item" />
+          </slot>
+        </AppLink>
 
-          <div
-            v-else
-            @click="emit('itemClick', item.data)"
-          >
-            <slot name="item" :item="item.data">
-              <YCarouselItem :item="item.data" />
-            </slot>
-          </div>
+        <div
+          v-else
+          v-focus
+          @click="emit('itemClick', item)"
+        >
+          <slot name="item" :item="item">
+            <YCarouselItem :item="item" />
+          </slot>
         </div>
+      </div>
 
-        <div v-if="$slots['after-items'] && !isLoading" class="h-77 p-2 carousel-item">
-          <slot name="after-items" />
-        </div>
+      <div v-if="$slots['after-items'] && !isLoading" class="h-77 p-2 carousel-item">
+        <slot name="after-items" />
       </div>
     </div>
 
@@ -112,5 +109,37 @@ function scrollPrev() {
   .arrow-btn {
     @apply absolute top-1/2 h-13 w-13 cursor-pointer rounded-full bg-secondary -translate-y-1/2 transition-all;
   }
+}
+
+.carousel-item > *:focus, .carousel-item > *:not(.no_overlay):hover {
+  --open-delay: 950ms;
+  --open-duration: 200ms;
+
+  :deep(.r-carousel-item:not(.no_overlay)) {
+    @apply w-90;
+    transition-delay: var(--open-delay);
+    transition-duration: var(--open-duration);
+
+    .poster {
+      @apply op-0;
+      transition-duration: calc(var(--open-duration) - 100ms);
+      transition-delay: var(--open-delay);
+    }
+    .backdrop {
+      @apply op-100;
+      transition-duration: var(--open-duration);
+      transition-delay: var(--open-delay);
+      animation-fill-mode: forwards;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel {
+    @apply scroll-auto;
+  }
+}
+.reduce-motion .carousel {
+  @apply scroll-auto;
 }
 </style>

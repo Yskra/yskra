@@ -76,24 +76,6 @@ defineProps<{
       background: radial-gradient(at center top, rgba(0, 0, 0, 0.03), rgba(0, 0, 0, 0.6), transparent 500px);
     }
   }
-
-  &:not(.no_overlay):hover, &:not(.no_overlay):focus {
-    @apply w-90;
-    transition-delay: 750ms;
-    transition-duration: 300ms;
-
-    .poster {
-      @apply op-0;
-      transition-duration: 200ms;
-      transition-delay: 750ms;
-    }
-    .backdrop {
-      @apply op-100;
-      transition-duration: 300ms;
-      transition-delay: 750ms;
-      animation-fill-mode: forwards;
-    }
-  }
 }
 
 :global(.carousel-item *:focus) {
