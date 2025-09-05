@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { SearchResult } from '@/plugins/search/Public';
+import { defineNAConfig } from '@lib/vue-arrow-navigation';
 import { debounceFilter, onKeyStroke, watchWithFilter } from '@vueuse/core';
 import { computed, nextTick, ref, shallowRef } from 'vue';
 import { LIST_TYPES } from '@/plugins/search/constants';
@@ -35,6 +36,10 @@ watchWithFilter(query, (q: string) => {
 
 onKeyStroke('Enter', () => onSearch(query.value));
 
+defineNAConfig({
+  autofocus: false,
+});
+
 async function onSearch(query: string) {
   if (query === lastQuery.value) {
     return;
@@ -59,7 +64,7 @@ function onClear() {
 </script>
 
 <template>
-  <div class="w-350">
+  <div class="w-80vw">
     <div v-focus-section class="relative mb-2 flex items-center border-2 border-primary px-2 py-1 rounded-box focus-within:focus-cursor">
       <div class="i-mingcute:search-2-fill h-2rem w-2rem color-primary" />
       <BaseInput
@@ -156,7 +161,7 @@ function onClear() {
         Недавнее
       </BaseDivider>
 
-      <BaseMenu class="w-full">
+      <BaseMenu class="max-h-100 w-full flex-nowrap overflow-y-auto">
         <BaseMenuItem v-for="(item, i) in store.searchHistory" :key="item + i">
           <div
             v-focus
