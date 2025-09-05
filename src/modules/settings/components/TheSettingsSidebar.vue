@@ -104,12 +104,20 @@ function generateNativeRoutes(): RouteRecord[] {
   @apply h-3rem w-2rem;
 }
 .item-text {
-  @apply pl-3 whitespace-nowrap transition-opacity;
+  @apply pl-3 whitespace-nowrap transition-opacity delay-0;
 }
 
 .sidebar-body {
   @apply overflow-auto min-w-60 flex flex-col justify-between py-5 relative flex-grow transition-min-width;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 }
+.reduce-motion .sidebar-body {
+  transition: none;
+}
+
 .sidebar-body.compact {
   @apply min-w-4rem w-4rem duration-300 overflow-hidden;
 
@@ -117,7 +125,7 @@ function generateNativeRoutes(): RouteRecord[] {
     @apply pr-0;
   }
   .item-text {
-    @apply op-0;
+    @apply op-0 w-0 delay-150;
   }
 }
 </style>

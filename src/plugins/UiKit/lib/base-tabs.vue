@@ -111,7 +111,7 @@ const InjectWrap = defineComponent<{ mode: 'tab' | 'content' }, any, any, any>((
   }
 
   .tabs-list {
-    @apply flex overflow-x-auto p-3;
+    @apply flex overflow-x-hidden p-3;
 
     > * {
       @apply shrink-0;

@@ -13,3 +13,15 @@ const { is = 'div' } = defineProps<{ is?: string | Component }>();
     class="skeleton"
   />
 </template>
+
+<style scoped>
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
+
+.reduce-motion .skeleton {
+  animation: none;
+}
+</style>

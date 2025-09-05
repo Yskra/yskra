@@ -80,7 +80,7 @@ function generateRoutes(): RouteRecord[] {
             :is="resolveComponent('AppLink')"
             styling="outline"
             color="primary"
-            class="m-1"
+            class="m-1 h-3rem w-3rem p-0"
             :to="settingsPage"
           >
             <div class="i-mingcute:settings-5-fill h-2rem w-2rem" />
@@ -92,7 +92,7 @@ function generateRoutes(): RouteRecord[] {
               <BaseButton
                 styling="outline"
                 color="primary"
-                class="m-1 mx-3"
+                class="m-1 mx-3 h-3rem w-3rem p-0"
                 @click="open"
               >
                 <div class="i-mingcute:translate-2-line h-2rem w-2rem" />
@@ -124,17 +124,6 @@ function generateRoutes(): RouteRecord[] {
     @apply gap-0 p-e-0;
   }
 }
-.sidebar-body {
-  @apply min-w-60 flex flex-col justify-between py-5 relative flex-grow transition-min-width;
-}
-.sidebar-body.compact {
-  @apply min-w-4rem w-4rem duration-300 overflow-hidden;
-
-  .menu {
-    @apply pr-0;
-  }
-}
-
 .sidebar-bottom-area {
   @apply p-2 flex absolute bottom-0 left-0;
 }
@@ -142,6 +131,31 @@ function generateRoutes(): RouteRecord[] {
   @apply h-3rem w-2rem;
 }
 .item-text {
-  @apply pl-3 whitespace-nowrap;
+  @apply pl-3 whitespace-nowrap transition-opacity delay-0;
+}
+
+.sidebar-body {
+  @apply min-w-60 flex flex-col justify-between py-5 relative flex-grow transition-min-width;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+.reduce-motion .sidebar-body {
+  transition: none;
+}
+
+.sidebar-body.compact {
+  @apply min-w-4rem w-4rem duration-300 overflow-hidden;
+
+  .menu {
+    @apply pr-0;
+  }
+  .item-text {
+    @apply op-0 w-0 delay-150;
+  }
+  .sidebar-bottom-area {
+    @apply op-0 w-16 delay-150;
+  }
 }
 </style>

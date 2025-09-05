@@ -13,6 +13,10 @@ import { createNavigation } from './modules/navigation';
 
 import './styles/main.css';
 
+const SLOW_INITIALIZATION_TIME = 300;
+const MINIMUM_DEVICE_MEMORY = 2;
+const MINIMUM_DEVICE_CPUS = 4;
+
 // noinspection JSUnusedGlobalSymbols
 /** @type {PluginExecute} */
 export default function plugin({ app, defineBusService, defineConfig }) {
@@ -29,6 +33,7 @@ export default function plugin({ app, defineBusService, defineConfig }) {
   const removeComponents = registerComponents(app, logger);
   const removeDirectives = registerDirectives(app, logger);
   const removePlatformClass = addPlatformClass();
+  const removeReduceMotionClass = addReduceMotionClass();
   const removeGlobalContainers = initGlobalContainers();
   const removeGlobalPackage = initGlobalPackage();
 
@@ -41,6 +46,7 @@ export default function plugin({ app, defineBusService, defineConfig }) {
     removeModules();
     removeGlobalContainers();
     removePlatformClass();
+    removeReduceMotionClass();
     removeGlobalPackage();
     document.documentElement.removeChild($notifications);
   };
@@ -191,13 +197,31 @@ function initGlobalContainers() {
 }
 
 function addPlatformClass() {
-  const platformClass = `platform-${Yskra.platform.isTV ? 'tv' : 'desktop'}`;
+  const platformClass = `platform-${Yskra.platform.type}`;
 
   document.documentElement.classList.add(platformClass);
 
   return () => {
     document.documentElement.classList.remove(platformClass);
   };
+}
+
+function addReduceMotionClass() {
+  /** @type {any} */
+  const deviceMemory = 'deviceMemory' in navigator ? navigator.deviceMemory : MINIMUM_DEVICE_MEMORY;
+  /** @type {any} */
+  const deviceCpus = 'hardwareConcurrency' in navigator ? navigator.hardwareConcurrency : MINIMUM_DEVICE_CPUS;
+  const slowDevice = Yskra.initialization.totalTime > SLOW_INITIALIZATION_TIME || deviceMemory < MINIMUM_DEVICE_MEMORY || deviceCpus < MINIMUM_DEVICE_CPUS;
+
+  if (slowDevice) {
+    document.documentElement.classList.add('reduce-motion');
+
+    return () => {
+      document.documentElement.classList.remove('reduce-motion');
+    };
+  }
+
+  return () => null;
 }
 
 function initGlobalPackage() {

@@ -11,7 +11,7 @@ import { onKeyStroke } from '@vueuse/core';
 import { computed, nextTick, ref, useTemplateRef, watch } from 'vue';
 import { defineNAConfig, onBeforeANSectionLeave, useArrowNavigation } from 'vue-arrow-navigation';
 import { useRouterResolver } from '..';
-import { useRipple } from './ripple';
+import { createRipple } from './ripple';
 import { useDialogsStore } from './store';
 
 // The layout for manage all popup elements
@@ -33,7 +33,7 @@ const containerRef = useTemplateRef<HTMLDivElement>('containerRef');
 const targetRefRect = computed(() => props.targetRef?.getBoundingClientRect());
 const rippleX = computed(() => (targetRefRect.value?.left || 0) + window.scrollX + (targetRefRect.value?.width || 0) / 2);
 const rippleY = computed(() => (targetRefRect.value?.top || 0) + window.scrollY + (targetRefRect.value?.height || 0) / 2);
-const { style: rippleStyle, class: rippleClass } = useRipple(rippleX, rippleY, show, isActive);
+const Ripple = createRipple(rippleX, rippleY, show, isActive);
 const arrowNavigation = useArrowNavigation();
 
 defineNAConfig({
@@ -100,7 +100,7 @@ function forceClose() {
         :class="{ 'pointer-events-none': !isActive }"
         class="dialog-backdrop"
       >
-        <div :class="rippleClass" :style="rippleStyle" />
+        <Ripple />
 
         <div class="dialog-container" @click.self="show = false">
           <div
@@ -131,6 +131,16 @@ function forceClose() {
 
   &-enter-from, &-leave-to {
     opacity: 0;
+  }
+}
+
+.reduce-motion .dialog-backdrop :deep(div) {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dialog-backdrop :deep(div) {
+    transition: none;
   }
 }
 </style>
