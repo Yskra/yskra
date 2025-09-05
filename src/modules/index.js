@@ -66,11 +66,15 @@ export default function loadModules({ config, userProfiles, rootComponents }) {
         rootComponents,
       };
       const exposeGlobal = {};
+      const initialization = {
+        totalTime: 0,
+      };
 
       readyModules.set('Init', Promise.resolve(ready.thenable));
 
       app.config.errorHandler = errorHandler;
       app.config.warnHandler = warnHandler;
+      app.config.performance = true;
 
       initializeModules(moduleContext, (module) => {
         Object.assign(exposeGlobal, module.global);
@@ -78,8 +82,11 @@ export default function loadModules({ config, userProfiles, rootComponents }) {
         module?.devtoolsPlugin?.(app);
       });
 
+      initialization.totalTime = performance.now() - startTime;
+
+      Object.assign(exposeGlobal, { initialization });
+      initLogger.info(`Done in ${initialization.totalTime.toFixed(1)}ms`);
       attachGlobals(exposeGlobal);
-      initLogger.info(`Done in ${(performance.now() - startTime).toFixed(1)}ms`);
       ready.resolve();
     },
   };

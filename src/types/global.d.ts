@@ -9,6 +9,9 @@ declare global {
     componentRegister: Map<string, Component>;
     platform: Platform;
     version: string;
+    initialization: Readonly<{
+      totalTime: number;
+    }>;
   }>;
   const System: any;
 }
