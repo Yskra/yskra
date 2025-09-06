@@ -43,12 +43,6 @@ function generateNativeRoutes(): RouteRecord[] {
     <div class="sidebar-body" :class="{ compact: props.compact }">
       <BaseMenu class="menu">
         <BaseMenuItem>
-          <div v-focus @click="router.back()">
-            <Icon name="line-md-chevron-left" class="item-icon" />
-            <span class="item-text">{{ $t('back') }}</span>
-          </div>
-        </BaseMenuItem>
-        <BaseMenuItem>
           <AppLink to="/">
             <Icon name="line-md-home-simple-filled" class="item-icon" />
             <span class="item-text">{{ $t('home') }}</span>

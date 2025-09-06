@@ -40,19 +40,10 @@ function generateRoutes(): RouteRecord[] {
     :class="{ 'bg-base-200/40': isPresentation }"
   >
     <div
-
       class="sidebar-body"
       :class="{ compact: props.compact }"
     >
       <BaseMenu class="menu">
-        <BaseMenuItem>
-          <div v-focus @click="router.back()">
-            <Icon name="line-md-chevron-left" class="item-icon" />
-            <span class="item-text">{{ $t('back') }}</span>
-          </div>
-        </BaseMenuItem>
-        <BaseMenuItem modifier="disabled" />
-
         <BaseMenuItem>
           <AppLink
             to="/"
@@ -155,7 +146,7 @@ function generateRoutes(): RouteRecord[] {
     @apply op-0 w-0 delay-150;
   }
   .sidebar-bottom-area {
-    @apply op-0 w-16 delay-150;
+    @apply w-16 delay-150;
   }
 }
 </style>
