@@ -1,5 +1,7 @@
 import { execSync } from 'node:child_process';
-import { resolve } from 'node:path';
+import { createHash } from 'node:crypto';
+import { writeFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
 import process from 'node:process';
 
 import legacy from '@vitejs/plugin-legacy';
@@ -14,9 +16,10 @@ const isProd = process.env.NODE_ENV === 'production';
 const commitHash = execSync('git rev-parse HEAD').toString();
 
 const modulesConfig = mergeConfig(i18nConfig, componentRegisterConfig);
-const rootConfig = defineConfig(async () => ({
+const rootConfig = defineConfig(async () => /** @type {import('vite').UserConfig} */ ({
   define: {
     __COMMIT_HASH__: JSON.stringify(commitHash),
+    __BUILD_DATE__: JSON.stringify(new Date().toISOString()),
   },
   build: {
     minify: true,
@@ -49,6 +52,7 @@ const rootConfig = defineConfig(async () => ({
         'web.structured-clone',
       ],
     }),
+    buildHashPlugin(),
   ],
   resolve: {
     alias: {
@@ -73,9 +77,7 @@ export default defineConfig(async (env) => mergeConfig(
 ));
 
 
-/**
- * @return {Promise<import('vite').Plugin[]>}
- */
+/** @return {Promise<(import('vite').Plugin | any)[]>} */
 async function devPlugins() {
   if (isProd) {
     return [];
@@ -86,4 +88,29 @@ async function devPlugins() {
       launchEditor: 'webstorm',
     })),
   ];
+}
+
+/** @return {import('vite').Plugin} */
+function buildHashPlugin() {
+  return {
+    name: 'vite-plugin-build-hash',
+    apply: 'build', // Только для сборки
+
+    generateBundle(options, bundle) {
+      const entryFile = Object.values(bundle).find(
+        (chunk) => chunk.type === 'chunk' && chunk.isEntry,
+      );
+
+      if (!entryFile || !options.dir) {
+        return;
+      }
+
+      const hash = createHash('sha256')
+        // @ts-ignore
+        .update(entryFile.code)
+        .digest('hex');
+
+      writeFileSync(join(options.dir, 'buildHash.txt'), hash, 'utf-8');
+    },
+  };
 }

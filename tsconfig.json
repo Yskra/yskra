@@ -27,5 +27,5 @@
       "parse-ua": ["./lib/parse-ua"]
     }
   },
-  "include": ["src/", "lib/parse-ua/"],
+  "include": ["src/", "lib/parse-ua/", "./*.js"],
 }

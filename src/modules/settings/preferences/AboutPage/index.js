@@ -1,6 +1,10 @@
 /** @import {Config} from '@/modules/Public'; */
+/** @import {ShallowRef} from 'vue' */
 /* global __COMMIT_HASH__ */
+/* global __BUILD_DATE__ */
 
+import { useFetch } from '@vueuse/core';
+import { computed } from 'vue';
 import pkg from '@/../package.json';
 
 // @unocss-include
@@ -16,7 +20,8 @@ export const ICONS = Object.freeze({
 
 /** @type {ReturnType<typeof setLinksFromConfig>} */
 let instance;
-const hash = __COMMIT_HASH__;
+const commitHash = __COMMIT_HASH__;
+const buildDate = __BUILD_DATE__;
 
 /**
  * @return {ReturnType<typeof setLinksFromConfig>}
@@ -26,9 +31,15 @@ export function getLinks() {
 }
 
 export function getAppInfo() {
+  /** @type {{ data: ShallowRef<string> }} */
+  const { data: buildHash } = useFetch('/buildHash.txt', { initialData: '' }).get().text();
+  const shortBuildHash = computed(() => buildHash.value.slice(0, 7));
+
   return {
     version: pkg.version,
-    shortHash: hash.slice(0, 7),
+    shortCommitHash: commitHash.slice(0, 10),
+    shortBuildHash,
+    buildDate: new Date(buildDate),
   };
 }
 
@@ -41,7 +52,8 @@ export function setLinksFromConfig(config) {
     privacy: new URL(config.value.legal.privacy_policy || window.location.origin),
     dmca: new URL(config.value.legal.dmca || window.location.origin),
     sourceCode: new URL(pkg.repository),
-    commitHash: new URL(`commit/${hash}`, pkg.repository),
+    commitHash: new URL(`commit/${commitHash}`, pkg.repository),
+    buildHash: new URL(`/buildHash.txt`, window.location.origin),
 
     other: config.value.links.map((link) => ({ url: new URL(link.href), name: link.name })),
   };

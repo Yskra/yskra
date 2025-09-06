@@ -53,19 +53,19 @@ function getIcon(name: string | URL) {
 </script>
 
 <template>
-  <div class="w-full flex flex-col items-center justify-center">
-    <div class="w-50% flex justify-between bg-base-300 p-4 pr-50 rounded-box">
+  <div class="w-full flex flex-col items-center">
+    <div class="flex items-start bg-base-300 p-4 px-10 rounded-box">
       <img
         src="/logo.svg"
         alt="Yskra"
-        class="w-40"
+        class="mt-10 w-30"
       >
-      <div>
-        <p class="mb-5 text-xl">
+      <div class="pl-10">
+        <p class="mb-5 text-base line-height-relaxed">
           {{ $t('aboutYskra') }}
         </p>
 
-        <div class="flex">
+        <div class="flex text-sm line-height-6">
           <ul
             v-for="(column, columnIndex) in linkColumns"
             :key="columnIndex"
@@ -74,7 +74,7 @@ function getIcon(name: string | URL) {
             <li
               v-for="link in column"
               :key="link.href"
-              class="my-1"
+              class="my-1.5"
             >
               <a
                 :href="link.href"
@@ -82,7 +82,7 @@ function getIcon(name: string | URL) {
                 class="flex items-center link"
               >
                 <div
-                  class="mr-2 h-2rem w-2rem"
+                  class="mr-2 h-2rem w-2rem flex-shrink-0"
                   :class="link.icon"
                 />
                 {{ link.name }}
@@ -91,17 +91,35 @@ function getIcon(name: string | URL) {
           </ul>
         </div>
 
-        <div class="mt-5 text-center text-sm">
+        <div class="mt-5 border-t border-base-content border-dotted pt-2 text-center text-sm line-height-relaxed">
           <p>
-            {{ info.version }}
+            <span>{{ $t('version') }}: </span>
+            <span class="font-bold">{{ info.version }}</span>
           </p>
-          <a
-            :href="links.commitHash.href"
-            target="_blank"
-            class="link"
-          >
-            {{ info.shortHash }}
-          </a>
+          <p>
+            <span>{{ $t('buildDate') }}: </span>
+            <span class="font-bold">{{ info.buildDate.toLocaleString(undefined, { dateStyle: 'medium' }) }}</span>
+          </p>
+          <p>
+            <span>{{ $t('commitHash') }}: </span>
+            <a
+              :href="links.commitHash.href"
+              target="_blank"
+              class="link"
+            >
+              {{ info.shortCommitHash }}
+            </a>
+          </p>
+          <p>
+            <span>{{ $t('buildHash') }}: </span>
+            <a
+              :href="links.buildHash.href"
+              target="_blank"
+              class="link"
+            >
+              {{ info.shortBuildHash }}
+            </a>
+          </p>
         </div>
       </div>
     </div>
