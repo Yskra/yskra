@@ -1,5 +1,5 @@
-import type { useBackgroundStore, useNoticesStore } from './lib';
-import type { useDialogStore } from './lib';
+import type { ComputedRef } from 'vue';
+import type { useBackgroundStore, useDialogStore, useNoticesStore } from './lib';
 import type { Method, Property } from '@/modules/appBus/BaseBus';
 import type { FilmCardAction } from '@/plugins/UiKit/lib/film-card/Public';
 import type { PiniaStore } from '@/types/pinia';
@@ -23,6 +23,10 @@ declare global {
     'ui.filmCard': {
       addActionBtn: Method<(btn: FilmCardAction) => (() => void)>;
       removeActionBtn: Method<(btn: FilmCardAction) => true | void>;
+    };
+    'ui.property': {
+      fontSize: Property<ComputedRef<number>>;
+      rem: Property<ComputedRef<number>>;
     };
   }
 }

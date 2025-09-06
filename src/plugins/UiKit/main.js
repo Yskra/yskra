@@ -2,8 +2,9 @@
 /** @import {App} from 'vue' */
 
 import { UseImage, vOnClickOutside } from '@vueuse/components';
+import { computedWithControl } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
-import { h } from 'vue';
+import { computed, h } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useUIKitConfigStore } from '@/plugins/UiKit/libConfig.js';
 import { useAppBus } from '@/utils/appBus.js';
@@ -13,7 +14,7 @@ import { createNavigation } from './modules/navigation';
 
 import './styles/main.css';
 
-const SLOW_INITIALIZATION_TIME = 300;
+const SLOW_INITIALIZATION_TIME = 90;
 const MINIMUM_DEVICE_MEMORY = 2;
 const MINIMUM_DEVICE_CPUS = 4;
 
@@ -62,6 +63,24 @@ function initServices(defineBusService) {
   const filmCardStore = lib.useFilmCardStore();
   const { presentationMode } = storeToRefs(storeBg);
 
+  const fontSize = computedWithControl(
+    () => undefined,
+    () => Number.parseInt(getComputedStyle(document.documentElement).fontSize.replace('px', '')),
+  );
+  const rem = computed(() => 1 / fontSize.value);
+
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'attributes') {
+        fontSize.trigger();
+      }
+    });
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+  });
+
   defineBusService('ui.dialog', {
     confirm: storeDialog.confirm,
     prompt: storeDialog.prompt,
@@ -80,8 +99,14 @@ function initServices(defineBusService) {
     addActionBtn: filmCardStore.addAction,
     removeActionBtn: filmCardStore.removeAction,
   });
+  defineBusService('ui.property', {
+    fontSize: { type: 'property', value: fontSize },
+    rem: { type: 'property', value: rem },
+  });
 
-  return () => null;
+  return () => {
+    observer.disconnect();
+  };
 }
 
 /**
