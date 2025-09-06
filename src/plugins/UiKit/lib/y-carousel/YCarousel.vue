@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { Item } from './Public';
-import { useScroll } from '@vueuse/core';
-import { computed, watch } from 'vue';
+import { useActiveElement, useElementSize, useScroll } from '@vueuse/core';
+import { computed, ref, useTemplateRef, watch, watchEffect } from 'vue';
+import { useAppBus } from '@/utils/appBus';
 import YCarouselItem from './YCarouselItem.vue';
 
 export interface Props {
@@ -16,24 +17,52 @@ const emit = defineEmits<{
   (e: 'itemClick', item: Item): void;
 }>();
 
-const items = computed(() => props.isLoading ? Array.from({ length: 20 }).map((_, i) => ({ id: i }) as Item) : props.items);
-const { x, arrivedState, measure } = useScroll(null);
+const ITEM_SIZE_WIDTH = 11.25;
+const ITEM_PLACEHOLDER = Array.from({ length: 20 }).map((_, i) => ({ id: i }) as Item);
+
+const bus = useAppBus();
+const rem = bus.get('ui.property:rem');
+const containerRef = useTemplateRef<HTMLElement>('containerRef');
+const { x, arrivedState, measure } = useScroll(containerRef);
+const { width } = useElementSize(containerRef);
+const activeElement = useActiveElement();
+const containerWidth = computed(() => width.value ? width.value * rem.value : 0);
+const focusedCarousel = computed(() => activeElement.value && containerRef.value?.contains(activeElement.value));
+
+const maxShowItems = ref(5);
+const items = computed(() => (props.isLoading ? ITEM_PLACEHOLDER : props.items).slice(0, maxShowItems.value));
+
+
 const showNextBtn = computed(() => !arrivedState.right);
 const showPrevBtn = computed(() => !arrivedState.left);
 
 watch(items, measure);
 
+watchEffect(() => {
+  if (focusedCarousel.value || x.value > 0) {
+    if (props.items.length > 0) {
+      maxShowItems.value = props.items.length;
+    }
+  }
+  else {
+    if (containerWidth.value > 0) {
+      maxShowItems.value = Math.ceil(containerWidth.value / ITEM_SIZE_WIDTH);
+    }
+  }
+});
+
 function scrollNext() {
-  x.value += containerProps.ref.value?.clientWidth ?? 0;
+  x.value += containerRef.value?.clientWidth ?? 0;
 }
 function scrollPrev() {
-  x.value -= containerProps.ref.value?.clientWidth ?? 0;
+  x.value -= containerRef.value?.clientWidth ?? 0;
 }
 </script>
 
 <template>
   <div v-focus-section class="y-carousel group">
     <div
+      ref="containerRef"
       class="w-full carousel"
       :class="{ 'gradient-left': showPrevBtn, 'gradient-right': showNextBtn, 'gradient-between': showPrevBtn && showNextBtn }"
     >
