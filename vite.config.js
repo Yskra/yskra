@@ -19,7 +19,7 @@ const rootConfig = defineConfig(async () => ({
     __COMMIT_HASH__: JSON.stringify(commitHash),
   },
   build: {
-    minify: false,
+    minify: true,
   },
   server: {
     port: 8930,
