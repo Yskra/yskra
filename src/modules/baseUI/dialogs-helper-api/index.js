@@ -1,8 +1,9 @@
 import { computed, h } from 'vue';
-import { useDialogStore } from './store';
+import { setCurrentApp, useDialogStore } from './store';
 
 export {
   DialogsContainer,
+  setCurrentApp,
   useDialogStore,
 };
 

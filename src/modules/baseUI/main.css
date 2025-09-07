@@ -1,0 +1,156 @@
+:root {
+    --color-base-100: rgb(29, 35, 42);
+    --color-base-200: rgb(25, 30, 36);
+    --color-base-300: rgb(21, 25, 30);
+    --color-base-content: rgb(243, 248, 255);
+    --color-primary: rgb(96, 93, 255);
+    --color-accent-content: rgb(8, 77, 73);
+    --color-neutral: rgb(9, 9, 11);
+    --color-neutral-content: rgb(228, 228, 231);
+    --color-info: rgb(0, 185, 250);
+    --color-success: rgb(0, 208, 147);
+    --color-warning: rgb(246, 185, 0);
+    --color-error: rgb(255, 102, 127);
+    --border: 1px;
+
+    background-color: var(--root-bg, var(--color-base-100));
+}
+
+.bg-base-100 {
+    background-color:#1d232a;
+    background-color:var(--color-base-100)
+}
+.bg-base-200,
+.bg-base-200\/40 {
+    background-color:#191e24;
+    background-color:var(--color-base-200)
+}
+.bg-base-300 {
+    background-color:#15191e;
+    background-color:var(--color-base-300)
+}
+.bg-base-content {
+    background-color:#f3f8ff;
+    background-color:color(display-p3 .95652 .97291 1);
+    background-color:var(--color-base-content)
+}
+.bg-neutral {
+    background-color:#09090b;
+    background-color:var(--color-neutral)
+}
+.bg-neutral-content {
+    background-color:#e4e4e7;
+    background-color:var(--color-neutral-content)
+}
+.border-accent {
+    border-color:#00d0bb;
+    border-color:color(display-p3 .31249 .81303 .73566);
+    border-color:var(--color-accent)
+}
+.border-accent-content {
+    border-color:#084d49;
+    border-color:var(--color-accent-content)
+}
+.border-base-100 {
+    border-color:#1d232a;
+    border-color:var(--color-base-100)
+}
+.border-base-200 {
+    border-color:#191e24;
+    border-color:var(--color-base-200)
+}
+.border-base-300 {
+    border-color:#15191e;
+    border-color:var(--color-base-300)
+}
+.border-base-content {
+    border-color:#f3f8ff;
+    border-color:color(display-p3 .95652 .97291 1);
+    border-color:var(--color-base-content)
+}
+.border-error {
+    border-color:#ff667f;
+    border-color:color(display-p3 .94018 .42824 .50076);
+    border-color:var(--color-error)
+}
+.border-error-content {
+    border-color:#4d0218;
+    border-color:var(--color-error-content)
+}
+.border-info {
+    border-color:#00b9fa;
+    border-color:color(display-p3 .29753 .71737 .97216);
+    border-color:var(--color-info)
+}
+.border-info-content {
+    border-color:#042e49;
+    border-color:var(--color-info-content)
+}
+.border-neutral {
+    border-color:#09090b;
+    border-color:var(--color-neutral)
+}
+.border-neutral-content {
+    border-color:#e4e4e7;
+    border-color:var(--color-neutral-content)
+}
+.border-primary {
+    border-color:#605dff;
+    border-color:var(--color-primary)
+}
+.border-primary-content {
+    border-color:#edf1fe;
+    border-color:var(--color-primary-content)
+}
+.border-secondary {
+    border-color:#f43098;
+    border-color:var(--color-secondary)
+}
+.border-secondary-content {
+    border-color:#f9e4f0;
+    border-color:var(--color-secondary-content)
+}
+.border-success {
+    border-color:#00d093;
+    border-color:color(display-p3 .32762 .81314 .58555);
+    border-color:var(--color-success)
+}
+.border-success-content {
+    border-color:#004c39;
+    border-color:color(display-p3 .10867 .29437 .22636);
+    border-color:var(--color-success-content)
+}
+.border-warning {
+    border-color:#f6b900;
+    border-color:color(display-p3 .94863 .72827 .09463);
+    border-color:var(--color-warning)
+}
+.border-warning-content {
+    border-color:#793205;
+    border-color:var(--color-warning-content)
+}
+.rounded {
+    border-radius:.25rem
+}
+.rounded-\[--radius-field\] {
+    border-radius:.25rem;
+    border-radius:var(--radius-field)
+}
+.rounded-full {
+    border-radius:9999px
+}
+.rounded-lg {
+    border-radius:.5rem
+}
+.rounded-md {
+    border-radius:.375rem
+}
+.rounded-none {
+    border-radius:0
+}
+.rounded-sm {
+    border-radius:.125rem
+}
+.rounded-xl {
+    border-radius:.75rem
+}

@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useNoticesStore, VNotification } from '@/plugins/UiKit/lib';
+import { useNoticesStore } from '.';
 
+defineOptions({
+  registerIgnore: true,
+});
 const store = useNoticesStore();
 const notifications = computed(() => [...store.notifications.entries()].toReversed());
 </script>
@@ -12,7 +15,7 @@ const notifications = computed(() => [...store.notifications.entries()].toRevers
       <div class="relative h-full overflow-x-hidden">
         <div class="absolute bottom-8 right-8 flex flex-col">
           <TransitionGroup name="notification">
-            <VNotification
+            <YNotification
               v-for="[id, notification] in notifications"
               :key="id"
               v-bind="notification"

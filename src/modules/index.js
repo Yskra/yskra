@@ -4,6 +4,7 @@
 import { until } from '@vueuse/core';
 import { computed, reactive, readonly, ref } from 'vue';
 import { createEventBusModule } from '@/modules/appBus';
+import { createBaseUIModule } from '@/modules/baseUI/index.js';
 import { createComponentRegisterModule } from '@/modules/componentRegister';
 import { createConfigEditorModule } from '@/modules/configEditor/index.js';
 import { createI18nModule } from '@/modules/i18n';
@@ -20,9 +21,10 @@ const MAX_MODULE_WAIT_TIME = 10_000;
 /** @type {Module[]} */
 const modulesByOrder = [
   createEventBusModule, // no deps
-  createRouterModule, // no deps. fixme: deps ui-kit plugin (index.vue)
-  createPlatformModule, // no deps. // convert to plugin ? (settings module uses it and ui-kit)
+  createRouterModule, // no deps.
+  createPlatformModule, // no deps. // convert to plugin ? (settings module uses it)
   createStore, // no deps
+  createBaseUIModule, // deps: Bus, Store
   createSettingsModule, // deps: Platform, Store
   createI18nModule, //  no deps
   createPluginManagerModule, // deps:  Init, Platform, i18n, Bus, Router, Store

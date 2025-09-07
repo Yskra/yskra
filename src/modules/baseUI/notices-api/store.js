@@ -1,14 +1,19 @@
 /** @import {UINotification} from './Public' */
 /** @import {UUID} from 'node:crypto'; */
 
-import { acceptHMRUpdate, defineStore, storeToRefs } from 'pinia';
+import { acceptHMRUpdate, defineStore } from 'pinia';
 import { shallowReactive } from 'vue';
-import { useUIKitConfigStore } from '@/plugins/UiKit/libConfig.js';
 import generateUUID from '@/utils/generateUUID.js';
 
-export const useNoticesStore = defineStore('ui.notices', () => {
-  const { config } = storeToRefs(useUIKitConfigStore());
+// todo tmp
+const config = {
+  notifications: {
+    timeout: 10_000,
+    maxElements: 4,
+  },
+};
 
+export const useNoticesStore = defineStore('ui.notices', () => {
   /** @type {Map<UUID, UINotification>} */
   const notifications = shallowReactive(new Map());
   /** @type {Map<UUID, UINotification>} */
@@ -28,7 +33,7 @@ export const useNoticesStore = defineStore('ui.notices', () => {
   function pushNotification(notification) {
     const id = generateUUID();
 
-    if (notifications.size < config.value.notifications.maxElements) {
+    if (notifications.size < config.notifications.maxElements) {
       notifications.set(id, notification);
     }
     else {
@@ -45,7 +50,7 @@ export const useNoticesStore = defineStore('ui.notices', () => {
     if (notifications.has(id)) {
       notifications.delete(id);
 
-      if (notifications.size < config.value.notifications.maxElements && queue.size > 0) {
+      if (notifications.size < config.notifications.maxElements && queue.size > 0) {
         // @ts-ignore
         const [newId, newNotification] = queue.entries().next().value;
 

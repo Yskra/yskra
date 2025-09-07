@@ -1,6 +1,6 @@
 // noinspection JSIgnoredPromiseFromCall,DuplicatedCode
 
-/** @import {VNodeProps, VNode, FunctionalComponent} from 'vue' */
+/** @import {VNodeProps, VNode, FunctionalComponent, Component, App} from 'vue' */
 /** @import {UseConfirmDialogReturn} from '@vueuse/core' */
 /** @import {DialogController} from '@/utils/dialog' */
 
@@ -8,7 +8,16 @@ import { useConfirmDialog } from '@vueuse/core';
 import { acceptHMRUpdate, defineStore } from 'pinia';
 import { h, isVNode, nextTick, reactive } from 'vue';
 import { useDialog } from '@/utils/dialog.js';
-import { YConfirm, YDrawer, YModal, YPrompt } from '..';
+
+/** @type {App} */
+let app;
+
+/**
+ * @param {App} value
+ */
+export function setCurrentApp(value) {
+  app = value;
+}
 
 export const useDialogStore = defineStore('ui.dialog', () => {
   let nextId = 0;
@@ -56,6 +65,7 @@ export const useDialogStore = defineStore('ui.dialog', () => {
       targetRef = optsOtText.targetRef;
     }
 
+    const YConfirm = resolveComponent('YConfirm');
     const controller = useConfirmDialog();
     const node = h(YConfirm, { controller, text, targetRef });
     const closed = addNode(node);
@@ -102,6 +112,7 @@ export const useDialogStore = defineStore('ui.dialog', () => {
       targetRef = optsOtText.targetRef;
     }
 
+    const YPrompt = resolveComponent('YPrompt');
     const controller = useConfirmDialog();
     const node = h(YPrompt, { controller, text, placeholder, validator, targetRef });
     const closed = addNode(node);
@@ -133,6 +144,7 @@ export const useDialogStore = defineStore('ui.dialog', () => {
    * @return {DialogController} controller
    */
   function drawer({ body, title, open = true, targetRef }) {
+    const YDrawer = resolveComponent('YDrawer');
     const controller = useDialog();
     const titleIsVNode = isVNode(title);
     const node = h(() =>
@@ -176,6 +188,7 @@ export const useDialogStore = defineStore('ui.dialog', () => {
    * @return {DialogController} controller
    */
   function modal({ body, title, buttons, footer, open = true, targetRef }) {
+    const YModal = resolveComponent('YModal');
     const controller = useDialog();
     const titleIsVNode = isVNode(title);
     const footerIsVNode = isVNode(footer);
@@ -211,6 +224,14 @@ export const useDialogStore = defineStore('ui.dialog', () => {
     };
   }
 });
+
+/**
+ * @param {string} name
+ * @return {Component}
+ */
+function resolveComponent(name) {
+  return app._context.components[name];
+}
 
 if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(useDialogStore, import.meta.hot));
