@@ -197,18 +197,20 @@ export function createPluginManagerModule({ config, userProfile, isRecoveryMode,
     instance = pluginManager;
     let createScriptTag = () => document.createElement('script');
 
-    if (!isRecoveryMode.value) {
-      // @unocss-include
-      addSettingsRootPage({
-        path: 'plugins',
-        name: 'settingsPlugins',
-        component: () => import('@/modules/pluginManager/pages/SettingsPlugins.vue'),
-        meta: {
-          title: 'pluginsCatalog',
-          icon: 'i-mingcute:plugin-2-fill',
-        },
-      });
+    if (isRecoveryMode.value) {
+      return;
     }
+
+    // @unocss-include
+    addSettingsRootPage({
+      path: 'plugins',
+      name: 'settingsPlugins',
+      component: () => import('@/modules/pluginManager/pages/SettingsPlugins.vue'),
+      meta: {
+        title: 'pluginsCatalog',
+        icon: 'i-mingcute:plugin-2-fill',
+      },
+    });
 
     onPluginMounted(({ manifest }) => {
       bus.emit('pluginManager.plugin:mounted', { manifest });
@@ -222,7 +224,7 @@ export function createPluginManagerModule({ config, userProfile, isRecoveryMode,
     if (import.meta.env.DEV) {
       app.provide(INJECT_KEY, pluginManager);
     }
-    if (import.meta.env.PROD && !isRecoveryMode.value) {
+    if (import.meta.env.PROD) {
       const { createElement } = enableProtection();
 
       createScriptTag = () => createElement('script');
@@ -236,27 +238,20 @@ export function createPluginManagerModule({ config, userProfile, isRecoveryMode,
 
     awaitModules('Init', 'PlatformModule', 'I18nModule', 'Store', 'EventBus', 'Router')
       .then(() => {
-        const builtMounted = initBuilt().map(async (plugin) => {
-          if (isRecoveryMode.value && plugin.manifest.flags?.includes('SafeDisable')) {
-            return;
-          }
-          await tryMount(plugin);
-        });
+        const builtMounted = initBuilt().map(async (plugin) => await tryMount(plugin));
 
         /** @type {Promise<void[]>} */
         let localMounted = Promise.resolve([]);
         /** @type {Promise<void[]>} */
         let installedMounted = Promise.resolve([]);
 
-        if (!isRecoveryMode.value) {
-          localMounted = initLocal()
-            .then((plugins) => plugins.map(tryMount))
-            .then((p) => Promise.all(p));
+        localMounted = initLocal()
+          .then((plugins) => plugins.map(tryMount))
+          .then((p) => Promise.all(p));
 
-          installedMounted = initInstalled()
-            .then((plugins) => plugins.map(tryMount))
-            .then((p) => Promise.all(p));
-        }
+        installedMounted = initInstalled()
+          .then((plugins) => plugins.map(tryMount))
+          .then((p) => Promise.all(p));
 
         Promise.all([...builtMounted, localMounted, installedMounted]).then(() => {
           ready.resolve();
