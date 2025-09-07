@@ -12,7 +12,7 @@ import FatalError from '@/FatalError.vue';
 import loadModules from '@/modules';
 import deepMerge from '@/utils/deepMerge.js';
 import { useFetch, useStorage, watchOnce } from '@vueuse/core';
-import { createApp, reactive, shallowReactive, shallowRef } from 'vue';
+import { createApp, shallowReactive, shallowRef } from 'vue';
 
 import 'element-closest-polyfill';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
@@ -79,7 +79,7 @@ import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
  */
 async function main() {
   /** @type {Set<VNode>} */
-  const rootComponents = reactive(new Set());
+  const rootComponents = shallowReactive(new Set());
   const { data: serverConfig, error } = await useFetch(CONFIG_FILE_PATH).get().json();
   const localStorage = window.localStorage;
 

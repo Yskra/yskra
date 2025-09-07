@@ -9,7 +9,7 @@ import vue from '@vitejs/plugin-vue';
 import UnoCSS from 'unocss/vite';
 import { defineConfig, mergeConfig } from 'vite';
 
-import componentRegisterConfig from './src/modules/componentRegister/buildConfigs/vite.config.js';
+import componentRegisterConfig from './src/modules/baseUI/buildConfigs/vite.config.js';
 import i18nConfig from './src/modules/i18n/buildConfigs/vite.config.js';
 
 const isProd = process.env.NODE_ENV === 'production';

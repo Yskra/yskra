@@ -5,7 +5,6 @@ import { until } from '@vueuse/core';
 import { computed, reactive, readonly, ref } from 'vue';
 import { createEventBusModule } from '@/modules/appBus';
 import { createBaseUIModule } from '@/modules/baseUI/index.js';
-import { createComponentRegisterModule } from '@/modules/componentRegister';
 import { createConfigEditorModule } from '@/modules/configEditor/index.js';
 import { createI18nModule } from '@/modules/i18n';
 import { createLoggerModule, Logger } from '@/modules/logger';
@@ -30,7 +29,6 @@ const modulesByOrder = [
   createPluginManagerModule, // deps:  Init, Platform, i18n, Bus, Router, Store
   createLoggerModule, // no deps
   createConfigEditorModule, // no deps
-  createComponentRegisterModule, // no deps
 ];
 
 /**
