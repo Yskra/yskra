@@ -10,10 +10,6 @@ export const useUIKitConfigStore = defineStore('uikit.config', () => {
       /** @type {FilmCardOrderItem[]} */
       actionsOrder: [],
     },
-    notifications: {
-      timeout: 10_000,
-      maxElements: 4,
-    },
   });
 
   return {

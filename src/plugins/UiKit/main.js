@@ -4,10 +4,9 @@
 import { UseImage, vOnClickOutside } from '@vueuse/components';
 import { computedWithControl } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
-import { computed, h } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useUIKitConfigStore } from '@/plugins/UiKit/libConfig.js';
-import { useAppBus } from '@/utils/appBus.js';
 import Logger from '@/utils/Logger.js';
 import * as lib from './lib';
 import { createNavigation } from './modules/navigation';
@@ -24,18 +23,12 @@ export default function plugin({ app, defineBusService, defineConfig }) {
   const logger = new Logger('UI Kit');
   const storeConfig = useUIKitConfigStore();
 
-  const $notifications = document.createElement('div');
-
-  $notifications.id = 'notifications';
-  document.documentElement.appendChild($notifications);
-
   const removeServices = initServices(defineBusService);
   const removeModules = initModules(app);
   const removeComponents = registerComponents(app, logger);
   const removeDirectives = registerDirectives(app, logger);
   const removePlatformClass = addPlatformClass();
   const removeReduceMotionClass = addReduceMotionClass();
-  const removeGlobalContainers = initGlobalContainers();
   const removeGlobalPackage = initGlobalPackage();
 
   storeConfig.init(defineConfig);
@@ -45,11 +38,9 @@ export default function plugin({ app, defineBusService, defineConfig }) {
     removeComponents();
     removeDirectives();
     removeModules();
-    removeGlobalContainers();
     removePlatformClass();
     removeReduceMotionClass();
     removeGlobalPackage();
-    document.documentElement.removeChild($notifications);
   };
 }
 
@@ -57,9 +48,7 @@ export default function plugin({ app, defineBusService, defineConfig }) {
  * @param {PluginContext['defineBusService']} defineBusService
  */
 function initServices(defineBusService) {
-  const storeDialog = lib.useDialogStore();
   const storeBg = lib.useBackgroundStore();
-  const noticesStore = lib.useNoticesStore();
   const filmCardStore = lib.useFilmCardStore();
   const { presentationMode } = storeToRefs(storeBg);
 
@@ -81,19 +70,10 @@ function initServices(defineBusService) {
     attributes: true,
   });
 
-  defineBusService('ui.dialog', {
-    confirm: storeDialog.confirm,
-    prompt: storeDialog.prompt,
-    drawer: storeDialog.drawer,
-    modal: storeDialog.modal,
-  });
+
   defineBusService('ui.background', {
     setImage: storeBg.setImage,
     presentationMode: { type: 'property', value: presentationMode },
-  });
-  defineBusService('ui.notices', {
-    pushNotification: noticesStore.pushNotification,
-    removeNotification: noticesStore.removeNotification,
   });
   defineBusService('ui.filmCard', {
     addActionBtn: filmCardStore.addAction,
@@ -113,10 +93,23 @@ function initServices(defineBusService) {
  * @param {App} app
  */
 function initModules(app) {
+  console.log(app._context.directives);
+  const buildFocusDirectives = Object.fromEntries([
+    'focus-section',
+    'focus',
+  ].map((name) => [name, app._context.directives[name]]));
+
+  Object.keys(buildFocusDirectives).forEach((name) => {
+    delete app._context.directives[name];
+  });
+
   const unregisterNavigation = createNavigation(app);
 
   return () => {
     unregisterNavigation();
+    Object.entries(buildFocusDirectives).forEach(([name, directive]) => {
+      app.directive(name, directive);
+    });
   };
 }
 
@@ -160,7 +153,7 @@ function registerComponents(app, logger) {
     YModal: lib.YModal,
     YDrawer: lib.YDrawer,
     YGrid: lib.YGrid,
-    VNotification: lib.VNotification,
+    YNotification: lib.YNotification,
     YPrompt: lib.YPrompt,
     YSlider: lib.YSlider,
     // YSortList: lib.YSortList,
@@ -171,7 +164,34 @@ function registerComponents(app, logger) {
     DialogLayout: lib.DialogLayout,
     SidebarLayout: lib.SidebarLayout,
   };
+  const buildComponents = Object.fromEntries([
+    'BaseButton',
+    'BackgroundImageLayout',
+    'SidebarLayout',
+    'Icon',
+    'AppLink',
+    'BaseMenu',
+    'BaseMenuItem',
+    'BaseTooltip',
+    'BaseSelect',
+    'BaseSelectItem',
+    'BaseDivider',
+    'BaseSlider',
+    'BaseInput',
+    'BaseTabs',
+    'BaseTabsItem',
+    'BaseBadge',
+    'BaseCard',
+    'YDrawer',
+    'YModal',
+    'YConfirm',
+    'YPrompt',
+    'YNotification',
+  ].map((name) => [name, app._context.components[name]]));
 
+  Object.keys(buildComponents).forEach((name) => {
+    delete app._context.components[name];
+  });
   Object.entries(components).forEach(([name, component]) => {
     app.component(name, component);
   });
@@ -180,6 +200,9 @@ function registerComponents(app, logger) {
   return () => {
     Object.keys(components).forEach((name) => {
       delete app._context.components[name];
+    });
+    Object.entries(buildComponents).forEach(([name, component]) => {
+      app.component(name, component);
     });
   };
 }
@@ -204,20 +227,6 @@ function registerDirectives(app, logger) {
     Object.keys(directives).forEach((name) => {
       delete app._context.directives[name];
     });
-  };
-}
-
-/**
- */
-function initGlobalContainers() {
-  const bus = useAppBus();
-
-  const rm1 = bus.call('rootComponent:add', h(lib.DialogsContainer));
-  const rm2 = bus.call('rootComponent:add', h(lib.NotificationContainer));
-
-  return () => {
-    rm1();
-    rm2();
   };
 }
 

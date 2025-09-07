@@ -38,6 +38,7 @@ export { default as YModal } from './y-modal.vue';
 export { default as YPrompt } from './y-prompt.vue';
 export { default as YSlider } from './y-slider.vue';
 export { default as YSortList } from './y-sort-list';
+export { default as YNotification } from './y-notification.vue';
 /** layouts */
 export { default as BackgroundImageLayout, useBackgroundStore } from './bg-iamge-layout';
 export { default as DialogLayout, useDialogsStore } from './dialog-layout';
@@ -48,11 +49,6 @@ export { Icon } from './Icons';
 /** special other components */
 export { default as FilmCard, FilmCardActions, FilmCardHero, FilmCardMeta, FilmCardPeople, FilmCardRatings, useFilmCardStore } from './film-card';
 export { default as DaisyUI, type2array } from './daisy-ui';
-
-/** managers */
-export { DialogsContainer, useDialogStore } from './dialogs-helper-api';
-export { NotificationContainer, VNotification } from './notices';
-export { useNoticesStore } from './notices';
 
 /** utils */
 export { useRouterResolver } from './routerResolver';

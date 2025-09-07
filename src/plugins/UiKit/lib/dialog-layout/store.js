@@ -7,7 +7,7 @@ import { computed, reactive } from 'vue';
 // regardless of z-index and position in the DOM, 1 dialog (and 1 dropdown) will always be active
 // (if you open several dialogs, the dropdown filter will constantly notice each other)
 
-export const useDialogsStore = defineStore('ui.dialogs', () => {
+export const useDialogsStore = defineStore('uikit.dialogs', () => {
   /** @type {number[]} */
   const ids = reactive([]);
   const activeDialog = computed(() => ids.at(-1) ?? -1);
