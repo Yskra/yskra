@@ -31,9 +31,8 @@ export function getLinks() {
 }
 
 export function getAppInfo() {
-  /** @type {{ data: ShallowRef<string> }} */
   const { data: buildHash } = useFetch('/buildHash.txt', { initialData: '' }).get().text();
-  const shortBuildHash = computed(() => buildHash.value.slice(0, 7));
+  const shortBuildHash = computed(() => buildHash.value?.slice(0, 7));
 
   return {
     version: pkg.version,
