@@ -11,10 +11,12 @@ function kebab2PascalCase(str) {
 
 // noinspection JSUnusedGlobalSymbols
 export function defineComponent(...args) {
-  const name = kebab2PascalCase(args[0].__name ?? args[0].name);
+  if (!args[0].registerIgnore) {
+    const name = kebab2PascalCase(args[0].__name ?? args[0].name);
 
-  if (name && !register.has(name)) {
-    register.set(name, args[0]);
+    if (name && !register.has(name)) {
+      register.set(name, args[0]);
+    }
   }
 
   return vueDefineComponent(...args);
