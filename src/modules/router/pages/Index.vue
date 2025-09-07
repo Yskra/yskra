@@ -22,8 +22,8 @@ function resolveI18nTitle(key: string) {
   return te(key) ? t(key) : key;
 }
 function clearBg() {
-  bus.call('ui.background:setImage', '');
-  bus.set('ui.background:presentationMode', false);
+//  bus.call('ui.background:setImage', '');
+  // bus.set('ui.background:presentationMode', false);
 }
 </script>
 

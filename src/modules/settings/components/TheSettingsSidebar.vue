@@ -41,7 +41,7 @@ function generateNativeRoutes(): RouteRecord[] {
 <template>
   <div class="sticky top-0 h-screen w-full flex flex-col rounded-br-2xl rounded-tr-2xl bg-base-200 px-2">
     <div class="sidebar-body" :class="{ compact: props.compact }">
-      <BaseMenu class="menu">
+      <BaseMenu>
         <BaseMenuItem>
           <AppLink to="/">
             <Icon name="line-md-home-simple-filled" class="item-icon" />

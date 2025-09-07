@@ -36,14 +36,14 @@ function generateRoutes(): RouteRecord[] {
 
 <template>
   <div
-    class="sidebar-container"
+    class="sidebar-container bg-base-200"
     :class="{ 'bg-base-200/40': isPresentation }"
   >
     <div
       class="sidebar-body"
       :class="{ compact: props.compact }"
     >
-      <BaseMenu class="menu">
+      <BaseMenu>
         <BaseMenuItem>
           <AppLink
             to="/"
@@ -106,7 +106,7 @@ function generateRoutes(): RouteRecord[] {
 
 <style scoped>
 .sidebar-container {
-  @apply sticky top-0 h-screen rounded-br-2xl rounded-tr-2xl bg-base-200 px-2 flex flex-col w-full;
+  @apply sticky top-0 h-screen rounded-br-2xl rounded-tr-2xl px-2 flex flex-col w-full;
 }
 .menu {
   @apply w-full text-base;
