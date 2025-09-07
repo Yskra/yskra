@@ -79,6 +79,10 @@ export function createConfigEditorModule({ config, requestRecoveryMode, isRecove
         name: 'configEditor',
         component: () => import('@/modules/configEditor/pages/ConfigEditor.vue'),
       });
+
+      router.isReady().then(() => {
+        router.replace(router.currentRoute.value);
+      });
     }
     else if (!isRecoveryMode.value) {
       // @unocss-include
