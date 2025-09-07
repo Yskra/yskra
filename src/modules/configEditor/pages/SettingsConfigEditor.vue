@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n';
 import { useConfigEditor } from '@/modules/configEditor';
 import { useAppBus } from '@/utils/appBus.js';
 
-const isTv = toRef(() => Yskra.platform.isTV);
+const isTv = toRef(() => Yskra.platform.type === 'tv');
 const { t } = useI18n();
 const bus = useAppBus();
 const btnReset = useTemplateRef<Element>('btnReset');
