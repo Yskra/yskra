@@ -4,10 +4,10 @@ import { writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import process from 'node:process';
 
-import legacy from '@vitejs/plugin-legacy';
 import vue from '@vitejs/plugin-vue';
 import UnoCSS from 'unocss/vite';
 import { defineConfig, mergeConfig } from 'vite';
+import legacy from 'vite-plugin-legacy-swc';
 
 import componentRegisterConfig from './src/modules/baseUI/buildConfigs/vite.config.js';
 import i18nConfig from './src/modules/i18n/buildConfigs/vite.config.js';
