@@ -19,57 +19,13 @@ import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 
 
 (() => {
-  /** @type {Set<Error>} */
-  const errors = shallowReactive(new Set());
-  const isFatal = shallowRef(false);
-  const localStorage = window.localStorage;
+  const { errors, isFatal } = createErrorShield();
 
-  main()
-    .catch((error) => {
-      // If some error occurred before mounting the main application we get here, obviously.
-      console.error('[FATAL 💀]', error);
-      isFatal.value = true;
-      errors.add(error);
-    });
-
-  // catch all sync errors
-  window.addEventListener('error', (event) => {
-    const error = event.error;
-
-    event.preventDefault();
-    console.error(error);
+  main().catch((error) => {
+    // If some error occurred before mounting the main application we get here, obviously.
+    console.error('[FATAL 💀]', error);
+    isFatal.value = true;
     errors.add(error);
-  });
-  // catch all async errors
-  window.addEventListener('unhandledrejection', (event) => {
-    const error = event.reason instanceof Error ? event.reason : new Error(event.reason);
-
-    event.preventDefault();
-    console.error(error);
-    errors.add(error);
-  });
-  // catch vite fails to load dynamic imports
-  window.addEventListener('vite:preloadError', (event) => {
-    const error = event.payload;
-
-    error.message = `${error.message}. See https://vite.dev/guide/build.html#load-error-handling`;
-
-    event.preventDefault();
-    console.error(error);
-    errors.add(error);
-  });
-
-  // create app only once, pass reactive errors to it
-  watchOnce(errors, () => {
-    const props = {
-      errors,
-      isFatal: isFatal.value,
-      onClose: () => errors.clear(),
-      onResetConfig: () => localStorage.removeItem(LS_CONFIG_KEY),
-    };
-
-    createApp(FatalError, props)
-      .mount(FATAL_MOUNT_POINT);
   });
 })();
 
@@ -96,4 +52,63 @@ async function main() {
   createApp(() => [...rootComponents])
     .use(loadModules({ config, userProfiles, rootComponents }))
     .mount(MOUNT_POINT);
+}
+
+/**
+ * Handle errors that are not caught by the application. And create overlay with errors.
+ */
+function createErrorShield() {
+  /** @type {Set<Error>} */
+  const errors = shallowReactive(new Set());
+  const isFatal = shallowRef(false);
+  const localStorage = window.localStorage;
+
+  catchTopErrors((err) => {
+    errors.add(err);
+    console.error(err);
+  });
+
+  // create app only once, pass reactive errors to it
+  watchOnce(errors, () => {
+    const props = {
+      errors,
+      isFatal: isFatal.value,
+      onClose: () => errors.clear(),
+      onResetConfig: () => localStorage.removeItem(LS_CONFIG_KEY),
+    };
+
+    createApp(FatalError, props)
+      .mount(FATAL_MOUNT_POINT);
+  });
+
+  return {
+    errors,
+    isFatal,
+  };
+}
+
+/**
+ * Catch all errors that were not caught in the application and were able to get to the very top context.
+ * The user will immediately see, instead of opening the console.
+ * @param {(err: Error) => void} handler
+ */
+function catchTopErrors(handler) {
+  // catch all sync errors
+  window.addEventListener('error', (event) => {
+    event.preventDefault();
+    handler(event.error);
+  });
+  // catch all async errors
+  window.addEventListener('unhandledrejection', (event) => {
+    event.preventDefault();
+    handler(event.reason instanceof Error ? event.reason : new Error(event.reason));
+  });
+  // catch vite fails to load dynamic imports
+  // The user will see this error if they configure their web-server poorly
+  window.addEventListener('vite:preloadError', (event) => {
+    event.preventDefault();
+
+    event.payload.message = `${event.payload.message}. See https://vite.dev/guide/build.html#load-error-handling`;
+    handler(event.payload);
+  });
 }
