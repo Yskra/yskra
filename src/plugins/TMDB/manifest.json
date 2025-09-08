@@ -11,5 +11,8 @@
   "id": "dev.yskra.themoviedb",
   "apiVersion": 0,
   "source": null,
-  "flags": []
+  "flags": [],
+  "dependencies": {
+    "dev.yskra.search": "1.0.0"
+  }
 }

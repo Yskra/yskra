@@ -33,9 +33,6 @@ export default function plugin({ app, defineBusService, defineConfig }) {
 
   storeConfig.init(defineConfig);
 
-  // @ts-ignore
-  app._context?.reload();
-
   return () => {
     removeServices();
     removeComponents();
@@ -44,9 +41,6 @@ export default function plugin({ app, defineBusService, defineConfig }) {
     removePlatformClass();
     removeReduceMotionClass();
     removeGlobalPackage();
-
-    // @ts-ignore
-    app._context?.reload();
   };
 }
 
