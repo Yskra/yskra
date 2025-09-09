@@ -66,6 +66,7 @@ function createErrorShield() {
   catchTopErrors((err) => {
     errors.add(err);
     console.error(err);
+    sendToAppLogger('error', err);
   });
 
   // create app only once, pass reactive errors to it
@@ -111,4 +112,22 @@ function catchTopErrors(handler) {
     event.payload.message = `${event.payload.message}. See https://vite.dev/guide/build.html#load-error-handling`;
     handler(event.payload);
   });
+}
+
+/**
+ * Sends message to the app logger if it is available
+ * @param {string} level
+ * @param {any} message
+ */
+function sendToAppLogger(level, message) {
+  const prefix = 'App';
+  const context = 'main.js';
+
+  window.dispatchEvent(new CustomEvent('logger:message', {
+    detail: {
+      meta: { prefix, context },
+      message,
+      level,
+    },
+  }));
 }
