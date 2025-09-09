@@ -1,6 +1,7 @@
-#file: noinspection SpellCheckingInspection
-
 onlyBuiltDependencies:
   - '@skirtle/vue-vnode-utils'
+  - '@swc/core'
+  - core-js
+  - esbuild
   - json-editor-vue
   - vue-demi
