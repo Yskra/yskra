@@ -1,23 +1,14 @@
-/** @import {LoggerLevel} from '@/modules/logger/Public'; */
+/** @import {EntryLevel} from '@/modules/logger/Public'; */
 
-import { initLogger } from '@/modules/logger/stores/logs.js';
-
-const baseStyle = 'color: #383A58; font-size: 10px; padding: 4px; font-weight: 700;';
-const prefixStyle = `${baseStyle}`;
-const contextStyle = `${baseStyle}`;
-
-const COLOR = Object.freeze({
-  INFO: '#00B4FF',
-  WARN: '#FFBD00',
-  ERROR: '#FF5760',
-});
+import { COLOR, contextStyle, prefixStyle } from './constants';
+import useStoreMessage from './utils/useStoreMessage.js';
 
 export class Logger {
   _prefix = { text: '', color: '' };
   /** @type {string} */
   _context;
-  /** @type {(level: LoggerLevel, ...message: any) => void} */
-  _save;
+  /** @type {(level: EntryLevel, ...message: any) => void} */
+  _store;
 
   /**
    * @param {string} context context
@@ -26,7 +17,7 @@ export class Logger {
   constructor(context, prefix = { text: 'App', color: '#00A96D' }) {
     this._prefix = prefix;
     this._context = context;
-    this._save = initLogger(prefix.text, prefix.color, context);
+    this._store = useStoreMessage(prefix.text, prefix.color, context);
   }
 
   /**
@@ -44,7 +35,7 @@ export class Logger {
    * @param {...any} message message
    */
   info(...message) {
-    this._save('info', ...message);
+    this._store('info', ...message);
     // oxlint-disable-next-line no-console
     console.info(...this._getBadge(COLOR.INFO), ...message);
   }
@@ -53,7 +44,7 @@ export class Logger {
    * @param {...any} message message
    */
   warn(...message) {
-    this._save('warn', ...message);
+    this._store('warn', ...message);
     console.warn(...this._getBadge(COLOR.WARN), ...message);
   }
 
@@ -61,7 +52,7 @@ export class Logger {
    * @param {...any} message message
    */
   error(...message) {
-    this._save('error', ...message);
+    this._store('error', ...message);
     console.error(...this._getBadge(COLOR.ERROR), ...message);
   }
 }

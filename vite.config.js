@@ -48,6 +48,7 @@ const rootConfig = defineConfig(async () => /** @type {import('vite').UserConfig
         'es.map.constructor',
         'es.iterator.filter',
         'es.iterator.map',
+        'es.iterator.take',
         'es.array.to-sorted',
         'web.structured-clone',
       ],
@@ -83,10 +84,12 @@ async function devPlugins() {
     return [];
   }
 
+  const { default: vueDevTools } = await import('vite-plugin-vue-devtools');
+
   return [
-    await import('vite-plugin-vue-devtools').then(({ default: plugin }) => plugin({
+    vueDevTools({
       launchEditor: 'webstorm',
-    })),
+    }),
   ];
 }
 

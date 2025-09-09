@@ -1,14 +1,9 @@
 <script setup lang="ts">
 import { UseClipboard } from '@vueuse/components';
 import { ref } from 'vue';
-import LoggerItem from '@/modules/logger/components/LoggerItem.vue';
-import { filteredEntries, saveLogs } from '@/modules/logger/stores/logs';
-
-const LEVELS = Object.freeze([
-  { value: 'info', label: 'Информация' },
-  { value: 'warn', label: 'Предупреждения' },
-  { value: 'error', label: 'Ошибки' },
-]);
+import LoggerItem from '@/modules/logger/ui/LoggerItem.vue';
+import { exportFlatArray, groups } from '../store';
+import saveLogs from '../utils/saveLogs';
 
 const showModal = ref(false);
 const targetRef = ref<HTMLElement>();
@@ -24,15 +19,15 @@ function openDetails(event: Event, msg: { title: string; full: string }) {
 <template>
   <div class="w-full flex flex-col items-end">
     <div class="flex items-center">
-      <BaseButton class="ml-3" @click="saveLogs">
+      <BaseButton class="ml-3" @click="() => saveLogs(exportFlatArray())">
         {{ $t('saveLogs') }}
       </BaseButton>
     </div>
 
     <BaseTabs styling="border" class="mt-2">
       <BaseTabsItem
-        v-for="({ messages, meta, getters }, id) in filteredEntries"
-        :key="id"
+        v-for="({ id: groupId, meta, messages, stats }) in groups.values()"
+        :key="groupId"
       >
         <template #tab>
           <h2 class="text-sm">
@@ -40,23 +35,23 @@ function openDetails(event: Event, msg: { title: string; full: string }) {
           </h2>
           <BaseBadge
             size="sm"
-            :color="`${getters.hasErrors ? 'error' : 'neutral'}`"
+            :color="`${stats.hasErrors ? 'error' : 'neutral'}`"
             class="ml-2"
           >
-            {{ messages.length }}
+            {{ stats.total }}
           </BaseBadge>
         </template>
         <div v-focus-section class="tab-content">
-          <div v-if="messages.length === 0" class="mt-5 flex items-center justify-center">
+          <div v-if="stats.total === 0" class="mt-5 flex items-center justify-center">
             <div class="i-mingcute:broom-fill mr-2 h-2rem w-2rem" />
             <span class="text-center">
               {{ $t('noLogs') }}
             </span>
           </div>
           <LoggerItem
-            v-for="({ level, date, message }, ii) in messages"
+            v-for="({ id, level, date, message }) in messages"
             v-else
-            :key="`${id}-${ii}`"
+            :key="id"
             v-focus
             :level="level"
             :message="message"

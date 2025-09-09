@@ -1,5 +1,7 @@
 /** @import {Module} from '@/modules/Public' */
 
+import { EVENT_LOG_MESSAGE } from '@/modules/logger/constants.js';
+import { addEntry, entries, groups } from '@/modules/logger/store.js';
 import { addSettingsRootPage } from '@/modules/settings';
 
 /**
@@ -7,7 +9,16 @@ import { addSettingsRootPage } from '@/modules/settings';
  * @type {Module}
  * @docs ''
  */
-export function createLoggerModule({ isRecoveryMode }) {
+export function createLoggerModule({ isRecoveryMode, awaitModules }) {
+  window.addEventListener(EVENT_LOG_MESSAGE, ({ detail, timeStamp }) => {
+    if (!detail.meta || !detail.level || !detail.message) {
+      return;
+    }
+    const timestamp = performance.timeOrigin + timeStamp;
+
+    addEntry(detail.meta, detail.level, timestamp, detail.message);
+  });
+
   return {
     displayName: 'Logger',
 
@@ -16,17 +27,21 @@ export function createLoggerModule({ isRecoveryMode }) {
         return;
       }
 
-      // @unocss-include
-      addSettingsRootPage({
-        name: 'logs',
-        path: 'logs',
-        component: () => import('@/modules/logger/pages/SettingsLogger.vue'),
-        meta: {
-          title: 'logs',
-          icon: 'i-mingcute:message-4-line',
-        },
+      awaitModules('SettingsModule').then(() => {
+        // @unocss-include
+        addSettingsRootPage({
+          name: 'logs',
+          path: 'logs',
+          component: () => import('@/modules/logger/ui/SettingsLoggerPage.vue'),
+          meta: {
+            title: 'logs',
+            icon: 'i-mingcute:message-4-line',
+          },
+        });
       });
     },
+
+    global: import.meta.env.DEV ? ({ logs: { entries, groups } }) : ({}),
   };
 }
 

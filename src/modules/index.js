@@ -19,6 +19,7 @@ const MAX_MODULE_WAIT_TIME = 10_000;
 
 /** @type {Module[]} */
 const modulesByOrder = [
+  createLoggerModule, // deps: Settings
   createEventBusModule, // no deps
   createRouterModule, // no deps.
   createPlatformModule, // no deps. // convert to plugin ? (settings module uses it)
@@ -27,7 +28,6 @@ const modulesByOrder = [
   createSettingsModule, // deps: Platform, Store
   createI18nModule, //  no deps
   createPluginManagerModule, // deps:  Init, Platform, i18n, Bus, Router, Store
-  createLoggerModule, // no deps
   createConfigEditorModule, // no deps
 ];
 

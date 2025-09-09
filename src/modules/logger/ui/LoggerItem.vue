@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import type { StoreMessageEntry } from '@/modules/logger/Public';
+import type { EntryLevel } from '@/modules/logger/Public';
 import { computed } from 'vue';
 import logMessage2str from '@/modules/logger/utils/logMessange2str';
 
-const props = defineProps<StoreMessageEntry>();
+const props = defineProps<{
+  level: EntryLevel;
+  message: unknown;
+  date: Date;
+}>();
 const emit = defineEmits<{
-  (e: 'openDetails', event: Event, msg: { title: string; full: string }): void;
+  (e: 'openDetails', event: Event, msg: Msg): void;
 }>();
 const styles = Object.freeze({
   info: { bg: 'border-success' },
@@ -14,6 +18,11 @@ const styles = Object.freeze({
 });
 const style = computed(() => styles[props.level]);
 const message = computed(() => logMessage2str(props.message));
+
+interface Msg {
+  title: string;
+  full: string;
+}
 </script>
 
 <template>
@@ -34,7 +43,7 @@ const message = computed(() => logMessage2str(props.message));
         v-if="message.full"
         size="sm"
         styling="active"
-        @click="emit('openDetails', $event, message)"
+        @click="emit('openDetails', $event, message as Msg)"
       >
         {{ $t('details') }}
       </BaseButton>

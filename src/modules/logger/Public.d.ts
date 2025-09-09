@@ -1,22 +1,48 @@
-import type { ComputedRef, Reactive } from 'vue';
+import type { ShallowReactive } from 'vue';
+import type { ENTRIES_GROUP_ID, MESSAGES_GROUP_ID } from './constants';
+import type { EVENT_LOG_MESSAGE } from '@/modules/logger/constants';
 
-export interface StoreEntry {
-  meta: {
-    prefix: string;
-    context: string;
-    color: string;
-  };
-  getters: {
-    hasErrors: ComputedRef<boolean>;
-  };
-  messages: StoreMessageEntry[];
-}
-export interface StoreMessageEntry {
-  level: LoggerLevel;
+export type EntryLevel = 'info' | 'warn' | 'error';
+export type GroupId = string;
+
+export interface Entry {
+  get group(): Group;
+  get date(): Date;
+  id: string;
+  level: EntryLevel;
   message: unknown;
-  date: Date;
+  [ENTRIES_GROUP_ID]: string;
+}
+export interface GroupMeta {
+  prefix: string;
+  context: string;
+  color: string;
+}
+export interface Group {
+  id: GroupId;
+  meta: GroupMeta;
+  stats: {
+    total: number;
+    byLevel: Record<EntryLevel, number>;
+    hasErrors: boolean;
+  };
+  get messages(): Entry[];
+  [MESSAGES_GROUP_ID]: Set<string>;
 }
 
-export type StoreEntries = Reactive<Record<string, StoreEntry>>;
 
-export type LoggerLevel = 'info' | 'warn' | 'error';
+export type StoreEntries = ShallowReactive<Map<string, Entry>>;
+export type StoreGroups = ShallowReactive<Map<GroupId, Group>>;
+
+
+export interface EventPayload {
+  meta: GroupMeta;
+  level: LoggerLevel;
+  message: unknown[];
+}
+
+declare global {
+  interface WindowEventMap {
+    [EVENT_LOG_MESSAGE]: CustomEvent<EventPayload>;
+  }
+}
